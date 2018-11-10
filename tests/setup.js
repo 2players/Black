@@ -7,6 +7,7 @@ const { document, window } = new JSDOM(
 ).window
 global.document = document
 global.window = window
+global.navigator = window.navigator
 global.requestAnimationFrame = window.requestAnimationFrame
 global.performance = {
   now: function() {
