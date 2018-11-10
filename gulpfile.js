@@ -1,20 +1,13 @@
 'use strict'
 const fs = require('fs')
 const gulp = require('gulp')
-const babel = require('gulp-babel')
 const concat = require('gulp-concat')
-const gutil = require('gulp-util')
-const watch = require('gulp-watch')
 const sourcemaps = require('gulp-sourcemaps')
-const template = require('gulp-template')
-const rename = require('gulp-rename')
-const preprocess = require('gulp-preprocess')
 const info = JSON.parse(fs.readFileSync('./build.json'))
 const files = info.files
-const bs = require('browser-sync').create()
 const replace = require('gulp-replace')
 
-gulp.task('build-es6-module', function() {
+gulp.task('build', function() {
   return gulp
     .src(files)
     .pipe(replace('/* @echo EXPORT */', 'export '))
@@ -24,11 +17,9 @@ gulp.task('build-es6-module', function() {
     .pipe(gulp.dest('dist'))
 })
 
-gulp.task('watch-es6-module', ['build-es6-module'], function() {
-  gulp.watch(['./src/**/*.js'], ['build-es6-module'])
+gulp.task('watch-build', ['build'], function() {
+  gulp.watch(['./src/**/*.js'], ['build'])
 })
-
-gulp.task('default', ['build-es6-module'])
 
 // INTERNAL TASKS
 gulp.task('copy-examples', ['build-es6'], function() {
