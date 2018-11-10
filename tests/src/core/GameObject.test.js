@@ -1,9 +1,7 @@
 import {
   GameObject,
   Sprite,
-  Vector,
   Matrix,
-  DirtyFlag,
   Rectangle,
   Texture,
   Black,
@@ -22,6 +20,8 @@ describe('GameObject', () => {
     let go = new GameObject()
     let identity = new Matrix()
 
+    console.log('xxxxxxxxxxxxx', go)
+
     expect(go.name).toBeNull()
     expect(go.x).toEqual(0)
     expect(go.y).toEqual(0)
@@ -30,8 +30,8 @@ describe('GameObject', () => {
     expect(go.height).toEqual(0)
     expect(go.scaleX).toEqual(1)
     expect(go.scaleY).toEqual(1)
-    expect(go.anchorX).toEqual(0)
-    expect(go.anchorY).toEqual(0)
+    expect(go.anchorX).toEqual(null)
+    expect(go.anchorY).toEqual(null)
     expect(go.pivotOffsetX).toEqual(0)
     expect(go.pivotOffsetY).toEqual(0)
     expect(go.pivotX).toEqual(0)
