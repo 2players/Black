@@ -2,19 +2,17 @@
   "name": "black-engine",
   "version": "0.5.8",
   "description": "",
-  "main": "dist/black-es6-module.js",
+  "main": "dist/es6-module.js",
   "directories": {},
   "scripts": {
     "postinstall": "npm run build",
     "docs": "node scripts/docs.js",
     "build": "gulp build",
-    "watch-build": "gulp watch-build",
-    "watch-test": "gulp watch-test",
+    "build:watch": "gulp build:watch",
     "test": "jest --config jest.config.json --runInBand --silent",
-    "test-watch": "jest --config jest.config.json --runInBand --watch",
-    "coverage": "jest --coverage --config jest.config.json --runInBand --silent",
-    "examples": "gulp examples",
-    "template": "gulp template"
+    "test:watch": "jest --config jest.config.json --runInBand --watch",
+    "test:coverage": "jest --coverage --config jest.config.json --runInBand --silent",
+    "examples": "gulp examples"
   },
   "repository": {
     "type": "git",
