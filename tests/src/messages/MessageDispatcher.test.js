@@ -1,63 +1,73 @@
-import { MessageDispatcher, GameObject, Sprite, Vector, Matrix, DirtyFlag, Rectangle, Texture, Black, VideoNullDriver } from './../../../dist/black-es6-module'
-const RECT_50X50_B64 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACRXR/mAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAFxJREFUeNrs2UENwCAUREHaoIM7EmoBO+hADlq4o4TWxU86L9n73Pd6Zkvxyu96qaFMY687hQwLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsL61+s708ce0VjHQEGALvnBuYLRdofAAAAAElFTkSuQmCC';
+import {
+  MessageDispatcher,
+  GameObject,
+  Sprite,
+  Vector,
+  Matrix,
+  DirtyFlag,
+  Rectangle,
+  Texture,
+  Black,
+  VideoNullDriver,
+} from './../../../dist/es6-module'
+const RECT_50X50_B64 =
+  'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACRXR/mAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAFxJREFUeNrs2UENwCAUREHaoIM7EmoBO+hADlq4o4TWxU86L9n73Pd6Zkvxyu96qaFMY687hQwLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsL61+s708ce0VjHQEGALvnBuYLRdofAAAAAElFTkSuQmCC'
 
 describe('MessageDispatcher', () => {
-  class MyGame extends GameObject { 
+  class MyGame extends GameObject {
     constructor() {
-      super();
+      super()
 
-      this.name = 'game';
+      this.name = 'game'
     }
   }
-  const black = new Black('game-container', MyGame, VideoNullDriver);
+  const black = new Black('game-container', MyGame, VideoNullDriver)
 
   beforeAll(() => {
-    black.start();
-  });
+    black.start()
+  })
 
   afterAll(() => {
-    black.stop();
-  });
+    black.stop()
+  })
 
-  class Player extends GameObject {
-  }
+  class Player extends GameObject {}
 
-  test('Post and receive message', () => {    
+  test('Post and receive message', () => {
     // we use stage because checkForStage is true by default
-    let p = new GameObject();
-    black.stage.addChild(p);
-    
-    const fn = jest.fn();
-    p.on('died', fn);
-    p.post('died');
+    let p = new GameObject()
+    black.stage.addChild(p)
 
-    expect(fn).toBeCalled();
-  });
+    const fn = jest.fn()
+    p.on('died', fn)
+    p.post('died')
 
-  test('Overhear message', () => {    
+    expect(fn).toBeCalled()
+  })
+
+  test('Overhear message', () => {
     // we use stage because checkForStage is true by default
-    let p = new GameObject();
-    p.name = 'player';
-    black.stage.addChild(p);
-   
-    const fn = jest.fn();
-    black.stage.on('died@stage/player', fn);
-    p.post('died');
+    let p = new GameObject()
+    p.name = 'player'
+    black.stage.addChild(p)
 
-    expect(fn).toBeCalled();
-  });
+    const fn = jest.fn()
+    black.stage.on('died@stage/player', fn)
+    p.post('died')
 
-  test('Overhear message using glob', () => {    
+    expect(fn).toBeCalled()
+  })
+
+  test('Overhear message using glob', () => {
     // we use stage because checkForStage is true by default
-    let p = new GameObject();
-    p.name = 'player';
-    black.stage.addChild(p);
-   
-    const fn = jest.fn();
-    black.stage.on('died@**/player', fn);
-    p.post('died');
+    let p = new GameObject()
+    p.name = 'player'
+    black.stage.addChild(p)
 
-    expect(fn).toBeCalled();
-  });
+    const fn = jest.fn()
+    black.stage.on('died@**/player', fn)
+    p.post('died')
 
-});
+    expect(fn).toBeCalled()
+  })
+})
