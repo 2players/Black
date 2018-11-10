@@ -7,125 +7,123 @@
 
 /* @echo EXPORT */
 class BVGStyle {
-
   /**
    * Creates new instance of BVGStyle.
    */
   constructor() {
-
     /**
      * Stroke color
      *
      * @private @export @type {string} */
-    this.L = '-';
+    this.L = '-'
 
     /**
      * Stroke alpha.
      *
      * @private @export @type {number} */
-    this.l = 1;
+    this.l = 1
 
     /**
      * Line width.
      *
      * @private @export @type {number} */
-    this.w = 1;
+    this.w = 1
 
     /**
      * Fill color.
      *
      * @private @export @type {string}*/
-    this.F = '0';
+    this.F = '0'
 
     /**
      * Fill alpha.
      *
      * @private @export @type {number} */
-    this.f = 1;
+    this.f = 1
 
     /**
      * Fill rule.
      * {nonzero: 1, evenodd: 0}
      *
      * @private @export @type {number} */
-    this.r = 1;
+    this.r = 1
 
     /**
      * Line cap.
      * {butt: 'b', round: 'r', square: 's'}
      *
      * @private @export @type {string} */
-    this.c = 'b';
+    this.c = 'b'
 
     /**
      * Line join.
      * {miter: 'm', round: 'r', bevel: 'b'}
      *
      * @private @export @type {string} */
-    this.j = 'm';
+    this.j = 'm'
 
     /**
      * Miter limit.
      *
      * @private @export @type {number} */
-    this.m = 4;
+    this.m = 4
 
     /**
      * Global alpha.
      *
      * @private @export @type {number} */
-    this.a = 1;
+    this.a = 1
 
     /**
      * Line dash.
      *
      * @private @export @type {string} */
-    this.d = '';
+    this.d = ''
 
     /**
      * Fill necessity flag.
      *
      * @public @type {boolean} */
-    this.needsFill = true;
+    this.needsFill = true
 
     /**
      * Stroke necessity flag.
      *
      * @public @type {boolean} */
-    this.needsStroke = false;
+    this.needsStroke = false
 
     /** @public @type {number} */
-    this.fillColor = 0;
+    this.fillColor = 0
 
     /** @public @type {number} */
-    this.fillAlpha = 1;
+    this.fillAlpha = 1
 
     /** @public @type {number} */
-    this.lineColor = 0;
+    this.lineColor = 0
 
     /** @public @type {number} */
-    this.lineAlpha = 1;
+    this.lineAlpha = 1
 
     /** @public @type {number} */
-    this.lineWidth = 1;
+    this.lineWidth = 1
 
     /** @public @type {CapsStyle} */
-    this.lineCap = CapsStyle.NONE;
+    this.lineCap = CapsStyle.NONE
 
     /** @public @type {JointStyle} */
-    this.lineJoin = JointStyle.MITER;
+    this.lineJoin = JointStyle.MITER
 
     /** @public @type {number} */
-    this.miterLimit = this.m;
+    this.miterLimit = this.m
 
     /** @public @type {FillRule} */
-    this.fillRule = FillRule.NONE_ZERO;
+    this.fillRule = FillRule.NONE_ZERO
 
     /**
      * Line dash segments length, unit.
      *
      * @public @type {Array<number>} */
-    this.lineDash = [];
+    this.lineDash = []
   }
 
   /**
@@ -137,38 +135,27 @@ class BVGStyle {
    * @returns {void}
    */
   merge(style) {
-    if (style.F)
-      this.F = style.F;
+    if (style.F) this.F = style.F
 
-    if (style.L)
-      this.L = style.L;
+    if (style.L) this.L = style.L
 
-    if (style.w)
-      this.w = style.w;
+    if (style.w) this.w = style.w
 
-    if (style.l)
-      this.l *= style.l;
+    if (style.l) this.l *= style.l
 
-    if (style.f)
-      this.f *= style.f;
+    if (style.f) this.f *= style.f
 
-    if (style.r)
-      this.r = style.r;
+    if (style.r) this.r = style.r
 
-    if (style.c)
-      this.c = style.c;
+    if (style.c) this.c = style.c
 
-    if (style.j)
-      this.j = style.j;
+    if (style.j) this.j = style.j
 
-    if (style.m)
-      this.m = style.m;
+    if (style.m) this.m = style.m
 
-    if (style.a)
-      this.a = style.a;
+    if (style.a) this.a = style.a
 
-    if (style.d)
-      this.d = style.d;
+    if (style.d) this.d = style.d
   }
 
   /**
@@ -179,26 +166,32 @@ class BVGStyle {
    * @returns {void}
    */
   compute() {
-    this.needsFill = this.F !== '-';
+    this.needsFill = this.F !== '-'
 
-    if (this.needsFill)
-      this.fillColor = parseInt(this.F, 16);
+    if (this.needsFill) this.fillColor = parseInt(this.F, 16)
 
-    this.lineWidth = +this.w;
-    this.needsStroke = this.L !== '-' && this.lineWidth > 0;
+    this.lineWidth = +this.w
+    this.needsStroke = this.L !== '-' && this.lineWidth > 0
 
-    if (this.needsStroke)
-      this.lineColor = parseInt(this.L, 16);
+    if (this.needsStroke) this.lineColor = parseInt(this.L, 16)
 
-    const alpha = Number(this.a);
-    this.lineAlpha = Number(this.l) * alpha;
-    this.fillAlpha = Number(this.f) * alpha;
+    const alpha = Number(this.a)
+    this.lineAlpha = Number(this.l) * alpha
+    this.fillAlpha = Number(this.f) * alpha
 
-    this.lineCap = { b: CapsStyle.NONE, r: CapsStyle.ROUND, s: CapsStyle.SQUARE }[this.c];
-    this.lineJoin = { m: JointStyle.MITER, r: JointStyle.ROUND, b: JointStyle.BEVEL }[this.j];
-    this.miterLimit = Number(this.m);
-    this.fillRule = { 1: FillRule.NONE_ZERO, 0: FillRule.EVEN_ODD }[this.r];
-    this.lineDash = this.d.split(',').map(v => Number(v));
+    this.lineCap = {
+      b: CapsStyle.NONE,
+      r: CapsStyle.ROUND,
+      s: CapsStyle.SQUARE,
+    }[this.c]
+    this.lineJoin = {
+      m: JointStyle.MITER,
+      r: JointStyle.ROUND,
+      b: JointStyle.BEVEL,
+    }[this.j]
+    this.miterLimit = Number(this.m)
+    this.fillRule = { 1: FillRule.NONE_ZERO, 0: FillRule.EVEN_ODD }[this.r]
+    this.lineDash = this.d.split(',').map(v => Number(v))
   }
 
   /**
@@ -209,18 +202,18 @@ class BVGStyle {
    * @returns {BVGStyle} Created style.
    */
   clone() {
-    let s = new BVGStyle();
-    s.L = this.L;
-    s.l = this.l;
-    s.w = this.w;
-    s.F = this.F;
-    s.f = this.f;
-    s.r = this.r;
-    s.c = this.c;
-    s.j = this.j;
-    s.m = this.m;
-    s.a = this.a;
+    let s = new BVGStyle()
+    s.L = this.L
+    s.l = this.l
+    s.w = this.w
+    s.F = this.F
+    s.f = this.f
+    s.r = this.r
+    s.c = this.c
+    s.j = this.j
+    s.m = this.m
+    s.a = this.a
 
-    return s;
+    return s
   }
 }

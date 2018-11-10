@@ -11,15 +11,14 @@ class GraphicsPattern {
    * Creates new instance of GraphicsPattern
    */
   constructor(image, repetition) {
-
     /** @type {HTMLImageElement | HTMLCanvasElement | HTMLVideoElement} */
-    this.image = image;
+    this.image = image
 
     /** @type {string} */
-    this.repetition = repetition;
+    this.repetition = repetition
 
     /** @type {CanvasPattern|null} */
-    this.native = null;
+    this.native = null
   }
 
   /**
@@ -28,6 +27,6 @@ class GraphicsPattern {
    * @return {GraphicsPattern} New instance
    */
   clone() {
-    return new GraphicsPattern(this.image, this.repetition);
+    return new GraphicsPattern(this.image, this.repetition)
   }
 }

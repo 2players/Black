@@ -1,5 +1,5 @@
 /**
- * The type of the message. 
+ * The type of the message.
  * @cat core
  * @static
  * @constant
@@ -8,5 +8,5 @@
 /* @echo EXPORT */
 const MessageType = {
   DIRECT: 'direct',
-  BUBBLE: 'bubble'
-};
+  BUBBLE: 'bubble',
+}

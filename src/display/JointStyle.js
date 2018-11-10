@@ -9,5 +9,5 @@
 const JointStyle = {
   BEVEL: 'bevel',
   MITER: 'miter',
-  ROUND: 'round'
-};
+  ROUND: 'round',
+}

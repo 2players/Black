@@ -7,16 +7,16 @@
 /* @echo EXPORT */
 class System extends MessageDispatcher {
   constructor() {
-    super();
+    super()
   }
 
   /**
    * onUpdate
    *
    * @protected
-   * @return {void} 
+   * @return {void}
    */
-  onUpdate() { }
+  onUpdate() {}
 
   /**
    * onPostUpdate
@@ -24,7 +24,7 @@ class System extends MessageDispatcher {
    * @protected
    * @return {void}
    */
-  onPostUpdate() { }
+  onPostUpdate() {}
 
   /**
    * onRender
@@ -32,7 +32,7 @@ class System extends MessageDispatcher {
    * @protected
    * @return {void}
    */
-  onRender() { }
+  onRender() {}
 
   /**
    * onChildrenAdded
@@ -41,7 +41,7 @@ class System extends MessageDispatcher {
    * @param {GameObject} gameObject GameObject instance.
    * @return {void}
    */
-  onChildrenAdded(gameObject) { }
+  onChildrenAdded(gameObject) {}
 
   /**
    * onChildrenRemoved
@@ -50,7 +50,7 @@ class System extends MessageDispatcher {
    * @param {GameObject} gameObject GameObject instance.
    * @return {void}
    */
-  onChildrenRemoved(gameObject) { }
+  onChildrenRemoved(gameObject) {}
 
   /**
    * onChildrenRemoved
@@ -59,7 +59,7 @@ class System extends MessageDispatcher {
    * @param {GameObject} gameObject GameObject instance.
    * @return {void}
    */
-  onChildrenChanged(gameObject) { }
+  onChildrenChanged(gameObject) {}
 
   /**
    * onComponentAdded
@@ -67,9 +67,9 @@ class System extends MessageDispatcher {
    * @protected
    * @param {GameObject} child GameObject instance.
    * @param {Component} component Component instance added to game object.
-   * @return {void} 
+   * @return {void}
    */
-  onComponentAdded(child, component) { }
+  onComponentAdded(child, component) {}
 
   /**
    * onComponentRemoved
@@ -79,5 +79,5 @@ class System extends MessageDispatcher {
    * @param {Component} component Component instance removed from game object.
    * @return {void}
    */
-  onComponentRemoved(child, component) { }
+  onComponentRemoved(child, component) {}
 }

@@ -9,7 +9,7 @@
 class TextField extends DisplayObject {
   /**
    * Creates new instance of TextField
-   * 
+   *
    * @param {string=} [text=''] Text to be displayed inside this text field
    * @param  {string=} family                                             Font name
    * @param  {number=} [color=0x0]                                        Text color as hexadecimal number eg 0xff0000 (total red)
@@ -19,175 +19,190 @@ class TextField extends DisplayObject {
    * @param  {number=} [strokeThickness=0]                                Thickness of the stroke. 0 means that no stroke
    * @param  {number=} [strokeColor=0xffffff]                             Stroke color as hexadecimal number eg 0x00ff00 (total green)
    */
-  constructor(text = '', family = 'sans-serif', color = 0x000000, size = 14, style = TextStyle.FontStyle.NORMAL, weight = TextStyle.FontWeight.NORMAL, strokeThickness = 0, strokeColor = 0xffffff) {
-    super();
+  constructor(
+    text = '',
+    family = 'sans-serif',
+    color = 0x000000,
+    size = 14,
+    style = TextStyle.FontStyle.NORMAL,
+    weight = TextStyle.FontWeight.NORMAL,
+    strokeThickness = 0,
+    strokeColor = 0xffffff
+  ) {
+    super()
 
     /** @private @type {string} */
-    this.mText = text;
+    this.mText = text
 
     /** @private @type {Rectangle} */
-    this.mCacheBounds = new Rectangle();
+    this.mCacheBounds = new Rectangle()
 
     /** @private @type {number} */
-    this.mTextWidth = 0;
+    this.mTextWidth = 0
 
     /** @private @type {number} */
-    this.mTextHeight = 0;
+    this.mTextHeight = 0
 
     /** @private @type {TextStyle} */
-    this.mDefaultStyle = new TextStyle(family, color, size, style, weight, strokeThickness, strokeColor);
+    this.mDefaultStyle = new TextStyle(
+      family,
+      color,
+      size,
+      style,
+      weight,
+      strokeThickness,
+      strokeColor
+    )
 
     /** @private @type {Object.<string,TextStyle>} */
-    this.mStyles = {};
+    this.mStyles = {}
 
     /** @private @type {boolean} */
-    this.mAutoSize = true;
+    this.mAutoSize = true
 
     /** @private @type {TextStyle.FontAlign} */
-    this.mAlign = TextStyle.FontAlign.LEFT;
+    this.mAlign = TextStyle.FontAlign.LEFT
 
     /** @private @type {TextStyle.FontVerticalAlign} */
-    this.mVerticalAlign = TextStyle.FontVerticalAlign.MIDDLE;
+    this.mVerticalAlign = TextStyle.FontVerticalAlign.MIDDLE
 
     /** @private @type {boolean} */
-    this.mMultiline = false;
+    this.mMultiline = false
 
     /** @private @type {number} */
-    this.mLineHeight = 1.2;
+    this.mLineHeight = 1.2
 
     /** @private @type {Rectangle} */
-    this.mTextBounds = new Rectangle();
+    this.mTextBounds = new Rectangle()
 
     /** @private @type {number} */
-    this.mFieldWidth = 0;
+    this.mFieldWidth = 0
 
     /** @private @type {number} */
-    this.mFieldHeight = 0;
+    this.mFieldHeight = 0
 
     /** @private @type {Rectangle} */
-    this.mPadding = new Rectangle(0, 0, 0, 0);
+    this.mPadding = new Rectangle(0, 0, 0, 0)
 
     /** @private @type {TextMetricsData|null} */
-    this.mMetrics = null;
+    this.mMetrics = null
 
     /** @private @type {boolean} */
-    this.mHighQuality = false;
+    this.mHighQuality = false
   }
 
   /**
    * @inheritDoc
    */
   getRenderer() {
-    return Black.driver.getRenderer('Text', this);
+    return Black.driver.getRenderer('Text', this)
   }
 
   /**
    * @inheritDoc
    */
   onGetLocalBounds(outRect = undefined) {
-    outRect = outRect || new Rectangle();
+    outRect = outRect || new Rectangle()
 
     if (this.mDirty & DirtyFlag.RENDER_CACHE) {
-      let text = this.text;
-      if (this.mMultiline === false)
-        text = text.replace(/\n/g, '');
+      let text = this.text
+      if (this.mMultiline === false) text = text.replace(/\n/g, '')
 
-      let styles = [this.mDefaultStyle];
+      let styles = [this.mDefaultStyle]
 
-      for (let key in /** @type {!Object} */(this.mStyles)) {
-        styles.push(this.mStyles[key]);
+      for (let key in /** @type {!Object} */ (this.mStyles)) {
+        styles.push(this.mStyles[key])
       }
 
-      this.mMetrics = TextMetricsEx.measure(text, this.mLineHeight, ...styles);
-      this.mTextBounds.copyFrom(this.mMetrics.bounds);
+      this.mMetrics = TextMetricsEx.measure(text, this.mLineHeight, ...styles)
+      this.mTextBounds.copyFrom(this.mMetrics.bounds)
     }
 
     if (this.mClipRect !== null) {
-      this.mClipRect.copyTo(outRect);
-      return outRect;
+      this.mClipRect.copyTo(outRect)
+      return outRect
     }
 
     if (this.mAutoSize === false) {
-      outRect.width = this.mFieldWidth;
-      outRect.height = this.mFieldHeight;
+      outRect.width = this.mFieldWidth
+      outRect.height = this.mFieldHeight
     } else {
-      outRect.width = this.mTextBounds.width;
-      outRect.height = this.mTextBounds.height;
+      outRect.width = this.mTextBounds.width
+      outRect.height = this.mTextBounds.height
     }
 
-    outRect.width += this.mPadding.right;
-    outRect.height += this.mPadding.bottom;
+    outRect.width += this.mPadding.right
+    outRect.height += this.mPadding.bottom
 
-    return outRect;
+    return outRect
   }
 
   /**
    * Adds or updates given text style by given tag name.
-   * 
-   * @param {string} name 
-   * @param {TextStyle} style 
+   *
+   * @param {string} name
+   * @param {TextStyle} style
    */
   setStyle(name, style) {
-    Debug.assert(name !== 'def', `Please use 'setDefaultStyle' instead.`);
-    style.name = name;
+    Debug.assert(name !== 'def', `Please use 'setDefaultStyle' instead.`)
+    style.name = name
 
-    this.mStyles[name] = style;
+    this.mStyles[name] = style
 
-    this.setDirty(DirtyFlag.RENDER_CACHE, false);
-    this.setTransformDirty();
+    this.setDirty(DirtyFlag.RENDER_CACHE, false)
+    this.setTransformDirty()
   }
 
   /**
    * Updates default text style with a given one.
-   * 
-   * @param {TextStyle} style 
+   *
+   * @param {TextStyle} style
    */
   setDefaultStyle(style) {
-    this.mDefaultStyle = style;
+    this.mDefaultStyle = style
 
-    this.setDirty(DirtyFlag.RENDER_CACHE, false);
-    this.setTransformDirty();
+    this.setDirty(DirtyFlag.RENDER_CACHE, false)
+    this.setTransformDirty()
   }
 
   /**
    * Removes style by given name.
-   * 
-   * @param {string} name 
+   *
+   * @param {string} name
    */
   removeStyle(name) {
-    delete this.mStyles[name];
+    delete this.mStyles[name]
 
-    this.setDirty(DirtyFlag.RENDER_CACHE, false);
-    this.setTransformDirty();
+    this.setDirty(DirtyFlag.RENDER_CACHE, false)
+    this.setTransformDirty()
   }
 
   /**
    * Returns text style by given name or null if not found.
-   * 
-   * @param {string} name 
-   * @return {TextStyle} 
+   *
+   * @param {string} name
+   * @return {TextStyle}
    */
   getStyle(name) {
-    return this.mStyles.hasOwnProperty(name) ? this.mStyles[name] : null;
+    return this.mStyles.hasOwnProperty(name) ? this.mStyles[name] : null
   }
 
   /**
    * Returns an array of all not default styles.
-   * 
-   * @return {Array<TextStyle>} 
+   *
+   * @return {Array<TextStyle>}
    */
   getAllStyles() {
-    let styles = [];
-    for (let s in this.mStyles)
-      styles.push(this.mStyles[s]);
-    return styles;
+    let styles = []
+    for (let s in this.mStyles) styles.push(this.mStyles[s])
+    return styles
   }
 
   /**
    * Returns default text style.
    */
   getDefaultStyle(name) {
-    return this.mDefaultStyle;
+    return this.mDefaultStyle
   }
 
   /**
@@ -196,10 +211,10 @@ class TextField extends DisplayObject {
    * @return {void}
    */
   set multiline(value) {
-    this.mMultiline = value;
+    this.mMultiline = value
 
-    this.setDirty(DirtyFlag.RENDER_CACHE, false);
-    this.setTransformDirty();
+    this.setDirty(DirtyFlag.RENDER_CACHE, false)
+    this.setTransformDirty()
   }
 
   /**
@@ -208,7 +223,7 @@ class TextField extends DisplayObject {
    * @return {boolean}
    */
   get multiline() {
-    return this.mMultiline;
+    return this.mMultiline
   }
 
   /**
@@ -217,10 +232,10 @@ class TextField extends DisplayObject {
    * @return {void}
    */
   set lineHeight(value) {
-    this.mLineHeight = value;
+    this.mLineHeight = value
 
-    this.setDirty(DirtyFlag.RENDER_CACHE, false);
-    this.setTransformDirty();
+    this.setDirty(DirtyFlag.RENDER_CACHE, false)
+    this.setTransformDirty()
   }
 
   /**
@@ -229,7 +244,7 @@ class TextField extends DisplayObject {
    * @return {number}
    */
   get lineHeight() {
-    return this.mLineHeight;
+    return this.mLineHeight
   }
 
   /**
@@ -238,7 +253,7 @@ class TextField extends DisplayObject {
    * @return {number}
    */
   get size() {
-    return this.mDefaultStyle.size;
+    return this.mDefaultStyle.size
   }
 
   /**
@@ -247,13 +262,12 @@ class TextField extends DisplayObject {
    * @return {void}
    */
   set size(value) {
-    if (this.mDefaultStyle.size === value)
-      return;
+    if (this.mDefaultStyle.size === value) return
 
-    this.mDefaultStyle.size = value;
+    this.mDefaultStyle.size = value
 
-    this.setDirty(DirtyFlag.RENDER_CACHE, false);
-    this.setTransformDirty();
+    this.setDirty(DirtyFlag.RENDER_CACHE, false)
+    this.setTransformDirty()
   }
 
   /**
@@ -262,7 +276,7 @@ class TextField extends DisplayObject {
    * @return {string}
    */
   get font() {
-    return this.mDefaultStyle.family;
+    return this.mDefaultStyle.family
   }
 
   /**
@@ -271,13 +285,12 @@ class TextField extends DisplayObject {
    * @return {void}
    */
   set font(value) {
-    if (this.mDefaultStyle.family === value)
-      return;
+    if (this.mDefaultStyle.family === value) return
 
-    this.mDefaultStyle.family = value;
+    this.mDefaultStyle.family = value
 
-    this.setDirty(DirtyFlag.RENDER_CACHE, false);
-    this.setTransformDirty();
+    this.setDirty(DirtyFlag.RENDER_CACHE, false)
+    this.setTransformDirty()
   }
 
   /**
@@ -286,7 +299,7 @@ class TextField extends DisplayObject {
    * @return {number}
    */
   get color() {
-    return this.mDefaultStyle.color;
+    return this.mDefaultStyle.color
   }
 
   /**
@@ -295,13 +308,12 @@ class TextField extends DisplayObject {
    * @return {void}
    */
   set color(value) {
-    if (this.mDefaultStyle.color === value)
-      return;
+    if (this.mDefaultStyle.color === value) return
 
-    this.mDefaultStyle.color = value;
+    this.mDefaultStyle.color = value
 
-    this.setDirty(DirtyFlag.RENDER_CACHE, false);
-    this.setTransformDirty();
+    this.setDirty(DirtyFlag.RENDER_CACHE, false)
+    this.setTransformDirty()
   }
 
   /**
@@ -310,7 +322,7 @@ class TextField extends DisplayObject {
    * @return {TextStyle.FontStyle}
    */
   get fontStyle() {
-    return this.mDefaultStyle.style;
+    return this.mDefaultStyle.style
   }
 
   /**
@@ -319,13 +331,12 @@ class TextField extends DisplayObject {
    * @return {void}
    */
   set fontStyle(value) {
-    if (this.mDefaultStyle.style === value)
-      return;
+    if (this.mDefaultStyle.style === value) return
 
-    this.mDefaultStyle.style = value;
+    this.mDefaultStyle.style = value
 
-    this.setDirty(DirtyFlag.RENDER_CACHE, false);
-    this.setTransformDirty();
+    this.setDirty(DirtyFlag.RENDER_CACHE, false)
+    this.setTransformDirty()
   }
 
   /**
@@ -334,7 +345,7 @@ class TextField extends DisplayObject {
    * @return {TextStyle.FontWeight}
    */
   get weight() {
-    return this.mDefaultStyle.weight;
+    return this.mDefaultStyle.weight
   }
 
   /**
@@ -343,13 +354,12 @@ class TextField extends DisplayObject {
    * @return {void}
    */
   set weight(value) {
-    if (this.mDefaultStyle.weight === value)
-      return;
+    if (this.mDefaultStyle.weight === value) return
 
-    this.mDefaultStyle.weight = value;
+    this.mDefaultStyle.weight = value
 
-    this.setDirty(DirtyFlag.RENDER_CACHE, false);
-    this.setTransformDirty();
+    this.setDirty(DirtyFlag.RENDER_CACHE, false)
+    this.setTransformDirty()
   }
 
   /**
@@ -358,7 +368,7 @@ class TextField extends DisplayObject {
    * @return {TextStyle.FontAlign}
    */
   get align() {
-    return this.mAlign;
+    return this.mAlign
   }
 
   /**
@@ -367,13 +377,12 @@ class TextField extends DisplayObject {
    * @return {void}
    */
   set align(value) {
-    if (this.mAlign === value)
-      return;
+    if (this.mAlign === value) return
 
-    this.mAlign = value;
+    this.mAlign = value
 
-    this.setDirty(DirtyFlag.RENDER_CACHE, false);
-    this.setTransformDirty();
+    this.setDirty(DirtyFlag.RENDER_CACHE, false)
+    this.setTransformDirty()
   }
 
   /**
@@ -382,7 +391,7 @@ class TextField extends DisplayObject {
    * @return {TextStyle.FontVerticalAlign}
    */
   get vAlign() {
-    return this.mVerticalAlign;
+    return this.mVerticalAlign
   }
 
   /**
@@ -391,13 +400,12 @@ class TextField extends DisplayObject {
    * @return {void}
    */
   set vAlign(value) {
-    if (this.mVerticalAlign === value)
-      return;
+    if (this.mVerticalAlign === value) return
 
-    this.mVerticalAlign = value;
+    this.mVerticalAlign = value
 
-    this.setDirty(DirtyFlag.RENDER_CACHE, false);
-    this.setTransformDirty();
+    this.setDirty(DirtyFlag.RENDER_CACHE, false)
+    this.setTransformDirty()
   }
 
   /**
@@ -405,7 +413,7 @@ class TextField extends DisplayObject {
    * @return {number}
    */
   get strokeColor() {
-    return this.mDefaultStyle.strokeColor;
+    return this.mDefaultStyle.strokeColor
   }
 
   /**
@@ -414,21 +422,23 @@ class TextField extends DisplayObject {
    * @return {void}
    */
   set strokeColor(value) {
-    if (this.mDefaultStyle.strokeColor === value)
-      return;
+    if (this.mDefaultStyle.strokeColor === value) return
 
-    this.mDefaultStyle.strokeColor = value;
-    this.setDirty(/** @type {DirtyFlag} */(DirtyFlag.RENDER_CACHE | DirtyFlag.RENDER), false);
+    this.mDefaultStyle.strokeColor = value
+    this.setDirty(
+      /** @type {DirtyFlag} */ (DirtyFlag.RENDER_CACHE | DirtyFlag.RENDER),
+      false
+    )
   }
 
   /**
    * Specifies the thickness of the stroke. 0 means that no stroke.
    * Note: if autoSize is true stroke works like filter meaning that position of the text will not be adjusted and bounds will be the same.
-   * 
-   * @return {number} 
+   *
+   * @return {number}
    */
   get strokeThickness() {
-    return this.mDefaultStyle.strokeThickness;
+    return this.mDefaultStyle.strokeThickness
   }
 
   /**
@@ -437,11 +447,13 @@ class TextField extends DisplayObject {
    * @return {void}
    */
   set strokeThickness(value) {
-    if (value === this.mDefaultStyle.strokeThickness)
-      return;
+    if (value === this.mDefaultStyle.strokeThickness) return
 
-    this.mDefaultStyle.strokeThickness = value;
-    this.setDirty(/** @type {DirtyFlag} */(DirtyFlag.RENDER_CACHE | DirtyFlag.RENDER), false);
+    this.mDefaultStyle.strokeThickness = value
+    this.setDirty(
+      /** @type {DirtyFlag} */ (DirtyFlag.RENDER_CACHE | DirtyFlag.RENDER),
+      false
+    )
   }
 
   /**
@@ -450,7 +462,7 @@ class TextField extends DisplayObject {
    * @return {number}
    */
   get fieldWidth() {
-    return this.mFieldWidth;
+    return this.mFieldWidth
   }
 
   /**
@@ -459,13 +471,12 @@ class TextField extends DisplayObject {
    * @return {void}
    */
   set fieldWidth(value) {
-    if (value === this.mFieldWidth)
-      return;
+    if (value === this.mFieldWidth) return
 
-    this.mFieldWidth = value;
+    this.mFieldWidth = value
 
-    this.setDirty(DirtyFlag.RENDER_CACHE, false);
-    this.setTransformDirty();
+    this.setDirty(DirtyFlag.RENDER_CACHE, false)
+    this.setTransformDirty()
   }
 
   /** Specifies the height of the text field, if autoSize set as false
@@ -473,9 +484,8 @@ class TextField extends DisplayObject {
    * @return {number}
    */
   get fieldHeight() {
-    return this.mFieldHeight;
+    return this.mFieldHeight
   }
-
 
   /**
    * @ignore
@@ -483,13 +493,12 @@ class TextField extends DisplayObject {
    * @return {void}
    */
   set fieldHeight(value) {
-    if (value === this.mFieldHeight)
-      return;
+    if (value === this.mFieldHeight) return
 
-    this.mFieldHeight = value;
+    this.mFieldHeight = value
 
-    this.setDirty(DirtyFlag.RENDER_CACHE, false);
-    this.setTransformDirty();
+    this.setDirty(DirtyFlag.RENDER_CACHE, false)
+    this.setTransformDirty()
   }
 
   /**Text to be displayed inside this text field.
@@ -497,7 +506,7 @@ class TextField extends DisplayObject {
    * @return {string}
    */
   get text() {
-    return this.mText;
+    return this.mText
   }
 
   /**
@@ -506,19 +515,18 @@ class TextField extends DisplayObject {
    * @return {void}
    */
   set text(value) {
-    if (this.mText === value)
-      return;
+    if (this.mText === value) return
 
-    this.mText = value;
+    this.mText = value
 
-    this.setDirty(DirtyFlag.RENDER_CACHE, false);
-    this.setTransformDirty();
+    this.setDirty(DirtyFlag.RENDER_CACHE, false)
+    this.setTransformDirty()
 
     /**
      * Posts every time text has been changed.
      * @event TextField#change
      */
-    this.post(Message.CHANGE);
+    this.post(Message.CHANGE)
   }
 
   /**
@@ -527,7 +535,7 @@ class TextField extends DisplayObject {
    * @return {boolean}
    */
   get autoSize() {
-    return this.mAutoSize;
+    return this.mAutoSize
   }
 
   /**
@@ -536,13 +544,12 @@ class TextField extends DisplayObject {
    * @return {void}
    */
   set autoSize(value) {
-    if (this.mAutoSize === value)
-      return;
+    if (this.mAutoSize === value) return
 
-    this.mAutoSize = value;
+    this.mAutoSize = value
 
-    this.setDirty(DirtyFlag.RENDER_CACHE, false);
-    this.setTransformDirty();
+    this.setDirty(DirtyFlag.RENDER_CACHE, false)
+    this.setTransformDirty()
   }
 
   /**
@@ -551,7 +558,7 @@ class TextField extends DisplayObject {
    * @return {Rectangle}
    */
   get padding() {
-    return this.mPadding;
+    return this.mPadding
   }
 
   /**
@@ -560,19 +567,19 @@ class TextField extends DisplayObject {
    * @return {void}
    */
   set padding(value) {
-    this.mPadding = value;
+    this.mPadding = value
 
-    this.setDirty(DirtyFlag.RENDER_CACHE, false);
-    this.setTransformDirty();
+    this.setDirty(DirtyFlag.RENDER_CACHE, false)
+    this.setTransformDirty()
   }
 
   /**
    * Gets sets whenever to drop shadow or not.
-   * 
-   * @return {boolean} 
+   *
+   * @return {boolean}
    */
   get dropShadow() {
-    return this.mDefaultStyle.dropShadow;
+    return this.mDefaultStyle.dropShadow
   }
 
   /**
@@ -581,22 +588,21 @@ class TextField extends DisplayObject {
    * @return {void}
    */
   set dropShadow(value) {
-    if (value === this.mDefaultStyle.dropShadow)
-      return;
+    if (value === this.mDefaultStyle.dropShadow) return
 
-    this.mDefaultStyle.dropShadow = value;
+    this.mDefaultStyle.dropShadow = value
 
-    this.setDirty(DirtyFlag.RENDER_CACHE, false);
-    this.setTransformDirty();
+    this.setDirty(DirtyFlag.RENDER_CACHE, false)
+    this.setTransformDirty()
   }
 
   /**
    * Gets/sets the color of the shadow.
-   * 
-   * @return {number} 
+   *
+   * @return {number}
    */
   get shadowColor() {
-    return this.mDefaultStyle.shadowColor;
+    return this.mDefaultStyle.shadowColor
   }
 
   /**
@@ -605,20 +611,22 @@ class TextField extends DisplayObject {
    * @return {void}
    */
   set shadowColor(value) {
-    if (value === this.mDefaultStyle.shadowColor)
-      return;
+    if (value === this.mDefaultStyle.shadowColor) return
 
-    this.mDefaultStyle.shadowColor = value;
-    this.setDirty(/** @type {DirtyFlag} */(DirtyFlag.RENDER_CACHE | DirtyFlag.RENDER), false);
+    this.mDefaultStyle.shadowColor = value
+    this.setDirty(
+      /** @type {DirtyFlag} */ (DirtyFlag.RENDER_CACHE | DirtyFlag.RENDER),
+      false
+    )
   }
 
   /**
    * Gets/sets alpha component of the shadows.
-   * 
-   * @return {number} 
+   *
+   * @return {number}
    */
   get shadowAlpha() {
-    return this.mDefaultStyle.shadowAlpha;
+    return this.mDefaultStyle.shadowAlpha
   }
 
   /**
@@ -627,20 +635,22 @@ class TextField extends DisplayObject {
    * @return {void}
    */
   set shadowAlpha(value) {
-    if (value === this.mDefaultStyle.shadowAlpha)
-      return;
+    if (value === this.mDefaultStyle.shadowAlpha) return
 
-    this.mDefaultStyle.shadowAlpha = value;
-    this.setDirty(/** @type {DirtyFlag} */(DirtyFlag.RENDER_CACHE | DirtyFlag.RENDER), false);
+    this.mDefaultStyle.shadowAlpha = value
+    this.setDirty(
+      /** @type {DirtyFlag} */ (DirtyFlag.RENDER_CACHE | DirtyFlag.RENDER),
+      false
+    )
   }
 
   /**
    * Gets/sets the shadow blur radius.
-   * 
-   * @return {number} 
+   *
+   * @return {number}
    */
   get shadowBlur() {
-    return this.mDefaultStyle.shadowBlur;
+    return this.mDefaultStyle.shadowBlur
   }
 
   /**
@@ -649,20 +659,22 @@ class TextField extends DisplayObject {
    * @return {void}
    */
   set shadowBlur(value) {
-    if (value === this.mDefaultStyle.shadowBlur)
-      return;
+    if (value === this.mDefaultStyle.shadowBlur) return
 
-    this.mDefaultStyle.shadowBlur = value;
-    this.setDirty(/** @type {DirtyFlag} */(DirtyFlag.RENDER_CACHE | DirtyFlag.RENDER), false);
+    this.mDefaultStyle.shadowBlur = value
+    this.setDirty(
+      /** @type {DirtyFlag} */ (DirtyFlag.RENDER_CACHE | DirtyFlag.RENDER),
+      false
+    )
   }
 
   /**
    * Gets/sets shadow distance on x axis.
-   * 
-   * @return {number} 
+   *
+   * @return {number}
    */
   get shadowDistanceX() {
-    return this.mDefaultStyle.shadowDistanceX;
+    return this.mDefaultStyle.shadowDistanceX
   }
 
   /**
@@ -671,20 +683,22 @@ class TextField extends DisplayObject {
    * @return {void}
    */
   set shadowDistanceX(value) {
-    if (value === this.mDefaultStyle.shadowDistanceX)
-      return;
+    if (value === this.mDefaultStyle.shadowDistanceX) return
 
-    this.mDefaultStyle.shadowDistanceX = value;
-    this.setDirty(/** @type {DirtyFlag} */(DirtyFlag.RENDER_CACHE | DirtyFlag.RENDER), false);
+    this.mDefaultStyle.shadowDistanceX = value
+    this.setDirty(
+      /** @type {DirtyFlag} */ (DirtyFlag.RENDER_CACHE | DirtyFlag.RENDER),
+      false
+    )
   }
 
   /**
    * Gets/sets shadow distance on y axis.
-   * 
-   * @return {number} 
+   *
+   * @return {number}
    */
   get shadowDistanceY() {
-    return this.mDefaultStyle.shadowDistanceY;
+    return this.mDefaultStyle.shadowDistanceY
   }
 
   /**
@@ -693,21 +707,23 @@ class TextField extends DisplayObject {
    * @return {void}
    */
   set shadowDistanceY(value) {
-    if (value === this.mDefaultStyle.shadowDistanceY)
-      return;
+    if (value === this.mDefaultStyle.shadowDistanceY) return
 
-    this.mDefaultStyle.shadowDistanceY = value;
-    this.setDirty(/** @type {DirtyFlag} */(DirtyFlag.RENDER_CACHE | DirtyFlag.RENDER), false);
+    this.mDefaultStyle.shadowDistanceY = value
+    this.setDirty(
+      /** @type {DirtyFlag} */ (DirtyFlag.RENDER_CACHE | DirtyFlag.RENDER),
+      false
+    )
   }
 
   /**
    * Gets/sets render quality of this text field. False by default.
    * When true font will respect object's scale and device pixel ratio. The downside is it may cause font shaking when animating.
-   * 
+   *
    * @returns {boolean}
    */
   get highQuality() {
-    return this.mHighQuality;
+    return this.mHighQuality
   }
 
   /**
@@ -716,10 +732,10 @@ class TextField extends DisplayObject {
    * @return {void}
    */
   set highQuality(value) {
-    this.mHighQuality = value;
+    this.mHighQuality = value
 
-    this.setDirty(DirtyFlag.RENDER_CACHE, false);
-    this.setTransformDirty();
+    this.setDirty(DirtyFlag.RENDER_CACHE, false)
+    this.setTransformDirty()
   }
 }
 
@@ -728,4 +744,4 @@ class TextField extends DisplayObject {
  * @private
  * @static
  */
-TextField.__cache = null;
+TextField.__cache = null

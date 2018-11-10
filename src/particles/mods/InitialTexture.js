@@ -12,16 +12,16 @@ class InitialTexture extends Modifier {
    * @param {...(number|FloatScatter)} values Min and max indexes from texture list.
    */
   constructor(...values) {
-    super();
+    super()
 
     /** @type {FloatScatter} Modifier's object to get values from.  */
-    this.scatter = FloatScatter.fromObject(...values);
+    this.scatter = FloatScatter.fromObject(...values)
   }
 
   /**
    * @inheritDoc
    */
   update(emitter, particle, dt) {
-    particle.textureIndex = Math.round(this.scatter.getValue());
+    particle.textureIndex = Math.round(this.scatter.getValue())
   }
 }

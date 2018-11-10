@@ -14,18 +14,20 @@ class JSONAsset extends Asset {
    * @return {void}
    */
   constructor(name, url) {
-    super(name);
+    super(name)
 
     /** @private @type {XHRAssetLoader} */
-    this.mXHR = new XHRAssetLoader(url);
-    this.mXHR.mimeType = 'application/json';
-    this.addLoader(this.mXHR);
+    this.mXHR = new XHRAssetLoader(url)
+    this.mXHR.mimeType = 'application/json'
+    this.addLoader(this.mXHR)
   }
 
   /**
    * @inheritDoc
    */
   onAllLoaded() {
-    super.ready(/** @type {!Object}*/(JSON.parse(/** @type {string} */(this.mXHR.data))));
+    super.ready(
+      /** @type {!Object}*/ (JSON.parse(/** @type {string} */ (this.mXHR.data)))
+    )
   }
 }

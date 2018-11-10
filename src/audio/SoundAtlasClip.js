@@ -1,32 +1,35 @@
 /**
  * The class which stores audio buffer of sound atlas and information about sub sound clips.
- * 
+ *
  * @cat audio
  * @extends SoundClip
  */
 /* @echo EXPORT */
 class SoundAtlasClip extends SoundClip {
-
   /**
    * Creates instance of SoundAtlas.
-   * 
+   *
    * @param {AudioBuffer} nativeBuffer Decoded audio buffer.
    * @param {Object} jsonObject        Data representing sub sounds name, duration and offset.
    */
   constructor(nativeBuffer, jsonObject) {
-    super(nativeBuffer);
+    super(nativeBuffer)
 
     /** @private @type {Object<string, SoundClip>} */
-    this.mClips = {};
-    
+    this.mClips = {}
+
     if (jsonObject !== null)
       for (let key in jsonObject['sounds'])
-        this.addSubSound(key, jsonObject['sounds'][key][0], jsonObject['sounds'][key][1]);
+        this.addSubSound(
+          key,
+          jsonObject['sounds'][key][0],
+          jsonObject['sounds'][key][1]
+        )
   }
 
   /**
    * Dynamically sets new sub sound info bypassing json.
-   * 
+   *
    * @public
    * @param {string} name     The name of the sub sound.
    * @param {number} offset   The offset is seconds, where sub sound will be start playing from.
@@ -34,24 +37,24 @@ class SoundAtlasClip extends SoundClip {
    * @returns {SoundClip}     New instance of SoundClip.
    */
   addSubSound(name, offset = 0, duration = NaN) {
-    this.mClips[name] = new SoundClip(this.native, offset, duration, true);
-    return this.mClips[name];
+    this.mClips[name] = new SoundClip(this.native, offset, duration, true)
+    return this.mClips[name]
   }
 
   /**
    * Removes previously added sub sound info.
-   * 
+   *
    * @public
    * @param {string} name The name of the sub sound.
    * @returns {void}
    */
   removeSubSound(name) {
-    delete this.mClips[name];
+    delete this.mClips[name]
   }
 
   /**
    * Directly plays sub sound by given name on specific channel.
-   * 
+   *
    * @public
    * @param {string} name                The name of the sub sound.
    * @param {string=} [channel='master'] The name of channel.
@@ -61,16 +64,15 @@ class SoundAtlasClip extends SoundClip {
    * @returns {SoundInstance|null}       New sound instance to be played.
    */
   playSubSound(name, channel = 'master', volume = 1, loop = false, pan = 0) {
-    let clip = this.mClips[name];
-    if (clip == null)
-      return null;
-    
-    let instance = new SoundInstance(clip);
-    instance.channel = channel;
-    instance.volume = volume;
-    instance.loop = loop;
-    instance.pan = pan;
-    return instance._play();
+    let clip = this.mClips[name]
+    if (clip == null) return null
+
+    let instance = new SoundInstance(clip)
+    instance.channel = channel
+    instance.volume = volume
+    instance.loop = loop
+    instance.pan = pan
+    return instance._play()
   }
 
   /**
@@ -81,6 +83,6 @@ class SoundAtlasClip extends SoundClip {
    * @returns {Object<string, SoundClip>}
    */
   get subSounds() {
-    return this.mClips;
+    return this.mClips
   }
 }

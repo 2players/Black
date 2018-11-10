@@ -8,5 +8,5 @@
 /* @echo EXPORT */
 const FillRule = {
   NONE_ZERO: 'nonzero',
-  EVEN_ODD : 'evenodd',
-};
+  EVEN_ODD: 'evenodd',
+}

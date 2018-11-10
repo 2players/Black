@@ -6,5 +6,5 @@
 /* @echo EXPORT */
 const EmitterSortOrder = {
   FRONT_TO_BACK: 'frontToBack',
-  BACK_TO_FRONT: 'backToFront'
-};
+  BACK_TO_FRONT: 'backToFront',
+}

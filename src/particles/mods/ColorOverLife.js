@@ -12,16 +12,16 @@ class ColorOverLife extends Modifier {
    * @param {...(number|ColorScatter)} values A starting and ending values of color property.
    */
   constructor(...values) {
-    super(false);
+    super(false)
 
     /** @type {ColorScatter} Modifier's object to get values from.  */
-    this.scatter = ColorScatter.fromObject(...values);
+    this.scatter = ColorScatter.fromObject(...values)
   }
 
   /**
    * @inheritDoc
    */
   update(emitter, particle, dt) {
-    particle.color = this.scatter.getValueAt(particle.energy);
+    particle.color = this.scatter.getValueAt(particle.energy)
   }
 }

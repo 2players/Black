@@ -7,22 +7,22 @@
 class Message {
   constructor() {
     /** @type {MessageDispatcher} The `MessageDispatcher` object, which posted this message. */
-    this.sender = null;
+    this.sender = null
 
     /** @type {string} The name of message. */
-    this.name = '';
+    this.name = ''
 
     /** @type {Object} `GameObject` which receives this message. */
-    this.target = null;
+    this.target = null
 
     /** @type {Object} The point from which sending is begun. */
-    this.origin = null;
+    this.origin = null
 
     /** @type {boolean} Specifies if invocation of this message was canceled. */
-    this.canceled = false;
+    this.canceled = false
 
     /** @type {MessageType} Message type. See `MessageType` enum. */
-    this.type = MessageType.DIRECT;
+    this.type = MessageType.DIRECT
   }
 
   /**
@@ -31,7 +31,7 @@ class Message {
    * @return {void}
    */
   cancel() {
-    this.canceled = true;
+    this.canceled = true
   }
 
   // @ifdef DEBUG
@@ -41,13 +41,15 @@ class Message {
    * @return {string}
    */
   toString() {
-    let name = '';
+    let name = ''
 
-    let isGameObject = this.sender instanceof GameObject;
+    let isGameObject = this.sender instanceof GameObject
     if (isGameObject === true)
-      name = /** @type {GameObject}*/ (this.sender).name;
+      name = /** @type {GameObject}*/ (this.sender).name
 
-    return `MESSAGE: { name: '${this.name}', sender: '${name}', target: '${this.target.name}', path: '${this.path}' }`;
+    return `MESSAGE: { name: '${this.name}', sender: '${name}', target: '${
+      this.target.name
+    }', path: '${this.path}' }`
   }
   // @endif
 
@@ -56,12 +58,12 @@ class Message {
    * @returns {Message}
    */
   __reset() {
-    this.sender = null;
-    this.name = '';
-    this.target = null;
-    this.canceled = false;
-    this.type = MessageType.DIRECT;
-    return this;
+    this.sender = null
+    this.name = ''
+    this.target = null
+    this.canceled = false
+    this.type = MessageType.DIRECT
+    return this
   }
 }
 
@@ -72,25 +74,25 @@ class Message {
  * @nocollapse
  *
  */
-Message.pool = new ObjectPool(Message);
+Message.pool = new ObjectPool(Message)
 
 /** @const @public @type {string} */
-Message.PROGRESS = 'progress';
+Message.PROGRESS = 'progress'
 
 /** @const @public @type {string} */
-Message.COMPLETE = 'complete';
+Message.COMPLETE = 'complete'
 
 /** @const @public @type {string} */
-Message.ERROR = 'error';
+Message.ERROR = 'error'
 
 /** @const @public @type {string} */
-Message.CHANGE = 'change';
+Message.CHANGE = 'change'
 
 /** @const @public @type {string} */
-Message.READY = 'ready';
+Message.READY = 'ready'
 
 /** @const @public @type {string} */
-Message.UPDATE = 'update';
+Message.UPDATE = 'update'
 
 /** @const @public @type {string} */
-Message.RESIZE = 'resize';
+Message.RESIZE = 'resize'

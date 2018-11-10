@@ -12,33 +12,35 @@ class Sprite extends DisplayObject {
    * @param {Texture|string|null} texture The Texture instance or null.
    */
   constructor(texture = null) {
-    super();
+    super()
 
     /** @private @type {Texture|null} */
-    this.mTexture = null;
+    this.mTexture = null
 
     /** @private @type {string|null} */
-    this.mTextureName = null;
+    this.mTextureName = null
 
     if (texture !== null && texture.constructor === String) {
-      this.mTextureName = /** @type {string} */ (texture);
-      this.mTexture = AssetManager.default.getTexture(/** @type {string} */(texture));
+      this.mTextureName = /** @type {string} */ (texture)
+      this.mTexture = AssetManager.default.getTexture(
+        /** @type {string} */ (texture)
+      )
     } else {
-      this.mTexture = /** @type {Texture} */ (texture);
+      this.mTexture = /** @type {Texture} */ (texture)
     }
 
     /** @private @type {TilingInfo|null} */
-    this.mTiling = null;
+    this.mTiling = null
 
     /** @private @type {Rectangle|null} */
-    this.mSlice9grid = null;
+    this.mSlice9grid = null
   }
 
   /**
    * @inheritDoc
    */
   getRenderer() {
-    return Black.driver.getRenderer('Sprite', this);
+    return Black.driver.getRenderer('Sprite', this)
   }
 
   /**
@@ -49,19 +51,17 @@ class Sprite extends DisplayObject {
    * @return {Rectangle} The new Rectangle or outRect if it was passed as a param.
    */
   onGetLocalBounds(outRect = undefined) {
-    outRect = outRect || new Rectangle();
+    outRect = outRect || new Rectangle()
 
-    if (!this.mTexture)
-      return outRect;
+    if (!this.mTexture) return outRect
 
-    if (this.mClipRect !== null)
-      this.mClipRect.copyTo(outRect);
+    if (this.mClipRect !== null) this.mClipRect.copyTo(outRect)
     else if (this.tiling !== null)
-      outRect.set(0, 0, this.tiling.width, this.tiling.height);
+      outRect.set(0, 0, this.tiling.width, this.tiling.height)
     else
-      outRect.set(0, 0, this.mTexture.displayWidth, this.mTexture.displayHeight);
+      outRect.set(0, 0, this.mTexture.displayWidth, this.mTexture.displayHeight)
 
-    return outRect;
+    return outRect
   }
 
   /**
@@ -70,7 +70,7 @@ class Sprite extends DisplayObject {
    * @return {Texture|null} The current texture set on this Sprite or null.
    */
   get texture() {
-    return this.mTexture;
+    return this.mTexture
   }
 
   /**
@@ -81,13 +81,11 @@ class Sprite extends DisplayObject {
    * @return {void}
    */
   set texture(texture) {
-    if (this.mTexture === texture)
-      return;
+    if (this.mTexture === texture) return
 
-    this.mTexture = texture;
-    this.setDirty(DirtyFlag.RENDER_CACHE, false);
-    this.setRenderDirty();
-
+    this.mTexture = texture
+    this.setDirty(DirtyFlag.RENDER_CACHE, false)
+    this.setRenderDirty()
   }
 
   /**
@@ -96,31 +94,32 @@ class Sprite extends DisplayObject {
    * @return {?string}
    */
   get textureName() {
-    return this.mTextureName;
+    return this.mTextureName
   }
 
   /**
    * Sets the current texture by its name
-   * 
+   *
    * @param {?string} value
    */
   set textureName(value) {
-    if (this.mTextureName === value)
-      return;
+    if (this.mTextureName === value) return
 
-    this.mTextureName = value;
-    this.texture = AssetManager.default.getTexture(/** @type {string} */(value));
+    this.mTextureName = value
+    this.texture = AssetManager.default.getTexture(
+      /** @type {string} */ (value)
+    )
   }
 
   /**
    * Gets sets tiling information.
-   * 
+   *
    * NOTE: after changing one of TilingInfo properties make sure to call `setDirty(DirtyFlag.RENDER_CACHE)`.
-   * 
+   *
    * @returns {TilingInfo|null}
    */
   get tiling() {
-    return this.mTiling;
+    return this.mTiling
   }
 
   /**
@@ -128,21 +127,21 @@ class Sprite extends DisplayObject {
    * @param {TilingInfo|null} value
    */
   set tiling(value) {
-    this.mTiling = value;
+    this.mTiling = value
 
-    this.setRenderDirty();
-    this.setDirty(DirtyFlag.RENDER_CACHE, false);
+    this.setRenderDirty()
+    this.setDirty(DirtyFlag.RENDER_CACHE, false)
   }
 
   /**
    * Gets/sets nine slice grid rectangle.
-   * 
+   *
    * NOTE: after changing x, y, width or height of nine slice grid attributes make sure to call `setDirty(DirtyFlag.RENDER_CACHE)` to refresh renderer.
-   * 
+   *
    * @returns {Rectangle|null}
    */
   get slice9grid() {
-    return this.mSlice9grid;
+    return this.mSlice9grid
   }
 
   /**
@@ -150,9 +149,9 @@ class Sprite extends DisplayObject {
    * @param {Rectangle|null} value
    */
   set slice9grid(value) {
-    this.mSlice9grid = value;
+    this.mSlice9grid = value
 
-    this.setRenderDirty();
-    this.setDirty(DirtyFlag.RENDER_CACHE, false);
+    this.setRenderDirty()
+    this.setDirty(DirtyFlag.RENDER_CACHE, false)
   }
 }

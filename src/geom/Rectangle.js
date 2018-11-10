@@ -14,19 +14,19 @@ class Rectangle {
    * @param  {number=} [h=0] The height.
    */
   constructor(x = 0, y = 0, w = 0, h = 0) {
-    Debug.isNumber(x, y, w, h);
+    Debug.isNumber(x, y, w, h)
 
     /** @export @type {number} The x coordinate of the rectangle. */
-    this.x = x;
+    this.x = x
 
     /** @export @type {number} The y coordinate of the rectangle. */
-    this.y = y;
+    this.y = y
 
     /** @export @type {number} The width of the rectangle. */
-    this.width = w;
+    this.width = w
 
     /** @export @type {number} The height of the rectangle. */
-    this.height = h;
+    this.height = h
   }
 
   /**
@@ -39,14 +39,14 @@ class Rectangle {
    * @return {Rectangle} This.
    */
   set(x, y, w, h) {
-    Debug.isNumber(x, y, w, h);
+    Debug.isNumber(x, y, w, h)
 
-    this.x = x;
-    this.y = y;
-    this.width = w;
-    this.height = h;
+    this.x = x
+    this.y = y
+    this.width = w
+    this.height = h
 
-    return this;
+    return this
   }
 
   /**
@@ -56,12 +56,12 @@ class Rectangle {
    * @return {Rectangle} This.
    */
   copyFrom(rect) {
-    this.x = rect.x;
-    this.y = rect.y;
-    this.width = rect.width;
-    this.height = rect.height;
+    this.x = rect.x
+    this.y = rect.y
+    this.width = rect.width
+    this.height = rect.height
 
-    return this;
+    return this
   }
 
   /**
@@ -71,12 +71,12 @@ class Rectangle {
    * @return {Rectangle} Given rect object.
    */
   copyTo(rect) {
-    rect.x = this.x;
-    rect.y = this.y;
-    rect.width = this.width;
-    rect.height = this.height;
+    rect.x = this.x
+    rect.y = this.y
+    rect.width = this.width
+    rect.height = this.height
 
-    return rect;
+    return rect
   }
 
   /**
@@ -85,7 +85,7 @@ class Rectangle {
    * @return {number}
    */
   get left() {
-    return this.x;
+    return this.x
   }
 
   /**
@@ -93,8 +93,8 @@ class Rectangle {
    * @param {number} left
    */
   set left(left) {
-    Debug.isNumber(left);
-    this.x = left;
+    Debug.isNumber(left)
+    this.x = left
   }
 
   /**
@@ -103,7 +103,7 @@ class Rectangle {
    * @return {number}
    */
   get right() {
-    return this.x + this.width;
+    return this.x + this.width
   }
 
   /**
@@ -111,8 +111,8 @@ class Rectangle {
    * @param {number} right
    */
   set right(right) {
-    Debug.isNumber(right);
-    this.x = right - this.width;
+    Debug.isNumber(right)
+    this.x = right - this.width
   }
 
   /**
@@ -121,7 +121,7 @@ class Rectangle {
    * @return {number}
    */
   get top() {
-    return this.y;
+    return this.y
   }
 
   /**
@@ -129,8 +129,8 @@ class Rectangle {
    * @param {number} top
    */
   set top(top) {
-    Debug.isNumber(top);
-    this.y = top;
+    Debug.isNumber(top)
+    this.y = top
   }
 
   /**
@@ -139,7 +139,7 @@ class Rectangle {
    * @return {number}
    */
   get bottom() {
-    return this.y + this.height;
+    return this.y + this.height
   }
 
   /**
@@ -147,9 +147,9 @@ class Rectangle {
    * @param {number} bottom
    */
   set bottom(bottom) {
-    Debug.isNumber(bottom);
+    Debug.isNumber(bottom)
 
-    this.y = bottom - this.height;
+    this.y = bottom - this.height
   }
 
   /**
@@ -158,7 +158,7 @@ class Rectangle {
    * @return {Vector}
    */
   get topLeft() {
-    return new Vector(this.x, this.y);
+    return new Vector(this.x, this.y)
   }
 
   /**
@@ -166,8 +166,8 @@ class Rectangle {
    * @param {Vector} vector
    */
   set topLeft(vector) {
-    this.left = vector.x;
-    this.top = vector.y;
+    this.left = vector.x
+    this.top = vector.y
   }
 
   /**
@@ -176,7 +176,7 @@ class Rectangle {
    * @return {Vector}
    */
   get topRight() {
-    return new Vector(this.right, this.y);
+    return new Vector(this.right, this.y)
   }
 
   /**
@@ -184,8 +184,8 @@ class Rectangle {
    * @param {Vector} vector
    */
   set topRight(vector) {
-    this.right = vector.x;
-    this.top = vector.y;
+    this.right = vector.x
+    this.top = vector.y
   }
 
   /**
@@ -194,7 +194,7 @@ class Rectangle {
    * @return {Vector}
    */
   get bottomRight() {
-    return new Vector(this.right, this.bottom);
+    return new Vector(this.right, this.bottom)
   }
 
   /**
@@ -202,8 +202,8 @@ class Rectangle {
    * @param {Vector} vector
    */
   set bottomRight(vector) {
-    this.right = vector.x;
-    this.bottom = vector.y;
+    this.right = vector.x
+    this.bottom = vector.y
   }
 
   /**
@@ -212,7 +212,7 @@ class Rectangle {
    * @return {Vector}
    */
   get bottomLeft() {
-    return new Vector(this.x, this.bottom);
+    return new Vector(this.x, this.bottom)
   }
 
   /**
@@ -220,8 +220,8 @@ class Rectangle {
    * @param {Vector} vector
    */
   set bottomLeft(vector) {
-    this.x = vector.x;
-    this.bottom = vector.y;
+    this.x = vector.x
+    this.bottom = vector.y
   }
 
   /**
@@ -231,8 +231,8 @@ class Rectangle {
    * @return {Vector} New Rectangle instance or `outVector` if passed.
    */
   size(outVector = undefined) {
-    outVector = outVector || new Vector();
-    return outVector.set(this.width, this.height);
+    outVector = outVector || new Vector()
+    return outVector.set(this.width, this.height)
   }
 
   /**
@@ -241,7 +241,7 @@ class Rectangle {
    * @return {Rectangle} This.
    */
   zero() {
-    return this.set(0, 0, 0, 0);
+    return this.set(0, 0, 0, 0)
   }
 
   /**
@@ -252,10 +252,14 @@ class Rectangle {
    * @return {boolean} True if rectangles are equal.
    */
   equals(rect, epsilon = Number.EPSILON) {
-    return rect !== null && (Math.abs(this.x - rect.x) < epsilon) && (Math.abs(this.y - rect.y) < epsilon) &&
-      (Math.abs(this.width - rect.width) < epsilon) && (Math.abs(this.height - rect.height) < epsilon);
+    return (
+      rect !== null &&
+      Math.abs(this.x - rect.x) < epsilon &&
+      Math.abs(this.y - rect.y) < epsilon &&
+      Math.abs(this.width - rect.width) < epsilon &&
+      Math.abs(this.height - rect.height) < epsilon
+    )
   }
-
 
   /**
    * Checks if a given point is inside this rectangle.
@@ -265,9 +269,8 @@ class Rectangle {
    * @return {boolean} True if point is inside.
    */
   containsXY(x, y) {
-    return x >= this.x && x <= this.right && y >= this.y && y <= this.bottom;
+    return x >= this.x && x <= this.right && y >= this.y && y <= this.bottom
   }
-
 
   /**
    * Checks if a given rectangle is inside this rect.
@@ -276,7 +279,12 @@ class Rectangle {
    * @return {boolean} True if given rectangle is inside this one.
    */
   contains(rect) {
-    return rect.x >= this.x && rect.y >= this.y && rect.right <= this.right && rect.bottom <= this.bottom;
+    return (
+      rect.x >= this.x &&
+      rect.y >= this.y &&
+      rect.right <= this.right &&
+      rect.bottom <= this.bottom
+    )
   }
 
   /**
@@ -286,8 +294,12 @@ class Rectangle {
    * @return {boolean} True if intersects.
    */
   intersects(rect) {
-    return rect.right > this.x && rect.bottom > this.y &&
-      rect.x < this.right && rect.y < this.bottom;
+    return (
+      rect.right > this.x &&
+      rect.bottom > this.y &&
+      rect.x < this.right &&
+      rect.y < this.bottom
+    )
   }
 
   /**
@@ -298,24 +310,21 @@ class Rectangle {
    * @returns {Rectangle}
    */
   intersection(toIntersect, outRect) {
-    outRect = outRect || new Rectangle();
+    outRect = outRect || new Rectangle()
 
-    let x0 = this.x < toIntersect.x ? toIntersect.x : this.x;
-    let x1 = this.right > toIntersect.right ? toIntersect.right : this.right;
+    let x0 = this.x < toIntersect.x ? toIntersect.x : this.x
+    let x1 = this.right > toIntersect.right ? toIntersect.right : this.right
 
-    if (x1 <= x0)
-      return new Rectangle();
+    if (x1 <= x0) return new Rectangle()
 
-    let y0 = this.y < toIntersect.y ? toIntersect.y : this.y;
-    let y1 = this.bottom > toIntersect.bottom ? toIntersect.bottom : this.bottom;
+    let y0 = this.y < toIntersect.y ? toIntersect.y : this.y
+    let y1 = this.bottom > toIntersect.bottom ? toIntersect.bottom : this.bottom
 
-    if (y1 <= y0)
-      return new Rectangle();
+    if (y1 <= y0) return new Rectangle()
 
-    outRect.set(x0, y0, x1 - x0, y1 - y0);
-    return outRect;
+    outRect.set(x0, y0, x1 - x0, y1 - y0)
+    return outRect
   }
-
 
   /**
    * Adds given rectangle into this.
@@ -324,12 +333,12 @@ class Rectangle {
    * @return {Rectangle} New rectangle object that is the union.
    */
   union(toUnion) {
-    let x0 = this.x > toUnion.x ? toUnion.x : this.x;
-    let x1 = this.right < toUnion.right ? toUnion.right : this.right;
-    let y0 = this.y > toUnion.y ? toUnion.y : this.y;
-    let y1 = this.bottom < toUnion.bottom ? toUnion.bottom : this.bottom;
+    let x0 = this.x > toUnion.x ? toUnion.x : this.x
+    let x1 = this.right < toUnion.right ? toUnion.right : this.right
+    let y0 = this.y > toUnion.y ? toUnion.y : this.y
+    let y1 = this.bottom < toUnion.bottom ? toUnion.bottom : this.bottom
 
-    return this.set(x0, y0, x1 - x0, y1 - y0);
+    return this.set(x0, y0, x1 - x0, y1 - y0)
   }
 
   /**
@@ -338,7 +347,7 @@ class Rectangle {
    * @return {number}
    */
   get volume() {
-    return this.width * this.height;
+    return this.width * this.height
   }
 
   /**
@@ -351,58 +360,53 @@ class Rectangle {
    * @return {Rectangle} This.
    */
   expand(x, y, width, height) {
-    Debug.isNumber(x, y, width, height);
+    Debug.isNumber(x, y, width, height)
 
-    if (this.volume === 0)
-      return this.set(x, y, width, height);
+    if (this.volume === 0) return this.set(x, y, width, height)
 
-    let cacheRight = this.right;
-    let cacheBottom = this.bottom;
+    let cacheRight = this.right
+    let cacheBottom = this.bottom
 
     if (this.x > x) {
-      this.x = x;
-      this.width = cacheRight - x;
+      this.x = x
+      this.width = cacheRight - x
     }
 
     if (this.y > y) {
-      this.y = y;
-      this.height = cacheBottom - y;
+      this.y = y
+      this.height = cacheBottom - y
     }
 
-    if (cacheRight < x + width)
-      this.width = x + width - this.x;
+    if (cacheRight < x + width) this.width = x + width - this.x
 
-    if (cacheBottom < y + height)
-      this.height = y + height - this.y;
+    if (cacheBottom < y + height) this.height = y + height - this.y
 
-    return this;
+    return this
   }
 
   /**
    * Expands this rectangle with a given point.
-   * 
-   * @param {number} x 
-   * @param {number} y 
+   *
+   * @param {number} x
+   * @param {number} y
    * @returns {Rectangle}
    */
   expandXY(x, y) {
     if (x < this.x) {
-      this.width += this.x - x;
-      this.x = x;
+      this.width += this.x - x
+      this.x = x
     }
 
     if (y < this.y) {
-      this.height += this.y - y;
-      this.y = y;
+      this.height += this.y - y
+      this.y = y
     }
 
-    if (x > this.x + this.width)
-      this.width = x - this.x;
+    if (x > this.x + this.width) this.width = x - this.x
 
-    if (y > this.y + this.height)
-      this.height = y - this.y;
+    if (y > this.y + this.height) this.height = y - this.y
 
-    return this;
+    return this
   }
 
   /**
@@ -413,14 +417,14 @@ class Rectangle {
    * @return {Rectangle} This.
    */
   inflate(x = 0, y = 0) {
-    Debug.isNumber(x, y);
+    Debug.isNumber(x, y)
 
-    this.x -= x;
-    this.y -= y;
-    this.width += 2 * x;
-    this.height += 2 * y;
+    this.x -= x
+    this.y -= y
+    this.width += 2 * x
+    this.height += 2 * y
 
-    return this;
+    return this
   }
 
   /**
@@ -429,7 +433,7 @@ class Rectangle {
    * @return {Rectangle} New rectangle object.
    */
   clone() {
-    return new Rectangle(this.x, this.y, this.width, this.height);
+    return new Rectangle(this.x, this.y, this.width, this.height)
   }
 
   /**
@@ -438,9 +442,8 @@ class Rectangle {
    * @return {number}
    */
   get perimeter() {
-    return 2 * (this.width + this.height);
+    return 2 * (this.width + this.height)
   }
-
 
   /**
    * Returns the center point of this rectangle.
@@ -449,8 +452,8 @@ class Rectangle {
    * @return {Vector} New rectangle object.
    */
   center(outVector = undefined) {
-    outVector = outVector || new Vector();
-    return outVector.set(this.x + this.width * 0.5, this.y + this.height * 0.5);
+    outVector = outVector || new Vector()
+    return outVector.set(this.x + this.width * 0.5, this.y + this.height * 0.5)
   }
 
   /**
@@ -461,10 +464,10 @@ class Rectangle {
    * @return {Rectangle} This rectangle.
    */
   scale(x, y) {
-    this.width *= x;
-    this.height *= y;
+    this.width *= x
+    this.height *= y
 
-    return this;
+    return this
   }
 
   /**
@@ -473,7 +476,7 @@ class Rectangle {
    * @return {boolean} True if has.
    */
   get isEmpty() {
-    return this.width <= 0 || this.height <= 0;
+    return this.width <= 0 || this.height <= 0
   }
 
   /**
@@ -486,79 +489,77 @@ class Rectangle {
       new Line(this.topLeft, this.topRight),
       new Line(this.topRight, this.bottomRight),
       new Line(this.bottomRight, this.bottomLeft),
-      new Line(this.bottomLeft, this.topLeft)
-    ];
+      new Line(this.bottomLeft, this.topLeft),
+    ]
   }
 
   /**
    * Calculates a bonding box enclosing the given list of points.
-   * 
-   * @param {Array<Vector>} points 
+   *
+   * @param {Array<Vector>} points
    * @returns {Rectangle}
    */
   static fromPoints(points) {
-    let result = new Rectangle();
+    let result = new Rectangle()
 
-    if (points.length === 0)
-      return result;
+    if (points.length === 0) return result
 
-    let length = points.length;
-    let minX = points[0].x;
-    let minY = points[0].y;
-    let maxX = points[0].x;
-    let maxY = points[0].y;
+    let length = points.length
+    let minX = points[0].x
+    let minY = points[0].y
+    let maxX = points[0].x
+    let maxY = points[0].y
 
     for (let i = 1; i < length; i++) {
-      let p = points[i];
-      let x = p.x;
-      let y = p.y;
+      let p = points[i]
+      let x = p.x
+      let y = p.y
 
-      minX = Math.min(x, minX);
-      maxX = Math.max(x, maxX);
-      minY = Math.min(y, minY);
-      maxY = Math.max(y, maxY);
+      minX = Math.min(x, minX)
+      maxX = Math.max(x, maxX)
+      minY = Math.min(y, minY)
+      maxY = Math.max(y, maxY)
     }
 
-    result.x = minX;
-    result.y = minY;
-    result.width = maxX - minX;
-    result.height = maxY - minY;
-    return result;
+    result.x = minX
+    result.y = minY
+    result.width = maxX - minX
+    result.height = maxY - minY
+    return result
   }
 
   /**
    * Calculates a bonding box enclosing the given list of x-y pairs.
-   * 
-   * @param {Array<number>} points 
+   *
+   * @param {Array<number>} points
    * @returns {Rectangle}
    */
   static fromPointsXY(points) {
-    let result = new Rectangle();
+    let result = new Rectangle()
 
-    if (points.length < 2)
-      return result;
+    if (points.length < 2) return result
 
-    let length = points.length;
-    let minX = points[0];
-    let minY = points[1];
-    let maxX = points[0];
-    let maxY = points[1];
+    let length = points.length
+    let minX = points[0]
+    let minY = points[1]
+    let maxX = points[0]
+    let maxY = points[1]
 
     for (let i = 2; i < length; i += 2) {
-      let x = points[i];
-      let y = points[i + 1];
+      let x = points[i]
+      let y = points[i + 1]
 
-      minX = Math.min(x, minX);
-      maxX = Math.max(x, maxX);
-      minY = Math.min(y, minY);
-      maxY = Math.max(y, maxY);
+      minX = Math.min(x, minX)
+      maxX = Math.max(x, maxX)
+      minY = Math.min(y, minY)
+      maxY = Math.max(y, maxY)
     }
 
-    result.x = minX;
-    result.y = minY;
-    result.width = maxX - minX;
-    result.height = maxY - minY;
-    return result;
+    result.x = minX
+    result.y = minY
+    result.width = maxX - minX
+    result.height = maxY - minY
+    return result
   }
 
   // @ifdef DEBUG
@@ -568,7 +569,11 @@ class Rectangle {
    * @return {string} Description
    */
   toString(digits = 2) {
-    return `Rectangle { x: ${this.x.toFixed(digits)}, y: ${this.y.toFixed(digits)}, width: ${this.width.toFixed(digits)}, height: ${this.height.toFixed(digits)} }`;
+    return `Rectangle { x: ${this.x.toFixed(digits)}, y: ${this.y.toFixed(
+      digits
+    )}, width: ${this.width.toFixed(digits)}, height: ${this.height.toFixed(
+      digits
+    )} }`
   }
   // @endif
 }
@@ -578,7 +583,7 @@ class Rectangle {
  * @type {Rectangle}
  * @nocollapse
  */
-Rectangle.__cache = new Rectangle();
+Rectangle.__cache = new Rectangle()
 
 /**
  * Recycled rectangles pool.
@@ -586,4 +591,4 @@ Rectangle.__cache = new Rectangle();
  * @type {ObjectPool}
  * @nocollapse
  */
-Rectangle.pool = new ObjectPool(Rectangle);
+Rectangle.pool = new ObjectPool(Rectangle)

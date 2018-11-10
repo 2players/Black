@@ -1,5 +1,5 @@
 /**
- * The type of the binding. 
+ * The type of the binding.
  * @cat core
  * @static
  * @constant
@@ -8,5 +8,5 @@
 /* @echo EXPORT */
 const BindingType = {
   REGULAR: 'regular',
-  OVERHEARD: 'overheard'
-};
+  OVERHEARD: 'overheard',
+}

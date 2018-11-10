@@ -15,10 +15,10 @@ class GraphicsCommand {
    */
   constructor(type, data) {
     /** @public @type {GraphicsCommandType} */
-    this.type = type;
+    this.type = type
 
     /** @public @type {Array<*>} */
-    this.data = data;
+    this.data = data
   }
 
   /**
@@ -27,7 +27,7 @@ class GraphicsCommand {
    * @returns {number}
    */
   getNumber(ix) {
-    return /** @type {!number} */ (this.data[ix]);
+    return /** @type {!number} */ (this.data[ix])
   }
 
   /**
@@ -36,7 +36,7 @@ class GraphicsCommand {
    * @returns {string}
    */
   getString(ix) {
-    return /** @type {!string} */ (this.data[ix]);
+    return /** @type {!string} */ (this.data[ix])
   }
 
   /**
@@ -45,7 +45,7 @@ class GraphicsCommand {
    * @returns {boolean}
    */
   getBoolean(ix) {
-    return /** @type {!boolean} */ (this.data[ix]);
+    return /** @type {!boolean} */ (this.data[ix])
   }
 
   /**
@@ -54,6 +54,6 @@ class GraphicsCommand {
    * @returns {Object}
    */
   getObject(ix) {
-    return /** @type {!Object} */ (this.data[ix]);
+    return /** @type {!Object} */ (this.data[ix])
   }
 }

@@ -12,19 +12,19 @@ class AnchorOverLife extends Modifier {
    * @param {...(number|VectorScatter)} values An VectorScatter which defines acceleration direction.
    */
   constructor(...values) {
-    super(false);
+    super(false)
 
     /** @type {VectorScatter} Modifier's object to get values from.  */
-    this.scatter = VectorScatter.fromObject(...values);
+    this.scatter = VectorScatter.fromObject(...values)
   }
 
   /**
    * @inheritDoc
    */
   update(emitter, particle, dt) {
-    this.scatter.getValueAt(particle.energy);
+    this.scatter.getValueAt(particle.energy)
 
-    particle.anchorX = this.scatter.value.x;
-    particle.anchorY = this.scatter.value.y;
+    particle.anchorX = this.scatter.value.x
+    particle.anchorY = this.scatter.value.y
   }
 }

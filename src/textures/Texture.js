@@ -14,42 +14,42 @@ class Texture {
    * @param {number=} [scale=1]                                                 Inverted scale factor.
    */
   constructor(nativeElement, region = null, untrimmedRegion = null, scale = 1) {
-    this.mId = ++Texture.__ID;
+    this.mId = ++Texture.__ID
 
     /** @private @type {HTMLImageElement|HTMLCanvasElement|HTMLVideoElement} */
-    this.mNative = nativeElement;
+    this.mNative = nativeElement
 
     /** @private @type {boolean} */
-    this.mValid = false;
+    this.mValid = false
 
     /** @private @type {Rectangle} */
-    this.mRegion = new Rectangle();
+    this.mRegion = new Rectangle()
 
     /** @private @type {Rectangle} */
-    this.mUntrimmedRegion = new Rectangle();
+    this.mUntrimmedRegion = new Rectangle()
 
     /** @private @type {number} */
-    this.mNativeWidth = 0;
+    this.mNativeWidth = 0
 
     /** @private @type {number} */
-    this.mNativeHeight = 0;
+    this.mNativeHeight = 0
 
     /** @private @type {number} */
-    this.mDisplayWidth = 0;
+    this.mDisplayWidth = 0
 
     /** @private @type {number} */
-    this.mDisplayHeight = 0;
+    this.mDisplayHeight = 0
 
     /** @private @type {number} */
-    this.mRenderWidth = 0;
+    this.mRenderWidth = 0
 
     /** @private @type {number} */
-    this.mRenderHeight = 0;
+    this.mRenderHeight = 0
 
     /** @private @type {number} */
-    this.mScale = scale;
+    this.mScale = scale
 
-    this.set(nativeElement, region, untrimmedRegion, scale);
+    this.set(nativeElement, region, untrimmedRegion, scale)
   }
 
   /**
@@ -61,25 +61,35 @@ class Texture {
    * @param {number=} [scale=1]                                                 Inverted scale factor.
    */
   set(nativeElement, region = null, untrimmedRegion = null, scale = 1) {
-    Debug.assert(nativeElement != null, 'nativeElement cannot be null');
-    Debug.assert(!isNaN(scale), 'scale cannot be NaN');
+    Debug.assert(nativeElement != null, 'nativeElement cannot be null')
+    Debug.assert(!isNaN(scale), 'scale cannot be NaN')
 
-    this.mScale = scale;
-    this.mNative = nativeElement;
+    this.mScale = scale
+    this.mNative = nativeElement
 
-    this.mNativeWidth = nativeElement.naturalWidth || nativeElement.videoWidth || nativeElement.width;
-    this.mNativeHeight = nativeElement.naturalHeight || nativeElement.videoHeight || nativeElement.height;
+    this.mNativeWidth =
+      nativeElement.naturalWidth ||
+      nativeElement.videoWidth ||
+      nativeElement.width
+    this.mNativeHeight =
+      nativeElement.naturalHeight ||
+      nativeElement.videoHeight ||
+      nativeElement.height
 
-    this.mRegion = region || this.mRegion.set(0, 0, this.mNativeWidth, this.mNativeHeight);
-    this.mUntrimmedRegion = untrimmedRegion || this.mUntrimmedRegion.set(0, 0, this.mRegion.width, this.mRegion.height);
+    this.mRegion =
+      region || this.mRegion.set(0, 0, this.mNativeWidth, this.mNativeHeight)
+    this.mUntrimmedRegion =
+      untrimmedRegion ||
+      this.mUntrimmedRegion.set(0, 0, this.mRegion.width, this.mRegion.height)
 
-    this.mDisplayWidth = Math.ceil(this.mUntrimmedRegion.width * this.mScale);
-    this.mDisplayHeight = Math.ceil(this.mUntrimmedRegion.height * this.mScale);
+    this.mDisplayWidth = Math.ceil(this.mUntrimmedRegion.width * this.mScale)
+    this.mDisplayHeight = Math.ceil(this.mUntrimmedRegion.height * this.mScale)
 
-    this.mRenderWidth = Math.ceil(this.mRegion.width * this.mScale);
-    this.mRenderHeight = Math.ceil(this.mRegion.height * this.mScale);
+    this.mRenderWidth = Math.ceil(this.mRegion.width * this.mScale)
+    this.mRenderHeight = Math.ceil(this.mRegion.height * this.mScale)
 
-    this.mValid = nativeElement != null && this.mDisplayWidth > 0 && this.mDisplayHeight > 0;
+    this.mValid =
+      nativeElement != null && this.mDisplayWidth > 0 && this.mDisplayHeight > 0
   }
 
   /**
@@ -88,12 +98,11 @@ class Texture {
    * @returns {number}
    */
   static getScaleFactorFromName(name) {
-    let ixStart = name.indexOf('@');
-    if (ixStart === -1)
-      return 1;
+    let ixStart = name.indexOf('@')
+    if (ixStart === -1) return 1
 
-    let ixEnd = name.indexOf('x', ixStart);
-    return parseFloat(name.substring(ixStart + 1, ixEnd));
+    let ixEnd = name.indexOf('x', ixStart)
+    return parseFloat(name.substring(ixStart + 1, ixEnd))
   }
 
   /**
@@ -102,12 +111,11 @@ class Texture {
    * @returns {string}
    */
   static removeScaleFactorFromName(name) {
-    let ixStart = name.indexOf('@');
-    if (ixStart === -1)
-      return name;
+    let ixStart = name.indexOf('@')
+    if (ixStart === -1) return name
 
-    let ixEnd = name.indexOf('x', ixStart);
-    return name.substring(0, ixStart) + name.substring(ixEnd + 1);
+    let ixEnd = name.indexOf('x', ixStart)
+    return name.substring(0, ixStart) + name.substring(ixEnd + 1)
   }
 
   /**
@@ -117,9 +125,9 @@ class Texture {
    * @returns {Texture}
    */
   static fromBase64String(string) {
-    let imgElement = new Image();
-    imgElement.src = string;
-    return new Texture(imgElement);
+    let imgElement = new Image()
+    imgElement.src = string
+    return new Texture(imgElement)
   }
 
   /**
@@ -130,10 +138,13 @@ class Texture {
    * @returns {Texture}
    */
   static fromCanvasAsImage(canvas, type = 'image/png', quality = 1) {
-    let imgElement = new Image();
-    imgElement.src = /** @type {HTMLCanvasElement} */(canvas).toDataURL(type, quality);
+    let imgElement = new Image()
+    imgElement.src = /** @type {HTMLCanvasElement} */ (canvas).toDataURL(
+      type,
+      quality
+    )
 
-    return new Texture(imgElement);
+    return new Texture(imgElement)
   }
 
   /**
@@ -142,7 +153,7 @@ class Texture {
    * @returns {Texture|null}
    */
   static fromCanvas(canvas) {
-    return Black.driver.getTextureFromCanvas(canvas);
+    return Black.driver.getTextureFromCanvas(canvas)
   }
 
   /**
@@ -152,7 +163,7 @@ class Texture {
    * @returns {number}
    */
   get width() {
-    return this.mDisplayWidth;
+    return this.mDisplayWidth
   }
 
   /**
@@ -162,7 +173,7 @@ class Texture {
    * @returns {number}
    */
   get height() {
-    return this.mDisplayHeight;
+    return this.mDisplayHeight
   }
 
   /**
@@ -172,7 +183,7 @@ class Texture {
    * @returns {number}
    */
   get scale() {
-    return this.mScale;
+    return this.mScale
   }
 
   /**
@@ -182,7 +193,7 @@ class Texture {
    * @returns {Rectangle}
    */
   get region() {
-    return this.mRegion;
+    return this.mRegion
   }
 
   /**
@@ -192,7 +203,7 @@ class Texture {
    * @returns {Rectangle}
    */
   get untrimmedRegion() {
-    return this.mUntrimmedRegion;
+    return this.mUntrimmedRegion
   }
 
   /**
@@ -202,7 +213,7 @@ class Texture {
    * @returns {number}
    */
   get nativeWidth() {
-    return this.mNativeWidth;
+    return this.mNativeWidth
   }
 
   /**
@@ -212,7 +223,7 @@ class Texture {
    * @returns {number}
    */
   get nativeHeight() {
-    return this.mNativeHeight;
+    return this.mNativeHeight
   }
 
   /**
@@ -222,7 +233,7 @@ class Texture {
    * @returns {number}
    */
   get displayWidth() {
-    return this.mDisplayWidth;
+    return this.mDisplayWidth
   }
 
   /**
@@ -232,7 +243,7 @@ class Texture {
    * @returns {number}
    */
   get displayHeight() {
-    return this.mDisplayHeight;
+    return this.mDisplayHeight
   }
 
   /**
@@ -242,7 +253,7 @@ class Texture {
    * @returns {number}
    */
   get renderWidth() {
-    return this.mRenderWidth;
+    return this.mRenderWidth
   }
 
   /**
@@ -252,7 +263,7 @@ class Texture {
    * @returns {number}
    */
   get renderHeight() {
-    return this.mRenderHeight;
+    return this.mRenderHeight
   }
 
   /**
@@ -262,7 +273,7 @@ class Texture {
    * @returns {boolean}
    */
   get isValid() {
-    return this.mValid;
+    return this.mValid
   }
 
   /**
@@ -272,11 +283,11 @@ class Texture {
    * @returns {HTMLImageElement|HTMLCanvasElement|HTMLVideoElement}
    */
   get native() {
-    return this.mNative;
+    return this.mNative
   }
 
   get id() {
-    return this.mId;
+    return this.mId
   }
 }
 
@@ -285,18 +296,18 @@ class Texture {
  * @type {number}
  * @nocollapse
  */
-Texture.__ID = 0;
+Texture.__ID = 0
 
 /**
  * @private
  * @type {HTMLImageElement|null}
  * @nocollapse
  */
-Texture.MISSING_IMAGE_CACHE = null;
+Texture.MISSING_IMAGE_CACHE = null
 
 /**
  * @private
  * @type {number}
  * @nocollapse
  */
-Texture.MAX_SIZE = 2048;
+Texture.MAX_SIZE = 2048

@@ -13,7 +13,7 @@ class MathEx {
    * @return {number}
    */
   static randomBetween(a, b) {
-    return Math.floor(Math.random() * (b - a + 1) + a);
+    return Math.floor(Math.random() * (b - a + 1) + a)
   }
 
   /**
@@ -25,12 +25,12 @@ class MathEx {
    * @return {number}
    */
   static clamp(value, min, max) {
-    return (value < min) ? min : (value > max) ? max : value;
+    return value < min ? min : value > max ? max : value
   }
 
   /**
    * Calculates distance between two points.
-   * 
+   *
    * @param  {number} x1 First point x-coordinate.
    * @param  {number} y1 First point y-coordinate.
    * @param  {number} x2 Second point x-coordinate.
@@ -38,15 +38,15 @@ class MathEx {
    * @return {number}
    */
   static distance(x1, y1, x2, y2) {
-    let x = x1 - x2;
-    let y = y1 - y2;
+    let x = x1 - x2
+    let y = y1 - y2
 
-    return Math.sqrt((x * x) + (y * y));
+    return Math.sqrt(x * x + y * y)
   }
 
   /**
    * Calculates squared distance between two points.
-   * 
+   *
    * @param  {number} x1 First point x-coordinate.
    * @param  {number} y1 First point y-coordinate.
    * @param  {number} x2 Second point x-coordinate.
@@ -54,15 +54,15 @@ class MathEx {
    * @return {number}
    */
   static distanceSqr(x1, y1, x2, y2) {
-    let x = x1 - x2;
-    let y = y1 - y2;
+    let x = x1 - x2
+    let y = y1 - y2
 
-    return (x * x) + (y * y);
+    return x * x + y * y
   }
 
   /**
    * Calculates angle in radians between two points.
-   * 
+   *
    * @param  {number} x1 First point x-coordinate.
    * @param  {number} y1 First point y-coordinate.
    * @param  {number} x2 Second point x-coordinate.
@@ -70,7 +70,7 @@ class MathEx {
    * @return {number}
    */
   static angleBetween(x1, y1, x2, y2) {
-    return Math.atan2(y2 - y1, x2 - x1);
+    return Math.atan2(y2 - y1, x2 - x1)
   }
 
   /**
@@ -84,7 +84,7 @@ class MathEx {
    * @return {number}
    */
   static mapRange(value, fromA, fromB, toA, toB) {
-    return toA + (toB - toA) * (value - fromA) / (fromB - fromA);
+    return toA + ((toB - toA) * (value - fromA)) / (fromB - fromA)
   }
 
   /**
@@ -96,7 +96,7 @@ class MathEx {
    * @return {number}
    */
   static lerp(a, b, t) {
-    return a + t * (b - a);
+    return a + t * (b - a)
   }
 
   /**
@@ -108,7 +108,7 @@ class MathEx {
    * @returns {boolean}
    */
   static equals(a, b, epsilon = Number.EPSILON) {
-    return (a - epsilon < b) && (a + epsilon > b);
+    return a - epsilon < b && a + epsilon > b
   }
 }
 
@@ -116,23 +116,23 @@ class MathEx {
  * Pi divided by 4.
  * @type {number}
  */
-MathEx.PI_Q = Math.PI / 4;
+MathEx.PI_Q = Math.PI / 4
 
 /**
  * PI multiplied by 2.
  * @type {number}
  */
-MathEx.PI2 = Math.PI * 2;
+MathEx.PI2 = Math.PI * 2
 
 /**
  * Degrees to radians constant.
  * @const
  * @type {number}
  */
-MathEx.DEG2RAD = 0.01745329251994329576923690768489;
+MathEx.DEG2RAD = 0.01745329251994329576923690768489
 
 /**
  * Radians to degrees constant.
  * @type {number}
  */
-MathEx.RAD2DEG = 57.295779513082320876798154814105;
+MathEx.RAD2DEG = 57.295779513082320876798154814105

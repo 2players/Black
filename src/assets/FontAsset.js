@@ -16,20 +16,22 @@ class FontAsset extends Asset {
    * @param {boolean} isLocal Pass `true` if font is local otherwise Google Fonts service is used.
    */
   constructor(name, url, isLocal) {
-    super(name);
+    super(name)
 
     if (isLocal === false)
-      url = 'https://fonts.googleapis.com/css?family=' + name.replace(new RegExp(' ', 'g'), '+');
+      url =
+        'https://fonts.googleapis.com/css?family=' +
+        name.replace(new RegExp(' ', 'g'), '+')
 
     // We are not doing actual loading since loading is handled by browser. Just fake it.
-    this.mLoader = new FontFaceAssetLoader(name, url, isLocal);
-    this.addLoader(this.mLoader);
+    this.mLoader = new FontFaceAssetLoader(name, url, isLocal)
+    this.addLoader(this.mLoader)
   }
 
   /**
    * @inheritDoc
    */
   onAllLoaded() {
-    super.ready();
+    super.ready()
   }
 }

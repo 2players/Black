@@ -3,7 +3,7 @@
  *
  * @fires Asset#error
  * @fires Asset#complete
- * 
+ *
  * @cat assets
  * @extends MessageDispatcher
  */
@@ -15,65 +15,65 @@ class Asset extends MessageDispatcher {
    * @param  {string} name Name of asset.
    */
   constructor(name) {
-    super();
+    super()
 
     /** @protected @type {string} */
-    this.mName = name;
+    this.mName = name
 
     /** @protected @type {Object|undefined} */
-    this.mData = null;
+    this.mData = null
 
     /** @protected @type {Array<AssetLoader>} */
-    this.mLoaders = [];
+    this.mLoaders = []
 
     /** @private @type {number} */
-    this.mNumLoaded = 0;
+    this.mNumLoaded = 0
 
     /** @private @type {boolean} */
-    this.mIsReady = false;
+    this.mIsReady = false
   }
 
   /**
    * Adds given loader to the list. Loader cannot be added to multiply Assets.
-   * 
+   *
    * @param {AssetLoader} loader Loader to add.
    */
   addLoader(loader) {
-    loader.mOwner = this;
-    this.mLoaders.push(loader);
+    loader.mOwner = this
+    this.mLoaders.push(loader)
 
-    loader.on(Message.COMPLETE, this.__onLoaderComplete, this);
-    loader.on(Message.ERROR, this.__onLoaderError, this);
+    loader.on(Message.COMPLETE, this.__onLoaderComplete, this)
+    loader.on(Message.ERROR, this.__onLoaderError, this)
   }
 
   /**
    * @private
-   * @param {Message} m 
+   * @param {Message} m
    * @returns {void}
    */
   __onLoaderComplete(m) {
-    this.mNumLoaded++;
+    this.mNumLoaded++
 
     if (this.mNumLoaded === this.mLoaders.length) {
       for (let i = 0; i < this.mLoaders.length; i++)
-        this.mLoaders[i].off(Message.COMPLETE, Message.ERROR);
+        this.mLoaders[i].off(Message.COMPLETE, Message.ERROR)
 
-      this.onAllLoaded();
+      this.onAllLoaded()
     }
   }
 
   /**
    * @private
-   * @param {Message} m 
+   * @param {Message} m
    */
   __onLoaderError(m) {
-    this.abort();
+    this.abort()
 
     /**
      * Posted when error occurred during loading this asset.
      * @event Asset#error
      */
-    this.post(Message.ERROR);
+    this.post(Message.ERROR)
   }
 
   /**
@@ -86,31 +86,31 @@ class Asset extends MessageDispatcher {
    * @public
    */
   abort() {
-    this.mNumLoaded = 0;
+    this.mNumLoaded = 0
 
     for (let i = 0; i < this.mLoaders.length; i++) {
-      const loader = this.mLoaders[i];
-      loader.off(Message.COMPLETE, Message.ERROR);
-      loader.abort();
+      const loader = this.mLoaders[i]
+      loader.off(Message.COMPLETE, Message.ERROR)
+      loader.abort()
     }
   }
 
   /**
    * Protected method used to notify AssetManager about completion of loading this asset.
-   * 
+   *
    * @protected
    * @param {Object=} data
    * @returns {void}
    */
   ready(data) {
-    this.mData = data;
-    this.mIsReady = true;
+    this.mData = data
+    this.mIsReady = true
 
     /**
      * Posted when asset finished loading.
      * @event Asset#complete
      */
-    this.post(Message.COMPLETE);
+    this.post(Message.COMPLETE)
   }
 
   /**
@@ -119,7 +119,7 @@ class Asset extends MessageDispatcher {
    * @return {string}
    */
   get name() {
-    return this.mName;
+    return this.mName
   }
 
   /**
@@ -128,7 +128,7 @@ class Asset extends MessageDispatcher {
    * @return {?}
    */
   get data() {
-    return this.mData;
+    return this.mData
   }
 
   /**
@@ -137,15 +137,15 @@ class Asset extends MessageDispatcher {
    * @return {boolean}
    */
   get isReady() {
-    return this.mIsReady;
+    return this.mIsReady
   }
 
   /**
    * Returns array of loaders.
-   * 
+   *
    * @returns {Array<AssetLoader>}
    */
   get loaders() {
-    return this.mLoaders;
+    return this.mLoaders
   }
 }

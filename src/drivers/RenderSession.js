@@ -10,28 +10,28 @@ class RenderSession {
    */
   constructor() {
     /** @type {Array<Renderer>} */
-    this.parentRenderers = [];
+    this.parentRenderers = []
 
     /** @type {Array<Renderer>} */
-    this.endPassParentRenderers = [];
+    this.endPassParentRenderers = []
 
     /** @type {boolean} */
-    this.isBackBufferActive = true;
+    this.isBackBufferActive = true
 
     /** @type {Matrix|null} */
-    this.customTransform = null;
+    this.customTransform = null
 
     /** @type {boolean} */
-    this.isMasking = false;
+    this.isMasking = false
   }
 
   /**
    * Resets state for future reuse.
    */
   reset() {
-    this.parentRenderers.splice(0, this.parentRenderers.length);
-    this.endPassParentRenderers.splice(0, this.endPassParentRenderers.length);
-    this.isBackBufferActive = true;
-    this.customTransform = null;
+    this.parentRenderers.splice(0, this.parentRenderers.length)
+    this.endPassParentRenderers.splice(0, this.endPassParentRenderers.length)
+    this.isBackBufferActive = true
+    this.customTransform = null
   }
 }

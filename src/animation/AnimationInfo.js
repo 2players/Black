@@ -16,79 +16,79 @@ class AnimationInfo {
    * @param {boolean}                [loop=true] Is animations should be looped
    */
   constructor(controller, name, frames, fps = 14, loop = true) {
-    Debug.assert(fps > 0, 'FPS must be greater than 0.');
+    Debug.assert(fps > 0, 'FPS must be greater than 0.')
 
     /**
      * @private
      * @type {AnimationController}
      */
-    this.mController = controller;
+    this.mController = controller
 
     /**
      * @private
      * @type {string}
      */
-    this.mName = name;
+    this.mName = name
 
     /**
      * @private
      * @type {Array<Texture>}
      */
-    this.mFrames = frames;
+    this.mFrames = frames
 
     /**
      * @private
      * @type {number}
      */
-    this.mCurrentFrame = 0;
+    this.mCurrentFrame = 0
 
     /**
      * @private
      * @type {number}
      */
-    this.mNextFrameAt = 0;
+    this.mNextFrameAt = 0
 
     /**
      * @private
      * @type {number}
      */
-    this.mFPS = fps;
+    this.mFPS = fps
 
     /**
      * @private
      * @type {number}
      */
-    this.mFrameDuration = 1 / this.mFPS;
+    this.mFrameDuration = 1 / this.mFPS
 
     /**
      * @private
      * @type {boolean}
      */
-    this.mLoop = loop;
+    this.mLoop = loop
 
     /**
      * @private
      * @type {boolean}
      */
-    this.mPaused = false;
+    this.mPaused = false
 
     /**
      * @private
      * @type {number}
      */
-    this.mElapsed = 0;
+    this.mElapsed = 0
 
     /**
      * @private
      * @type {boolean}
      */
-    this.mStopped = false;
+    this.mStopped = false
 
     /**
      * @private
      * @type {boolean}
      */
-    this.mCompleted = false;
+    this.mCompleted = false
   }
 
   /**
@@ -98,18 +98,18 @@ class AnimationInfo {
    */
   __play() {
     if (this.mCompleted === true) {
-      this.mCurrentFrame = 0;
-      this.mElapsed = 0;
+      this.mCurrentFrame = 0
+      this.mElapsed = 0
     }
 
-    this.mPaused = false;
-    this.mStopped = false;
-    this.mCompleted = false;
+    this.mPaused = false
+    this.mStopped = false
+    this.mCompleted = false
 
-    this.mNextFrameAt = Time.now + this.mFrameDuration - this.mElapsed;
-    this.mElapsed = 0;
+    this.mNextFrameAt = Time.now + this.mFrameDuration - this.mElapsed
+    this.mElapsed = 0
 
-    return this.mFrames[this.mCurrentFrame];
+    return this.mFrames[this.mCurrentFrame]
   }
 
   /**
@@ -119,8 +119,8 @@ class AnimationInfo {
    * @return {void}
    */
   __stop() {
-    this.mStopped = true;
-    this.mCurrentFrame = 0;
+    this.mStopped = true
+    this.mCurrentFrame = 0
   }
 
   /**
@@ -130,8 +130,8 @@ class AnimationInfo {
    * @return {void}
    */
   __pause() {
-    this.mPaused = true;
-    this.mElapsed = this.mNextFrameAt - Time.now;
+    this.mPaused = true
+    this.mElapsed = this.mNextFrameAt - Time.now
   }
 
   /**
@@ -139,33 +139,38 @@ class AnimationInfo {
    * @return {Texture|null}
    */
   __update() {
-    let t = Time.now;
-    let dt = Time.dt;
-    
-    if (t < this.mNextFrameAt || this.mPaused === true || this.mStopped === true || this.mCompleted === true)
-      return null;
+    let t = Time.now
+    let dt = Time.dt
 
-    this.mCurrentFrame++;
+    if (
+      t < this.mNextFrameAt ||
+      this.mPaused === true ||
+      this.mStopped === true ||
+      this.mCompleted === true
+    )
+      return null
+
+    this.mCurrentFrame++
 
     if (this.mCurrentFrame >= this.mFrames.length) {
       if (this.mLoop === true) {
-        this.mCurrentFrame = 0;
+        this.mCurrentFrame = 0
       } else {
-        this.mCurrentFrame = this.mFrames.length - 1;
+        this.mCurrentFrame = this.mFrames.length - 1
 
         /**
          * Post messages when animation reach its end.
          *
          * @event AnimationInfo#complete
          */
-        this.mController.post(Message.COMPLETE, this);
-        this.mCompleted = true;
-        return null;
+        this.mController.post(Message.COMPLETE, this)
+        this.mCompleted = true
+        return null
       }
     }
 
-    this.mNextFrameAt = Time.now + this.mFrameDuration;
-    return this.mFrames[this.mCurrentFrame];
+    this.mNextFrameAt = Time.now + this.mFrameDuration
+    return this.mFrames[this.mCurrentFrame]
   }
 
   /**
@@ -174,7 +179,7 @@ class AnimationInfo {
    * @return {number}
    */
   get fps() {
-    return this.mFPS;
+    return this.mFPS
   }
 
   /**
@@ -183,13 +188,13 @@ class AnimationInfo {
    * @return {void}
    */
   set fps(value) {
-    Debug.assert(value > 0, 'FPS must be greater than 0.');
+    Debug.assert(value > 0, 'FPS must be greater than 0.')
 
-    this.mFPS = value;
-    this.mFrameDuration = 1 / this.mFPS;
+    this.mFPS = value
+    this.mFrameDuration = 1 / this.mFPS
 
     // update next frame start time
-    this.mNextFrameAt += this.mNextFrameAt - Time.now;
+    this.mNextFrameAt += this.mNextFrameAt - Time.now
   }
 
   /**
@@ -197,7 +202,7 @@ class AnimationInfo {
    * @return {boolean}
    */
   get loop() {
-    return this.mLoop;
+    return this.mLoop
   }
 
   /**
@@ -206,7 +211,7 @@ class AnimationInfo {
    * @return {void}
    */
   set loop(value) {
-    this.mLoop = value;
+    this.mLoop = value
   }
 
   /**
@@ -215,7 +220,7 @@ class AnimationInfo {
    * @return {Array<Texture>}
    */
   get frames() {
-    return this.mFrames;
+    return this.mFrames
   }
 
   /**
@@ -224,7 +229,7 @@ class AnimationInfo {
    * @return {boolean}
    */
   get isPlaying() {
-    return this.mPaused === false && this.mStopped === false;
+    return this.mPaused === false && this.mStopped === false
   }
 
   /**
@@ -233,7 +238,7 @@ class AnimationInfo {
    * @return {boolean}
    */
   get isComplete() {
-    return this.mCompleted;
+    return this.mCompleted
   }
 
   /**
@@ -242,6 +247,6 @@ class AnimationInfo {
    * @return {string}
    */
   get name() {
-    return this.mName;
+    return this.mName
   }
 }

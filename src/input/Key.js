@@ -400,5 +400,5 @@ const Key = {
   /**
    * @type {number}
    */
-  SPACE: 32
-};
+  SPACE: 32,
+}

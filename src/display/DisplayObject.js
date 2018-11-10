@@ -7,196 +7,193 @@
 /* @echo EXPORT */
 class DisplayObject extends GameObject {
   constructor() {
-    super();
+    super()
 
     /** @protected @type {number} */
-    this.mAlpha = 1;
+    this.mAlpha = 1
 
     /** @protected @type {BlendMode} */
-    this.mBlendMode = BlendMode.AUTO;
+    this.mBlendMode = BlendMode.AUTO
 
     /** @protected @type {boolean} */
-    this.mVisible = true;
+    this.mVisible = true
 
     /** @protected @type {Rectangle} */
-    this.mClipRect = null;
+    this.mClipRect = null
 
     /** @protected @type {Renderer|null} */
-    this.mRenderer = this.getRenderer();
+    this.mRenderer = this.getRenderer()
 
     /** @private @type {boolean} */
-    this.mCacheAsBitmap = false;
+    this.mCacheAsBitmap = false
 
     /** @private @type {boolean} */
-    this.mCacheAsBitmapDynamic = true;
+    this.mCacheAsBitmapDynamic = true
 
     /** @private @type {boolean} */
-    this.mCacheAsBitmapDirty = true;
+    this.mCacheAsBitmapDirty = true
 
     /** @private @type {Matrix|null} */
-    this.mCacheAsBitmapMatrixCache = null;
+    this.mCacheAsBitmapMatrixCache = null
 
     /** @private @type {CanvasRenderTexture|null} */
-    this.mCache = null;
+    this.mCache = null
 
     /** @private @type {Rectangle|null} */
-    this.mCacheBounds = null;
+    this.mCacheBounds = null
 
     /** @protected @type {?number} */
-    this.mColor = null;
+    this.mColor = null
 
     /** @protected @type {boolean} */
-    this.mSnapToPixels = false;
+    this.mSnapToPixels = false
   }
 
   /**
    * Called at the end of the loop, all renderers are already collected and this object and its children will be
-   * rendered. Should be used to interpolate between last and current state. 
-   * 
+   * rendered. Should be used to interpolate between last and current state.
+   *
    * NOTE: Adding, removing or changing children elements inside onRender method can lead to unexpected behavior.
-   * 
+   *
    * @protected
    * @return {void}
    */
-  onRender() { }
+  onRender() {}
 
   /**
    * Factory method returns concrete renderer for this Game Object.
-   * 
+   *
    * @returns {Renderer}
    */
   getRenderer() {
-    return Black.driver.getRenderer('DisplayObject', this);
+    return Black.driver.getRenderer('DisplayObject', this)
   }
 
   /**
    * @inheritDoc
    */
   onGetLocalBounds(outRect = undefined) {
-    outRect = outRect || new Rectangle();
+    outRect = outRect || new Rectangle()
 
     if (this.mClipRect !== null) {
-      this.mClipRect.copyTo(outRect);
-      return outRect;
+      this.mClipRect.copyTo(outRect)
+      return outRect
     }
 
-    return outRect.set(0, 0, 0, 0);
+    return outRect.set(0, 0, 0, 0)
   }
 
   /**
    * @inheritDoc
    */
   getBounds(space = undefined, includeChildren = true, outRect = undefined) {
-    outRect = outRect || new Rectangle();
+    outRect = outRect || new Rectangle()
 
-    let localBounds = this.onGetLocalBounds();
+    let localBounds = this.onGetLocalBounds()
 
-    if (space == null)
-      space = this.mParent;
+    if (space == null) space = this.mParent
 
     if (space == this) {
       // local
     } else if (space == this.mParent) {
       if (includeChildren === false || this.mClipRect !== null) {
-        let matrix = Matrix.pool.get();
-        matrix.copyFrom(this.localTransformation);
-        matrix.transformRect(localBounds, outRect);
-        Matrix.pool.release(matrix);
-      }
-      else if (includeChildren === true && this.mDirty & DirtyFlag.BOUNDS) {
-        let matrix = Matrix.pool.get();
-        matrix.copyFrom(this.localTransformation);
-        matrix.transformRect(localBounds, outRect);
-        Matrix.pool.release(matrix);
+        let matrix = Matrix.pool.get()
+        matrix.copyFrom(this.localTransformation)
+        matrix.transformRect(localBounds, outRect)
+        Matrix.pool.release(matrix)
+      } else if (includeChildren === true && this.mDirty & DirtyFlag.BOUNDS) {
+        let matrix = Matrix.pool.get()
+        matrix.copyFrom(this.localTransformation)
+        matrix.transformRect(localBounds, outRect)
+        Matrix.pool.release(matrix)
       } else {
         // Return cached
-        outRect.copyFrom(this.mBoundsCache);
-        return outRect;
+        outRect.copyFrom(this.mBoundsCache)
+        return outRect
       }
     } else {
-      let matrix = Matrix.pool.get();
-      matrix.copyFrom(this.worldTransformation);
-      matrix.prepend(space.worldTransformationInverted);
-      matrix.transformRect(localBounds, outRect);
-      Matrix.pool.release(matrix);
+      let matrix = Matrix.pool.get()
+      matrix.copyFrom(this.worldTransformation)
+      matrix.prepend(space.worldTransformationInverted)
+      matrix.transformRect(localBounds, outRect)
+      Matrix.pool.release(matrix)
     }
 
     if (space !== this) {
       if (this.mClipRect !== null) {
-        outRect.x += this.mPivotX;
-        outRect.y += this.mPivotY;
+        outRect.x += this.mPivotX
+        outRect.y += this.mPivotY
       }
     } else {
-      localBounds.copyTo(outRect);
+      localBounds.copyTo(outRect)
     }
 
-    if (this.mClipRect !== null)
-      return outRect;
+    if (this.mClipRect !== null) return outRect
 
     if (includeChildren === true) {
-      let childBounds = Rectangle.pool.get();
+      let childBounds = Rectangle.pool.get()
 
       for (let i = 0; i < this.mChildren.length; i++) {
-        childBounds.zero();
+        childBounds.zero()
 
-        this.mChildren[i].getBounds(space, includeChildren, childBounds);
-        outRect.union(childBounds);
+        this.mChildren[i].getBounds(space, includeChildren, childBounds)
+        outRect.union(childBounds)
       }
 
-      Rectangle.pool.release(childBounds);
+      Rectangle.pool.release(childBounds)
 
       if (space == this.mParent && this.mDirty & DirtyFlag.BOUNDS) {
-        this.mBoundsCache.copyFrom(outRect);
-        this.mDirty ^= DirtyFlag.BOUNDS;
+        this.mBoundsCache.copyFrom(outRect)
+        this.mDirty ^= DirtyFlag.BOUNDS
       }
     }
 
-    return outRect;
+    return outRect
   }
 
   /**
    * @inheritDoc
    */
   hitTest(localPoint) {
-    let c = /** @type {InputComponent}*/ (this.getComponent(InputComponent));
-    let touchable = c !== null && c.touchable;
-    let insideMask = this.onHitTestMask(localPoint);
+    let c = /** @type {InputComponent}*/ (this.getComponent(InputComponent))
+    let touchable = c !== null && c.touchable
+    let insideMask = this.onHitTestMask(localPoint)
 
     if (this.visible === false || touchable === false || insideMask === false)
-      return null;
+      return null
 
-    let target = null;
-    let numChildren = this.mChildren.length;
+    let target = null
+    let numChildren = this.mChildren.length
 
     for (let i = numChildren - 1; i >= 0; --i) {
-      let child = this.mChildren[i];
+      let child = this.mChildren[i]
 
-      target = child.hitTest(localPoint);
+      target = child.hitTest(localPoint)
 
-      if (target !== null)
-        return target;
+      if (target !== null) return target
     }
 
-    if (this.onHitTest(localPoint) === true)
-      return this;
+    if (this.onHitTest(localPoint) === true) return this
 
-    return null;
+    return null
   }
 
   /**
-  * @inheritDoc
-  */
+   * @inheritDoc
+   */
   onHitTestMask(localPoint) {
-    if (this.mClipRect === null)
-      return true;
+    if (this.mClipRect === null) return true
 
-    let tmpVector = Vector.pool.get();
-    this.worldTransformationInverted.transformVector(localPoint, tmpVector);
+    let tmpVector = Vector.pool.get()
+    this.worldTransformationInverted.transformVector(localPoint, tmpVector)
 
-    let contains = this.mClipRect.containsXY(tmpVector.x - this.mPivotX, tmpVector.y - this.mPivotY);
-    Vector.pool.release(tmpVector);
+    let contains = this.mClipRect.containsXY(
+      tmpVector.x - this.mPivotX,
+      tmpVector.y - this.mPivotY
+    )
+    Vector.pool.release(tmpVector)
 
-    return contains;
+    return contains
   }
 
   /**
@@ -205,7 +202,7 @@ class DisplayObject extends GameObject {
    * @returns {?number}
    */
   get color() {
-    return this.mColor;
+    return this.mColor
   }
 
   /**
@@ -214,21 +211,20 @@ class DisplayObject extends GameObject {
    * @return {void}
    */
   set color(value) {
-    if (this.mColor === value)
-      return;
+    if (this.mColor === value) return
 
-    this.mColor = value;
-    this.setRenderDirty();
+    this.mColor = value
+    this.setRenderDirty()
   }
 
   /**
    * Gets/Sets whether this container and all it's children should be baked into bitmap. Setting `cacheAsBitmap` onto
    * Sprites,, TextField's or any other inherited classes will give zero effect.
    *
-   * @return {boolean} 
+   * @return {boolean}
    */
   get cacheAsBitmap() {
-    return this.mCacheAsBitmap;
+    return this.mCacheAsBitmap
   }
 
   /**
@@ -237,28 +233,27 @@ class DisplayObject extends GameObject {
    * @return {void}
    */
   set cacheAsBitmap(value) {
-    if (value === this.mCacheAsBitmap)
-      return;
+    if (value === this.mCacheAsBitmap) return
 
-    this.mCacheAsBitmap = value;
+    this.mCacheAsBitmap = value
 
     if (value === false) {
-      this.mCache = null;
-      this.mCacheAsBitmapDirty = true;
-      this.mCacheAsBitmapMatrixCache = null;
-      this.mCacheBounds = null;
+      this.mCache = null
+      this.mCacheAsBitmapDirty = true
+      this.mCacheAsBitmapMatrixCache = null
+      this.mCacheBounds = null
 
-      this.setTransformDirty();
+      this.setTransformDirty()
     }
   }
 
   /**
    * Gets/sets whenever cache as bitmap should be automatically refreshed.
-   * 
+   *
    * @returns {boolean}
    */
   get cacheAsBitmapDynamic() {
-    return this.mCacheAsBitmapDynamic;
+    return this.mCacheAsBitmapDynamic
   }
 
   /**
@@ -267,7 +262,7 @@ class DisplayObject extends GameObject {
    * @return {void}
    */
   set cacheAsBitmapDynamic(value) {
-    this.mCacheAsBitmapDynamic = value;
+    this.mCacheAsBitmapDynamic = value
   }
 
   /**
@@ -277,7 +272,7 @@ class DisplayObject extends GameObject {
    * @return {number}
    */
   get alpha() {
-    return this.mAlpha;
+    return this.mAlpha
   }
 
   /**
@@ -286,13 +281,12 @@ class DisplayObject extends GameObject {
    * @return {void}
    */
   set alpha(value) {
-    Debug.assert(!isNaN(value), 'Value cannot be NaN');
+    Debug.assert(!isNaN(value), 'Value cannot be NaN')
 
-    if (this.mAlpha === MathEx.clamp(value, 0, 1))
-      return;
+    if (this.mAlpha === MathEx.clamp(value, 0, 1)) return
 
-    this.mAlpha = MathEx.clamp(value, 0, 1);
-    this.setRenderDirty();
+    this.mAlpha = MathEx.clamp(value, 0, 1)
+    this.setRenderDirty()
   }
 
   /**
@@ -301,7 +295,7 @@ class DisplayObject extends GameObject {
    * @return {boolean}
    */
   get visible() {
-    return this.mVisible;
+    return this.mVisible
   }
 
   /**
@@ -310,11 +304,10 @@ class DisplayObject extends GameObject {
    * @return {void}
    */
   set visible(value) {
-    if (this.mVisible === value)
-      return;
+    if (this.mVisible === value) return
 
-    this.mVisible = value;
-    this.setRenderDirty();
+    this.mVisible = value
+    this.setRenderDirty()
   }
 
   /**
@@ -323,7 +316,7 @@ class DisplayObject extends GameObject {
    * @return {BlendMode}
    */
   get blendMode() {
-    return this.mBlendMode;
+    return this.mBlendMode
   }
 
   /**
@@ -332,11 +325,10 @@ class DisplayObject extends GameObject {
    * @return {void}
    */
   set blendMode(value) {
-    if (this.mBlendMode === value)
-      return;
+    if (this.mBlendMode === value) return
 
-    this.mBlendMode = value;
-    this.setRenderDirty();
+    this.mBlendMode = value
+    this.setRenderDirty()
   }
 
   /**
@@ -345,7 +337,7 @@ class DisplayObject extends GameObject {
    * @return {Rectangle}
    */
   get clipRect() {
-    return this.mClipRect;
+    return this.mClipRect
   }
 
   /**
@@ -354,8 +346,8 @@ class DisplayObject extends GameObject {
    * @return {void}
    */
   set clipRect(value) {
-    this.mClipRect = value;
-    this.setRenderDirty();
+    this.mClipRect = value
+    this.setRenderDirty()
   }
 
   /**
@@ -363,7 +355,7 @@ class DisplayObject extends GameObject {
    * @returns {boolean}
    */
   get snapToPixels() {
-    return this.mSnapToPixels;
+    return this.mSnapToPixels
   }
 
   /**
@@ -371,6 +363,6 @@ class DisplayObject extends GameObject {
    * @param {boolean} value
    */
   set snapToPixels(value) {
-    this.mSnapToPixels = value;
+    this.mSnapToPixels = value
   }
 }

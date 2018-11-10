@@ -11,12 +11,11 @@ class Modifier {
    * @param {boolean} isInitializer Indicates whenever this modifier will be applied to particle during initialization stage or particle lifetime.
    */
   constructor(isInitializer = true) {
-
     /** @private @type {boolean} */
-    this.mIsInitializer = isInitializer;
+    this.mIsInitializer = isInitializer
 
     /** @type {Scatter} Modifier's object to get values from.  */
-    this.scatter = null;
+    this.scatter = null
   }
 
   /**
@@ -26,7 +25,7 @@ class Modifier {
    * @param {number} dt Time since last update.
    * @return {void}
    */
-  preUpdate(dt) { }
+  preUpdate(dt) {}
 
   /**
    * Called on each Emitter's update for each particle.
@@ -37,7 +36,7 @@ class Modifier {
    * @param {number} dt Time since last update.
    * @return {void}
    */
-  update(emitter, particle, dt) { }
+  update(emitter, particle, dt) {}
 
   /**
    * Called on each Emitter's update after `Modifier.update`
@@ -46,7 +45,7 @@ class Modifier {
    * @param {number} dt Time since last update.
    * @return {void}
    */
-  postUpdate(dt) { }
+  postUpdate(dt) {}
 
   /**
    * Specifies if the modifier is initializer or action.
@@ -55,10 +54,9 @@ class Modifier {
    * @returns {boolean}
    */
   get isInitializer() {
-    return this.mIsInitializer;
+    return this.mIsInitializer
   }
 }
-
 
 // Acceleration (vel += acc * dt;)
 // InitialPosition (box)

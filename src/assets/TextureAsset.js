@@ -14,20 +14,20 @@ class TextureAsset extends Asset {
    * @param {string} url  URL to load image from.
    */
   constructor(name, url) {
-    super(name);
+    super(name)
 
     /** @type {number} */
-    this.mScale = 1 / Texture.getScaleFactorFromName(url);
+    this.mScale = 1 / Texture.getScaleFactorFromName(url)
 
     /** @private @type {ImageAssetLoader} */
-    this.mImageLoader = new ImageAssetLoader(url);
-    this.addLoader(this.mImageLoader);
+    this.mImageLoader = new ImageAssetLoader(url)
+    this.addLoader(this.mImageLoader)
   }
 
   /**
    * @inheritDoc
    */
   onAllLoaded() {
-    super.ready(new Texture(this.mImageLoader.data, null, null, this.mScale));
+    super.ready(new Texture(this.mImageLoader.data, null, null, this.mScale))
   }
 }

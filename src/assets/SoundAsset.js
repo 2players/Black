@@ -13,29 +13,28 @@ class SoundAsset extends Asset {
    * @param {string} url  URL to load audio from.
    */
   constructor(name, url) {
-    super(name);
+    super(name)
 
-    if (Device.webAudioSupported === false)
-      return;
+    if (Device.webAudioSupported === false) return
 
     if (Black.instance.hasSystem(MasterAudio) === false) {
-      Debug.warn('[SoundAsset] Loading sound files without MasterAudio system.');
-      return;
+      Debug.warn('[SoundAsset] Loading sound files without MasterAudio system.')
+      return
     }
 
     /** @private @type {XHRAssetLoader} */
-    this.mXHR = new XHRAssetLoader(url);
-    this.mXHR.responseType = 'arraybuffer';
-    this.addLoader(this.mXHR);
+    this.mXHR = new XHRAssetLoader(url)
+    this.mXHR.responseType = 'arraybuffer'
+    this.addLoader(this.mXHR)
   }
 
   /**
    * @inheritDoc
    */
   onAllLoaded() {
-    let undecodedAudio = /** @type {!ArrayBuffer} */ (this.mXHR.data);
-    MasterAudio.context.decodeAudioData(undecodedAudio, (buffer) => {
-      super.ready(new SoundClip(buffer));
-    });
+    let undecodedAudio = /** @type {!ArrayBuffer} */ (this.mXHR.data)
+    MasterAudio.context.decodeAudioData(undecodedAudio, buffer => {
+      super.ready(new SoundClip(buffer))
+    })
   }
 }

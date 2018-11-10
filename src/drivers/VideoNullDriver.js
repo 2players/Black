@@ -13,50 +13,50 @@ class VideoNullDriver {
    * @param  {number} height                The height of the viewport.
    */
   constructor(containerElement, width, height) {
-
     /** @protected @type {HTMLElement} */
-    this.mContainerElement = containerElement;
+    this.mContainerElement = containerElement
 
     /** @protected @type {number} */
-    this.mClientWidth = width;
+    this.mClientWidth = width
 
     /** @protected @type {number} */
-    this.mClientHeight = height;
+    this.mClientHeight = height
 
     /** @protected @type {Matrix} Actual object - do not change */
-    this.mTransform = new Matrix();
+    this.mTransform = new Matrix()
 
     /** @protected @type {Matrix} */
-    this.mIdentityMatrix = new Matrix();
+    this.mIdentityMatrix = new Matrix()
 
     /** @protected @type {RenderSession} */
-    this.mActiveSession = new RenderSession();
+    this.mActiveSession = new RenderSession()
 
     /** @protected @type {Array<RenderSession>} */
-    this.mSessions = [];
+    this.mSessions = []
 
     /** @protected @type {?} */
-    this.mLastRenderTexture = null;
+    this.mLastRenderTexture = null
 
     /** @protected @type {boolean} */
-    this.mSnapToPixels = false;
+    this.mSnapToPixels = false
 
     /** @protected @type {number} */
-    this.mDevicePixelRatio = Black.instance.useHiDPR === true ? Device.getDevicePixelRatio() : 1;
+    this.mDevicePixelRatio =
+      Black.instance.useHiDPR === true ? Device.getDevicePixelRatio() : 1
 
     /** @protected @type {BlendMode|null} */
-    this.mGlobalBlendMode = BlendMode.AUTO;
+    this.mGlobalBlendMode = BlendMode.AUTO
 
     /** @protected @type {number} */
-    this.mGlobalAlpha = 1;
+    this.mGlobalAlpha = 1
 
     /** @protected @type {Renderer} */
-    this.mStageRenderer = new Renderer();
+    this.mStageRenderer = new Renderer()
 
     /** @protected @type {Object.<string, function(new: Renderer)>} */
-    this.mRendererMap = {};
+    this.mRendererMap = {}
 
-    Black.instance.viewport.on('resize', this.__onResize, this);
+    Black.instance.viewport.on('resize', this.__onResize, this)
   }
 
   /**
@@ -68,8 +68,7 @@ class VideoNullDriver {
    *                                                   onto backbuffer if null.
    * @param {Matrix} [customTransform=null]            An optional extra offset.
    */
-  render(gameObject, renderTexture = null, customTransform = null) {
-  }
+  render(gameObject, renderTexture = null, customTransform = null) {}
 
   /**
    * A factory method which returns new Renderer instance based on internal GameObject to Renderer map.
@@ -79,7 +78,7 @@ class VideoNullDriver {
    * @returns {Renderer} New renderer instance.
    */
   getRenderer(type, owner) {
-    return null;
+    return null
   }
 
   /**
@@ -88,13 +87,13 @@ class VideoNullDriver {
    * @returns {RenderSession}
    */
   __saveSession() {
-    let session = VideoNullDriver.sessionPool.get();
-    session.reset();
+    let session = VideoNullDriver.sessionPool.get()
+    session.reset()
 
-    this.mSessions.push(session);
+    this.mSessions.push(session)
 
-    this.mActiveSession = session;
-    return session;
+    this.mActiveSession = session
+    return session
   }
 
   /**
@@ -102,8 +101,8 @@ class VideoNullDriver {
    * @private
    */
   __restoreSession() {
-    this.mSessions.pop();
-    this.mActiveSession = this.mSessions[this.mSessions.length - 1] || null;
+    this.mSessions.pop()
+    this.mActiveSession = this.mSessions[this.mSessions.length - 1] || null
   }
 
   /**
@@ -115,30 +114,28 @@ class VideoNullDriver {
    * @returns {void}
    */
   __collectParentRenderables(session, gameObject, parentRenderer) {
-    let current = gameObject;
-    if (current === null)
-      return;
+    let current = gameObject
+    if (current === null) return
 
-    let parents = [];
+    let parents = []
     for (current = current.parent; current !== null; current = current.parent)
-      parents.splice(0, 0, current);
+      parents.splice(0, 0, current)
 
     for (let i = 0; i < parents.length; i++) {
-      current = parents[i];
+      current = parents[i]
 
-      let renderer = current.mRenderer;
+      let renderer = current.mRenderer
 
-      if (renderer == null)
-        continue;
+      if (renderer == null) continue
 
-      session.parentRenderers.push(renderer);
-      renderer.parent = parentRenderer;
-      parentRenderer = renderer;
+      session.parentRenderers.push(renderer)
+      renderer.parent = parentRenderer
+      parentRenderer = renderer
 
-      renderer.preRender(this, session);
+      renderer.preRender(this, session)
 
       if (renderer.endPassRequired === true)
-        session.endPassParentRenderers.push(renderer);
+        session.endPassParentRenderers.push(renderer)
     }
   }
 
@@ -150,15 +147,13 @@ class VideoNullDriver {
    * @param {number} px Pivot-x.
    * @param {number} py Pivot-y.
    */
-  beginClip(clipRect, px, py) {
-  }
+  beginClip(clipRect, px, py) {}
 
   /**
    * Notifies renderer to stop last clipping.
    * @protected
    */
-  endClip() {
-  }
+  endClip() {}
 
   /**
    * @protected
@@ -168,13 +163,13 @@ class VideoNullDriver {
    * @returns {void}
    */
   __onResize(msg, rect) {
-    Renderer.__dirty = true;
+    Renderer.__dirty = true
 
-    let w = this.mContainerElement.clientWidth;
-    let h = this.mContainerElement.clientHeight;
+    let w = this.mContainerElement.clientWidth
+    let h = this.mContainerElement.clientHeight
 
-    this.mClientWidth = w;
-    this.mClientHeight = h;
+    this.mClientWidth = w
+    this.mClientHeight = h
   }
 
   /**
@@ -183,8 +178,7 @@ class VideoNullDriver {
    * @protected
    * @return {void}
    */
-  start() {
-  }
+  start() {}
 
   /**
    * Called before rendering anything. Usually used to clear back-buffer.
@@ -193,7 +187,7 @@ class VideoNullDriver {
    * @returns {void}
    */
   beginFrame() {
-    this.clear();
+    this.clear()
   }
 
   /**
@@ -202,8 +196,7 @@ class VideoNullDriver {
    * @protected
    * @returns {void}
    */
-  endFrame() {
-  }
+  endFrame() {}
 
   /**
    * @ignore
@@ -211,7 +204,7 @@ class VideoNullDriver {
    * @return {?Texture}
    */
   getTextureFromCanvas(canvas) {
-    return null;
+    return null
   }
 
   /**
@@ -222,16 +215,16 @@ class VideoNullDriver {
    * @returns {void}
    */
   setTransform(m) {
-    this.mTransform = m;
+    this.mTransform = m
   }
 
   /**
    * Indicates if transform should be snapped to pixels.
-   * @param {boolean} value 
+   * @param {boolean} value
    * @returns {void}
    */
   setSnapToPixels(value) {
-    this.mSnapToPixels = value;
+    this.mSnapToPixels = value
   }
 
   /**
@@ -241,7 +234,7 @@ class VideoNullDriver {
    * @return {number}
    */
   getGlobalAlpha() {
-    return this.mGlobalAlpha;
+    return this.mGlobalAlpha
   }
 
   /**
@@ -250,7 +243,7 @@ class VideoNullDriver {
    * @return {void}
    */
   setGlobalAlpha(value) {
-    this.mGlobalAlpha = value;
+    this.mGlobalAlpha = value
   }
 
   /**
@@ -259,7 +252,7 @@ class VideoNullDriver {
    * @return {?BlendMode}
    */
   getGlobalBlendMode() {
-    return this.mGlobalBlendMode;
+    return this.mGlobalBlendMode
   }
 
   /**
@@ -268,7 +261,7 @@ class VideoNullDriver {
    * @return {void}
    */
   setGlobalBlendMode(value) {
-    this.mGlobalBlendMode = value;
+    this.mGlobalBlendMode = value
   }
 
   /**
@@ -277,10 +270,9 @@ class VideoNullDriver {
    *
    * @public
    * @param {Texture} texture Instance of the Texture to draw.
-   * 
+   *
    */
-  drawTexture(texture) {
-  }
+  drawTexture(texture) {}
 
   /**
    * Draws texture onto back-buffer with given offset. alpha, blend mode and transformation matrix must be set prior to calling this
@@ -290,8 +282,7 @@ class VideoNullDriver {
    * @param {number} ox Offset along x-axis
    * @param {number} oy Offset along y-axis
    */
-  drawTextureWithOffset(texture, ox, oy) {
-  }
+  drawTextureWithOffset(texture, ox, oy) {}
 
   /**
    * Clears back-buffer.
@@ -299,24 +290,23 @@ class VideoNullDriver {
    * @protected
    * @returns {void}
    */
-  clear() {
-  }
+  clear() {}
 
-  /** 
+  /**
    * Returns current rendering context or null.
    * @returns {?}
    */
   get context() {
-    return null;
+    return null
   }
 
   /**
    * Returns device pixel ratio or 1 in case high DPR support is disabled.
-   * 
+   *
    * @returns {number}
    */
   get renderScaleFactor() {
-    return this.mDevicePixelRatio;
+    return this.mDevicePixelRatio
   }
 }
 
@@ -326,4 +316,4 @@ class VideoNullDriver {
  * @type {ObjectPool}
  * @nocollapse
  */
-VideoNullDriver.sessionPool = new ObjectPool(RenderSession);
+VideoNullDriver.sessionPool = new ObjectPool(RenderSession)

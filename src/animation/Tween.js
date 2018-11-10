@@ -4,8 +4,8 @@
  * @fires Tween#start
  * @fires Tween#update
  * @fires Tween#loop
- * @fires Tween#complete 
- * 
+ * @fires Tween#complete
+ *
  * @cat animation
  * @unrestricted
  * @extends Component
@@ -19,81 +19,81 @@ class Tween extends Component {
    * @param {Object|null}   [properties=null] Tween properties Object.
    * @param {Object|null}   [plugins=null]    Interpolation plugins object
    */
-  constructor(values, duration = 0.250, properties = null, plugins = null) {
-    super();
+  constructor(values, duration = 0.25, properties = null, plugins = null) {
+    super()
 
     /** @private @dict */
-    this.mValues = values;
+    this.mValues = values
 
     /** @private @type {number} */
-    this.mDuration = duration;
+    this.mDuration = duration
 
     /** @private @dict */
-    this.mProperties = properties;
+    this.mProperties = properties
 
     /** @private @dict */
-    this.mPlugins = plugins;
+    this.mPlugins = plugins
 
     /** @private @type {boolean} */
-    this.mIsPlaying = false;
+    this.mIsPlaying = false
 
     /** @private @type {boolean} */
-    this.mIsPaused = false;
+    this.mIsPaused = false
 
     /** @private @type {number} */
-    this.mStartTime = 0;
+    this.mStartTime = 0
 
     /** @private @type {number} */
-    this.mPausedTime = 0;
+    this.mPausedTime = 0
 
     /** @private @dict */
-    this.mValuesStart = {};
+    this.mValuesStart = {}
 
     /** @private @type {number} */
-    this.mElapsed = 0;
+    this.mElapsed = 0
 
     /** @private @type {function (Array, number):number} */
-    this.mInterpolation = Interpolation.linear;
+    this.mInterpolation = Interpolation.linear
 
     /** @private @type {number} */
-    this.mDelay = 0;
+    this.mDelay = 0
 
     /** @private @type {number} */
-    this.mRepeatDelay = 0;
+    this.mRepeatDelay = 0
 
     /** @private @type {number} */
-    this.mRepeats = 0;
+    this.mRepeats = 0
 
     /** @private @type {boolean} */
-    this.mInitiated = false;
+    this.mInitiated = false
 
     /** @private @type {boolean} */
-    this.mStarted = false;
+    this.mStarted = false
 
     /** @private @type {boolean} */
-    this.mReversed = false;
+    this.mReversed = false
 
     /** @private @type {boolean} */
-    this.mYoyo = false;
+    this.mYoyo = false
 
     /** @private @type {boolean} */
-    this.mIsYoyoBack = false;
+    this.mIsYoyoBack = false
 
     /** @private @type {boolean} */
-    this.mReverseOnInit = false;
+    this.mReverseOnInit = false
 
     /** @private @type {boolean} */
-    this.mRemoveOnComplete = true;
+    this.mRemoveOnComplete = true
 
     /** @private @type {boolean} */
-    this.mPlayOnAdded = true;
+    this.mPlayOnAdded = true
 
     /** @private @type {function(number):number} */
-    this.mEase = Tween.DEFAULT_EASE;
+    this.mEase = Tween.DEFAULT_EASE
 
     if (this.mProperties !== null) {
       for (let f in this.mProperties) {
-        this[f] = /** @dict */ (this.mProperties[f]);
+        this[f] = /** @dict */ this.mProperties[f]
       }
     }
   }
@@ -104,7 +104,7 @@ class Tween extends Component {
    * @return {function(number):number}
    */
   get ease() {
-    return this.mEase;
+    return this.mEase
   }
 
   /**
@@ -113,7 +113,7 @@ class Tween extends Component {
    * @return {void}
    */
   set ease(value) {
-    this.mEase = value;
+    this.mEase = value
   }
 
   /**
@@ -122,7 +122,7 @@ class Tween extends Component {
    * @return {function(Array, number):number}
    */
   get interpolation() {
-    return this.mInterpolation;
+    return this.mInterpolation
   }
 
   /**
@@ -131,7 +131,7 @@ class Tween extends Component {
    * @return {void}
    */
   set interpolation(value) {
-    this.mInterpolation = value;
+    this.mInterpolation = value
   }
 
   /**
@@ -141,7 +141,7 @@ class Tween extends Component {
    * @return {number}
    */
   get elapsed() {
-    return this.mElapsed;
+    return this.mElapsed
   }
 
   /**
@@ -150,7 +150,7 @@ class Tween extends Component {
    * @return {number}
    */
   get delay() {
-    return this.mDelay;
+    return this.mDelay
   }
 
   /**
@@ -159,7 +159,7 @@ class Tween extends Component {
    * @return {void}
    */
   set delay(value) {
-    this.mDelay = value;
+    this.mDelay = value
   }
 
   /**
@@ -168,7 +168,7 @@ class Tween extends Component {
    * @return {number}
    */
   get repeats() {
-    return this.mRepeats;
+    return this.mRepeats
   }
 
   /**
@@ -177,7 +177,7 @@ class Tween extends Component {
    * @return {void}
    */
   set repeats(value) {
-    this.mRepeats = value;
+    this.mRepeats = value
   }
 
   /**
@@ -186,7 +186,7 @@ class Tween extends Component {
    * @return {number}
    */
   get repeatDelay() {
-    return this.mRepeatDelay;
+    return this.mRepeatDelay
   }
 
   /**
@@ -195,7 +195,7 @@ class Tween extends Component {
    * @return {void}
    */
   set repeatDelay(value) {
-    this.mRepeatDelay = value;
+    this.mRepeatDelay = value
   }
 
   /**
@@ -204,7 +204,7 @@ class Tween extends Component {
    * @return {boolean}
    */
   get loop() {
-    return this.mRepeats === Infinity;
+    return this.mRepeats === Infinity
   }
 
   /**
@@ -213,7 +213,7 @@ class Tween extends Component {
    * @return {void}
    */
   set loop(value) {
-    this.mRepeats = value ? Infinity : 0;
+    this.mRepeats = value ? Infinity : 0
   }
 
   /**
@@ -222,7 +222,7 @@ class Tween extends Component {
    * @return {boolean}
    */
   get yoyo() {
-    return this.mYoyo;
+    return this.mYoyo
   }
 
   /**
@@ -231,7 +231,7 @@ class Tween extends Component {
    * @return {void}
    */
   set yoyo(value) {
-    this.mYoyo = value;
+    this.mYoyo = value
   }
 
   /**
@@ -240,7 +240,7 @@ class Tween extends Component {
    * @return {boolean}
    */
   get reversed() {
-    return this.mReversed;
+    return this.mReversed
   }
 
   /**
@@ -249,7 +249,7 @@ class Tween extends Component {
    * @return {void}
    */
   set reversed(value) {
-    this.mReversed = value;
+    this.mReversed = value
   }
 
   /**
@@ -258,7 +258,7 @@ class Tween extends Component {
    * @return {boolean}
    */
   get removeOnComplete() {
-    return this.mRemoveOnComplete;
+    return this.mRemoveOnComplete
   }
 
   /**
@@ -267,16 +267,16 @@ class Tween extends Component {
    * @return {void}
    */
   set removeOnComplete(value) {
-    this.mRemoveOnComplete = value;
+    this.mRemoveOnComplete = value
   }
 
   /**
    * Sets/Gets whether the tween should start playing automatically when added to the root.
-   * 
+   *
    * @return {boolean}
    */
   get playOnAdded() {
-    return this.mPlayOnAdded;
+    return this.mPlayOnAdded
   }
 
   /**
@@ -285,16 +285,16 @@ class Tween extends Component {
    * @return {void}
    */
   set playOnAdded(value) {
-    this.mPlayOnAdded = value;
+    this.mPlayOnAdded = value
   }
 
   /**
    * Sets/Gets optional object with custom interpolation handler function for specific target properties.
-   * 
+   *
    * @return {Object}
    */
   get plugins() {
-    return this.mPlugins;
+    return this.mPlugins
   }
 
   /**
@@ -303,25 +303,25 @@ class Tween extends Component {
    * @return {void}
    */
   set plugins(value) {
-    this.mPlugins = value;
+    this.mPlugins = value
   }
 
   /**
    * Gets this tween duration.
-   * 
+   *
    * @return {number}
    */
   get duration() {
-    return this.mDuration;
+    return this.mDuration
   }
 
   /**
    * Indicated whether the tween is playing and not paused.
-   * 
+   *
    * @return {boolean}
    */
   get isPlaying() {
-    return this.mIsPlaying === true && this.mIsPaused === false;
+    return this.mIsPlaying === true && this.mIsPaused === false
   }
 
   /**
@@ -330,8 +330,8 @@ class Tween extends Component {
    * @return {void}
    */
   __start(t) {
-    this.mIsPlaying = true;
-    this.mStartTime = t + this.mDelay;
+    this.mIsPlaying = true
+    this.mStartTime = t + this.mDelay
   }
 
   /**
@@ -341,12 +341,12 @@ class Tween extends Component {
    */
   play() {
     if (!this.mIsPaused) {
-      this.__start(Time.now);
+      this.__start(Time.now)
     } else {
-      this.__resume();
+      this.__resume()
     }
 
-    return this;
+    return this
   }
 
   /**
@@ -355,12 +355,11 @@ class Tween extends Component {
    * @return {Tween} Returns this.
    */
   stop() {
-    if (!this.mIsPlaying)
-      return this;
+    if (!this.mIsPlaying) return this
 
-    this.mIsPlaying = false;
+    this.mIsPlaying = false
 
-    return this;
+    return this
   }
 
   /**
@@ -369,11 +368,10 @@ class Tween extends Component {
    * @return {Tween} Returns this.
    */
   reset() {
-    this.mElapsed = 0;
-    if (this.mIsPlaying)
-      this.play();
+    this.mElapsed = 0
+    if (this.mIsPlaying) this.play()
 
-    return this;
+    return this
   }
 
   /**
@@ -383,11 +381,11 @@ class Tween extends Component {
    * @param {number} [duration=0.25] Duration in seconds.
    * @return {Tween} Returns this.
    */
-  to(values = {}, duration = 0.250) {
-    this.mValues = values;
-    this.mDuration = duration;
-    this.mInitiated = false;
-    return this;
+  to(values = {}, duration = 0.25) {
+    this.mValues = values
+    this.mDuration = duration
+    this.mInitiated = false
+    return this
   }
 
   /**
@@ -396,13 +394,12 @@ class Tween extends Component {
    * @return {Tween} Returns this.
    */
   pause() {
-    if (!this.mIsPlaying)
-      return this;
+    if (!this.mIsPlaying) return this
 
-    this.mIsPaused = true;
-    this.mPausedTime = Time.now;
+    this.mIsPaused = true
+    this.mPausedTime = Time.now
 
-    return this;
+    return this
   }
 
   /**
@@ -411,22 +408,19 @@ class Tween extends Component {
    * @return {void} Description
    */
   __resume() {
-    if (!this.mIsPaused)
-      return;
+    if (!this.mIsPaused) return
 
-    this.mIsPaused = false;
-    this.mStartTime += Time.now - this.mPausedTime;
+    this.mIsPaused = false
+    this.mStartTime += Time.now - this.mPausedTime
   }
-
 
   /**
    * @inheritDoc
    */
   removeFromParent() {
-    if (this.mIsPlaying)
-      this.stop();
+    if (this.mIsPlaying) this.stop()
 
-    super.removeFromParent();
+    super.removeFromParent()
   }
 
   /**
@@ -436,17 +430,17 @@ class Tween extends Component {
    */
   chain(tween) {
     if (!tween) {
-      return this;
+      return this
     }
 
-    this.mRemoveOnComplete = false;
-    tween.playOnAdded = false;
+    this.mRemoveOnComplete = false
+    tween.playOnAdded = false
 
     this.on(Message.COMPLETE, () => {
-      tween.play();
-    });
+      tween.play()
+    })
 
-    return tween;
+    return tween
   }
 
   /**
@@ -454,7 +448,7 @@ class Tween extends Component {
    */
   onAdded(gameObject) {
     if (this.mPlayOnAdded) {
-      this.__start(Time.now);
+      this.__start(Time.now)
     }
   }
 
@@ -463,9 +457,7 @@ class Tween extends Component {
    * @param {number} t
    * @return {void}
    */
-  __update(t) {
-
-  }
+  __update(t) {}
 
   /**
    * Updates tween values.
@@ -474,10 +466,10 @@ class Tween extends Component {
    * @return {void}
    */
   set(values) {
-    this.mValues = values;
+    this.mValues = values
 
     for (let f in this.mValues)
-      this.mValuesStart[f] = parseFloat(this.gameObject[f]);
+      this.mValuesStart[f] = parseFloat(this.gameObject[f])
   }
 
   /**
@@ -488,15 +480,14 @@ class Tween extends Component {
    */
   reverse(asYoyo = false) {
     if (this.mInitiated) {
-      this.__reverse();
+      this.__reverse()
     } else {
-      this.mReverseOnInit = true;
+      this.mReverseOnInit = true
     }
 
-    if (asYoyo)
-      this.mIsYoyoBack = !this.mIsYoyoBack;
+    if (asYoyo) this.mIsYoyoBack = !this.mIsYoyoBack
 
-    return this;
+    return this
   }
 
   /**
@@ -505,40 +496,46 @@ class Tween extends Component {
    */
   __reverse() {
     for (let f in this.mValues) {
-      [this.mValues[f], this.mValuesStart[f]] = [this.mValuesStart[f], this.mValues[f]];
+      ;[this.mValues[f], this.mValuesStart[f]] = [
+        this.mValuesStart[f],
+        this.mValues[f],
+      ]
     }
   }
 
   onRender() {
-    if (Black.numUpdates !== 0)
-      return;
+    if (Black.numUpdates !== 0) return
 
-    let time = Time.now;
+    let time = Time.now
 
-    if (time < this.mStartTime || this.mIsPlaying === false || this.mIsPaused === true)
-      return;
+    if (
+      time < this.mStartTime ||
+      this.mIsPlaying === false ||
+      this.mIsPaused === true
+    )
+      return
 
-    if (this.mStarted === false || this.mInitiated === false)
-      return;
+    if (this.mStarted === false || this.mInitiated === false) return
 
-    this.mElapsed = (time - this.mStartTime) / this.mDuration;
+    this.mElapsed = (time - this.mStartTime) / this.mDuration
 
-    if (this.mElapsed > 1)
-      this.mElapsed = 1;
+    if (this.mElapsed > 1) this.mElapsed = 1
 
-    let t = this.mEase(this.mIsYoyoBack ? 1 - this.mElapsed : this.mElapsed);
+    let t = this.mEase(this.mIsYoyoBack ? 1 - this.mElapsed : this.mElapsed)
 
     for (let f in this.mValues) {
-      let start = /** @type {number} */ (this.mValuesStart[f]);
-      let end = /** @type {number|Array} */ (this.mValues[f]);
+      let start = /** @type {number} */ (this.mValuesStart[f])
+      let end = /** @type {number|Array} */ (this.mValues[f])
 
       if (this.mPlugins !== null && this.mPlugins.hasOwnProperty(f)) {
-        let toLerp = Array.isArray(end) ? end : [start, end];
-        this.gameObject[f] = Interpolation.linear(toLerp, t, this.mPlugins[f]);
+        let toLerp = Array.isArray(end) ? end : [start, end]
+        this.gameObject[f] = Interpolation.linear(toLerp, t, this.mPlugins[f])
       } else if (Array.isArray(end)) {
-        this.gameObject[f] = this.mInterpolation(end, t);
+        this.gameObject[f] = this.mInterpolation(end, t)
       } else {
-        this.gameObject[f] = /** @type {number} */ (start + (/** @type {number} */(end) - start) * (this.mIsYoyoBack ? 1 - t : t));
+        this.gameObject[f] =
+          /** @type {number} */ (start +
+          /** @type {number} */ (end - start) * (this.mIsYoyoBack ? 1 - t : t))
       }
     }
   }
@@ -547,71 +544,77 @@ class Tween extends Component {
    * @inheritDoc
    */
   onUpdate() {
-    let t = Time.now;
+    let t = Time.now
 
-    if (t < this.mStartTime || this.mIsPlaying === false || this.mIsPaused === true)
-      return;
+    if (
+      t < this.mStartTime ||
+      this.mIsPlaying === false ||
+      this.mIsPaused === true
+    )
+      return
 
-    this.__collectStartingValues();
+    this.__collectStartingValues()
 
-    this.mElapsed = (t - this.mStartTime) / this.mDuration;
+    this.mElapsed = (t - this.mStartTime) / this.mDuration
 
-    if (this.mElapsed > 1)
-      this.mElapsed = 1;
+    if (this.mElapsed > 1) this.mElapsed = 1
 
-    let tt = this.mEase(this.mIsYoyoBack ? 1 - this.mElapsed : this.mElapsed);
+    let tt = this.mEase(this.mIsYoyoBack ? 1 - this.mElapsed : this.mElapsed)
 
     for (let f in this.mValues) {
-      let start = /** @type {number} */ (this.mValuesStart[f]);
-      let end = /** @type {number|Array} */ (this.mValues[f]);
+      let start = /** @type {number} */ (this.mValuesStart[f])
+      let end = /** @type {number|Array} */ (this.mValues[f])
 
       if (this.mPlugins !== null && this.mPlugins.hasOwnProperty(f)) {
-        let toLerp = Array.isArray(end) ? end : [start, end];
-        this.gameObject[f] = Interpolation.linear(toLerp, tt, this.mPlugins[f]);
+        let toLerp = Array.isArray(end) ? end : [start, end]
+        this.gameObject[f] = Interpolation.linear(toLerp, tt, this.mPlugins[f])
       } else if (Array.isArray(end)) {
-        this.gameObject[f] = this.mInterpolation(end, tt);
+        this.gameObject[f] = this.mInterpolation(end, tt)
       } else {
-        this.gameObject[f] = /** @type {number} */ (start + (/** @type {number} */(end) - start) * (this.mIsYoyoBack ? 1 - tt : tt));
+        this.gameObject[f] =
+          /** @type {number} */ (start +
+          /** @type {number} */ (end - start) *
+            (this.mIsYoyoBack ? 1 - tt : tt))
       }
     }
 
     /**
-     * Posted on every tween update. 
+     * Posted on every tween update.
      * Note: tween can update object values inside `onRender` method without posting `Tween#update` message.
      * @event Tween#update
      */
-    this.post(Message.UPDATE, this.gameObject);
+    this.post(Message.UPDATE, this.gameObject)
 
     if (this.mElapsed === 1) {
       if (this.mRepeats-- > 0) {
         if (this.mYoyo === true) {
-          this.reverse(true);
+          this.reverse(true)
         }
 
-        this.mStartTime = t + this.mRepeatDelay;
+        this.mStartTime = t + this.mRepeatDelay
 
         /**
          * Posted everytime tween is repeating.
          * @event Tween#loop
          */
-        this.post('loop', this.gameObject);
+        this.post('loop', this.gameObject)
       } else {
-        this.mIsPlaying = false;
+        this.mIsPlaying = false
 
         /**
          * Posten when tween is finished.
          * @event Tween#complete
          */
-        this.post(Message.COMPLETE, this.gameObject);
+        this.post(Message.COMPLETE, this.gameObject)
 
         if (this.mRemoveOnComplete) {
-          this.removeFromParent();
+          this.removeFromParent()
         } else {
           for (let f in this.mValues) {
-            this.mValuesStart[f] = this.mValues[f];
+            this.mValuesStart[f] = this.mValues[f]
           }
 
-          this.mStarted = false;
+          this.mStarted = false
         }
       }
     }
@@ -619,27 +622,26 @@ class Tween extends Component {
 
   __collectStartingValues() {
     if (this.mStarted === false) {
-      this.mStarted = true;
+      this.mStarted = true
 
       /**
        * Posted when tween started.
        * @event Tween#start
        */
-      this.post('start', this.gameObject);
+      this.post('start', this.gameObject)
 
       for (let f in this.mValues) {
         if (!this.mInitiated && Array.isArray(this.mValues[f])) {
-          this.mValues[f] = [this.gameObject[f]].concat(this.mValues[f]);
+          this.mValues[f] = [this.gameObject[f]].concat(this.mValues[f])
         }
-        this.mValuesStart[f] = parseFloat(this.gameObject[f]);
+        this.mValuesStart[f] = parseFloat(this.gameObject[f])
       }
 
       if (this.mReversed === true || this.mReverseOnInit === true)
-        this.__reverse();
+        this.__reverse()
 
-      this.mInitiated = true;
+      this.mInitiated = true
     }
-
   }
 }
 
@@ -650,4 +652,4 @@ class Tween extends Component {
  * @type {function(number):number}
  * @nocollapse
  */
-Tween.DEFAULT_EASE = Ease.smootherStep;
+Tween.DEFAULT_EASE = Ease.smootherStep

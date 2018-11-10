@@ -15,50 +15,50 @@ class VectorScatter extends Scatter {
    * @param {number=} [maxY=NaN] The max value along y-axis.
    */
   constructor(minX, minY, maxX = NaN, maxY = NaN) {
-    super();
+    super()
 
     /**
      * A min value along x-axis.
      * @type {number}
      */
-    this.minX = minX;
+    this.minX = minX
 
     /**
      * A min value along y-axis.
      * @type {number}
      */
-    this.minY = minY;
+    this.minY = minY
 
     /**
      * A max value along x-axis.
      * @type {number}
      */
-    this.maxX = isNaN(maxX) ? minX : maxX;
+    this.maxX = isNaN(maxX) ? minX : maxX
 
     /**
      * A max value along y-axis.
      * @type {number}
      */
-    this.maxY = isNaN(maxY) ? minY : maxY;
+    this.maxY = isNaN(maxY) ? minY : maxY
 
     /**
      * Cached last value of `getValueAt` result.
      * @readonly
      * @type {Vector}
      */
-    this.value = new Vector();
+    this.value = new Vector()
   }
 
   /**
-  * Returns a random Vector object at given position within a range specified in the constructor.
+   * Returns a random Vector object at given position within a range specified in the constructor.
    *
-  * @override
-  * @return {Vector} Vector object with random values withing defined range.
-  */
+   * @override
+   * @return {Vector} Vector object with random values withing defined range.
+   */
   getValue() {
-    this.value.x = Math.random() * (this.maxX - this.minX) + this.minX;
-    this.value.y = Math.random() * (this.maxY - this.minY) + this.minY;
-    return this.value;
+    this.value.x = Math.random() * (this.maxX - this.minX) + this.minX
+    this.value.y = Math.random() * (this.maxY - this.minY) + this.minY
+    return this.value
   }
 
   /**
@@ -69,9 +69,9 @@ class VectorScatter extends Scatter {
    * @return {Vector} Vector object representing values in a range at given position.
    */
   getValueAt(t) {
-    this.value.x = this.minX + t * (this.maxX - this.minX);
-    this.value.y = this.minY + t * (this.maxY - this.minY);
-    return this.value;
+    this.value.x = this.minX + t * (this.maxX - this.minX)
+    this.value.y = this.minY + t * (this.maxY - this.minY)
+    return this.value
   }
 
   /**
@@ -82,8 +82,8 @@ class VectorScatter extends Scatter {
    */
   static fromObject(...values) {
     if (values[0] instanceof Scatter)
-      return /** @type {VectorScatter} */ (values[0]);
+      return /** @type {VectorScatter} */ (values[0])
 
-    return new VectorScatter(...values);
+    return new VectorScatter(...values)
   }
 }

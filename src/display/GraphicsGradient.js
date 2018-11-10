@@ -11,12 +11,11 @@ class GraphicsGradient {
    * Creates new instance of GraphicsGradient
    */
   constructor() {
-
     /** @type {Object} */
-    this.stops = {};
+    this.stops = {}
 
     /** @type {CanvasGradient|null} */
-    this.native = null;
+    this.native = null
   }
 
   /**
@@ -28,7 +27,7 @@ class GraphicsGradient {
    * @return {void}
    */
   addColorStop(offset, color) {
-    this.stops[offset] = color;
-    this.native = null;
+    this.stops[offset] = color
+    this.native = null
   }
 }

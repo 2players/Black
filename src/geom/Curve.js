@@ -10,19 +10,19 @@ class Curve {
    */
   constructor() {
     /** @private @type {Array<number>} */
-    this.mPoints = [];
+    this.mPoints = []
 
     /** @private @type {Array<Vector>} */
-    this.mLookup = null;
+    this.mLookup = null
 
     /** @private @type {boolean} */
-    this.mBaked = false;
+    this.mBaked = false
 
     /** @private @type {number} */
-    this.mStep = 1 / 60;
+    this.mStep = 1 / 60
 
     /** @private @type {Array<number>} */
-    this.mEachT = [];
+    this.mEachT = []
   }
 
   /**
@@ -32,15 +32,13 @@ class Curve {
    * @return {Curve} This curve.
    */
   set(...points) {
-    this.mPoints = this.__initPoints(points);
-    this.__refreshEachT();
+    this.mPoints = this.__initPoints(points)
+    this.__refreshEachT()
 
-    if (this.mBaked)
-      this.__refreshCache();
+    if (this.mBaked) this.__refreshCache()
 
-    return this;
+    return this
   }
-
 
   /**
    * Enables or disables interpolation from cache (lookup).
@@ -49,7 +47,7 @@ class Curve {
    * @return {boolean}
    */
   get baked() {
-    return this.mBaked;
+    return this.mBaked
   }
 
   /**
@@ -57,10 +55,10 @@ class Curve {
    * @param  {boolean} label
    */
   set baked(label) {
-    this.mBaked = label;
+    this.mBaked = label
 
     if (!this.mLookup && this.mPoints) {
-      this.__refreshCache();
+      this.__refreshCache()
     }
   }
 
@@ -73,13 +71,13 @@ class Curve {
    * @return {Array<number>} Points coordinates array.
    */
   __initPoints(points) {
-    let res = [];
+    let res = []
 
     for (let i = 6; i < points.length; i += 6) {
-      res = res.concat(points.slice(i - 6, i + 2));
+      res = res.concat(points.slice(i - 6, i + 2))
     }
 
-    return res;
+    return res
   }
 
   /**
@@ -90,22 +88,21 @@ class Curve {
    * @return {Curve} This curve.
    */
   __refreshCache() {
-    let lookup = this.mLookup = [];
-    let getFullLength = this.getFullLength();
-    let points = this.mPoints;
-    let pointsLen = points.length;
+    let lookup = (this.mLookup = [])
+    let getFullLength = this.getFullLength()
+    let points = this.mPoints
+    let pointsLen = points.length
 
     for (let i = 0; i < pointsLen; i += 8) {
-      let length = Curve.getLength(...points.slice(i, i + 8));
-      let step = this.mStep * getFullLength / length;
+      let length = Curve.getLength(...points.slice(i, i + 8))
+      let step = (this.mStep * getFullLength) / length
 
       for (let t = step; t < 1; t += step)
-        lookup.push(Curve.lerp(t, ...points.slice(i, i + 8)));
+        lookup.push(Curve.lerp(t, ...points.slice(i, i + 8)))
     }
 
-    return this;
+    return this
   }
-
 
   /**
    * Refresh local interpolation kof for each bezier in curve.
@@ -115,22 +112,22 @@ class Curve {
    * @return {Curve} This curve.
    */
   __refreshEachT() {
-    let points = this.mPoints;
-    let eachT = this.mEachT = [];
-    let pointsLen = points.length;
-    let eachLength = [];
+    let points = this.mPoints
+    let eachT = (this.mEachT = [])
+    let pointsLen = points.length
+    let eachLength = []
 
     for (let i = 0; i < pointsLen; i += 8)
-      eachLength.push(Curve.getLength(...points.slice(i, i + 8)));
+      eachLength.push(Curve.getLength(...points.slice(i, i + 8)))
 
-    let length = this.getFullLength();
-    let s = 0;
+    let length = this.getFullLength()
+    let s = 0
     for (let i = 0; i < pointsLen; i += 8) {
-      s += eachLength[i / 8];
-      eachT.push(s / length);
+      s += eachLength[i / 8]
+      eachT.push(s / length)
     }
 
-    return this;
+    return this
   }
 
   /**
@@ -148,31 +145,42 @@ class Curve {
    * @param  {Vector=} outVector
    * @return {Vector} Position on bezier.
    */
-  static lerp(t, startX, startY, cpStartX, cpStartY, cpEndX, cpEndY, endX, endY, outVector) {
-    let u = 1 - t;
-    let tt = t * t;
-    let uu = u * u;
-    let uuu = uu * u;
-    let ttt = tt * t;
+  static lerp(
+    t,
+    startX,
+    startY,
+    cpStartX,
+    cpStartY,
+    cpEndX,
+    cpEndY,
+    endX,
+    endY,
+    outVector
+  ) {
+    let u = 1 - t
+    let tt = t * t
+    let uu = u * u
+    let uuu = uu * u
+    let ttt = tt * t
 
-    let p = outVector || new Vector();
-    p.set(startX, startY);
-    p.x *= uuu;
-    p.y *= uuu;
+    let p = outVector || new Vector()
+    p.set(startX, startY)
+    p.x *= uuu
+    p.y *= uuu
 
     // first
-    p.x += 3 * uu * t * cpStartX;
-    p.y += 3 * uu * t * cpStartY;
+    p.x += 3 * uu * t * cpStartX
+    p.y += 3 * uu * t * cpStartY
 
     // second
-    p.x += 3 * u * tt * cpEndX;
-    p.y += 3 * u * tt * cpEndY;
+    p.x += 3 * u * tt * cpEndX
+    p.y += 3 * u * tt * cpEndY
 
     // third
-    p.x += ttt * endX;
-    p.y += ttt * endY;
+    p.x += ttt * endX
+    p.y += ttt * endY
 
-    return p;
+    return p
   }
 
   /**
@@ -183,29 +191,28 @@ class Curve {
    * @return {Vector} Position on curve.
    */
   interpolate(t, outVector) {
-    let res = outVector || new Vector();
-    let lookup = this.mLookup;
+    let res = outVector || new Vector()
+    let lookup = this.mLookup
 
     if (this.mBaked) {
-      let i = Math.ceil((lookup.length - 1) * t);
-      let p = lookup[i];
-      res.copyFrom(p);
+      let i = Math.ceil((lookup.length - 1) * t)
+      let p = lookup[i]
+      res.copyFrom(p)
 
-      return res;
+      return res
     }
 
     // not backed
-    let { mEachT, mPoints } = this;
-    let i = 0;
+    let { mEachT, mPoints } = this
+    let i = 0
 
-    while (mEachT[i] < t)
-      i++;
+    while (mEachT[i] < t) i++
 
-    let minT = mEachT[i - 1] || 0;
-    let maxT = mEachT[i];
-    let bezier = mPoints.slice(i * 8, i * 8 + 8);
+    let minT = mEachT[i - 1] || 0
+    let maxT = mEachT[i]
+    let bezier = mPoints.slice(i * 8, i * 8 + 8)
 
-    return Curve.lerp((t - minT) / (maxT - minT), ...bezier, res);
+    return Curve.lerp((t - minT) / (maxT - minT), ...bezier, res)
   }
 
   /**
@@ -215,12 +222,15 @@ class Curve {
    * @return {number} Length.
    */
   static getLength(...points) {
-    let p0 = new Vector(points[0], points[1]);
-    let p1 = new Vector(points[2], points[3]);
-    let p2 = new Vector(points[4], points[5]);
-    let p3 = new Vector(points[6], points[7]);
+    let p0 = new Vector(points[0], points[1])
+    let p1 = new Vector(points[2], points[3])
+    let p2 = new Vector(points[4], points[5])
+    let p3 = new Vector(points[6], points[7])
 
-    return (p3.distance(p0) + p0.distance(p1) + p1.distance(p2) + p2.distance(p3)) / 2;
+    return (
+      (p3.distance(p0) + p0.distance(p1) + p1.distance(p2) + p2.distance(p3)) /
+      2
+    )
   }
 
   /**
@@ -229,14 +239,14 @@ class Curve {
    * @return {number} Length.
    */
   getFullLength() {
-    let points = this.mPoints;
-    let mPointsLen = points.length;
-    let res = 0;
+    let points = this.mPoints
+    let mPointsLen = points.length
+    let res = 0
 
     for (let i = 0; i < mPointsLen; i += 8)
-      res += Curve.getLength(...points.slice(i, i + 8));
+      res += Curve.getLength(...points.slice(i, i + 8))
 
-    return res;
+    return res
   }
 }
 
@@ -245,4 +255,4 @@ class Curve {
  * @type {Curve}
  * @nocollapse
  */
-Curve.__cache = new Curve();
+Curve.__cache = new Curve()

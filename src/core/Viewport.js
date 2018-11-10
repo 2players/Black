@@ -1,7 +1,7 @@
 /**
  * Manages viewport, handles DOM container resize events and updates internal data.
  * When firing `resize` event stage bounds will be not up to date. Listen for stage's `resize` message instead.
- * 
+ *
  * @cat core
  * @fires Viewport#resize
  * @extends MessageDispatcher
@@ -14,29 +14,29 @@ class Viewport extends MessageDispatcher {
    * @return {void}
    */
   constructor(containerElement) {
-    super();
+    super()
 
     /** @private @type {HTMLElement} */
-    this.mContainerElement = containerElement;
+    this.mContainerElement = containerElement
 
-    let style = this.mContainerElement.style;
-    style.userSelect = 'none';
-    style.touchAction = 'none';
+    let style = this.mContainerElement.style
+    style.userSelect = 'none'
+    style.touchAction = 'none'
     //style.overflow = 'hidden';
-    style.cursor = 'auto';
-    style.WebkitTapHighlightColor = 'rgba(0, 0, 0, 0)';
+    style.cursor = 'auto'
+    style.WebkitTapHighlightColor = 'rgba(0, 0, 0, 0)'
 
-    let size = this.mContainerElement.getBoundingClientRect();
+    let size = this.mContainerElement.getBoundingClientRect()
 
     /** @private @type {Rectangle} */
-    this.mSize = new Rectangle(size.left, size.top, size.width, size.height);
+    this.mSize = new Rectangle(size.left, size.top, size.width, size.height)
 
-    this.isTransparent = true;
-    this.backgroundColor = 0x222222;
+    this.isTransparent = true
+    this.backgroundColor = 0x222222
 
-    this.mChecksLeftSeconds = 0;
+    this.mChecksLeftSeconds = 0
 
-    window.addEventListener('resize', x => this.__onResize());
+    window.addEventListener('resize', x => this.__onResize())
   }
 
   /**
@@ -44,12 +44,11 @@ class Viewport extends MessageDispatcher {
    * @ignore
    */
   __update() {
-    if (this.mChecksLeftSeconds <= 0)
-      return;
+    if (this.mChecksLeftSeconds <= 0) return
 
-    this.__onResize();
+    this.__onResize()
 
-    this.mChecksLeftSeconds -= Time.delta;
+    this.mChecksLeftSeconds -= Time.delta
   }
 
   /**
@@ -57,23 +56,24 @@ class Viewport extends MessageDispatcher {
    * @ignore
    */
   __onResize() {
-    let size = this.mContainerElement.getBoundingClientRect();
+    let size = this.mContainerElement.getBoundingClientRect()
 
-    let newSize = Rectangle.pool.get().set(size.left, size.top, size.width, size.height);
+    let newSize = Rectangle.pool
+      .get()
+      .set(size.left, size.top, size.width, size.height)
 
-    if (this.mSize.equals(newSize) === true)
-      return;
+    if (this.mSize.equals(newSize) === true) return
 
-    this.mSize.copyFrom(newSize);
+    this.mSize.copyFrom(newSize)
 
     /**
      * Posted every time viewport size has changed.
      * @event Viewport#resize
      */
-    this.post(Message.RESIZE, this.mSize);
+    this.post(Message.RESIZE, this.mSize)
 
-    this.mChecksLeftSeconds = 1;
-    Rectangle.pool.release(newSize);
+    this.mChecksLeftSeconds = 1
+    Rectangle.pool.release(newSize)
   }
 
   /**
@@ -82,16 +82,16 @@ class Viewport extends MessageDispatcher {
    * @return {Rectangle}
    */
   get size() {
-    return this.mSize;
+    return this.mSize
   }
 
   /**
    * nativeDOM - Returns the HTML container element the engine runs in.
-   * 
+   *
    * @return {Element}
    */
   get nativeDOM() {
-    return this.mContainerElement;
+    return this.mContainerElement
   }
 
   // TODO: dispose, remove resize event

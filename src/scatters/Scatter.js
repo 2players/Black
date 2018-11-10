@@ -16,7 +16,7 @@ class Scatter {
    * @return {?} Any object.
    */
   getValue() {
-    return this.getValueAt(Math.random());
+    return this.getValueAt(Math.random())
   }
 
   /**

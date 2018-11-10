@@ -11,16 +11,16 @@ class Component extends MessageDispatcher {
    * Creates new Component instance.
    */
   constructor() {
-    super(true);
+    super(true)
 
     /** @private @type {number} */
-    this.mId = ++Component.ID;
+    this.mId = ++Component.ID
 
     /** @private @type {GameObject|null} */
-    this.mGameObject = null;
+    this.mGameObject = null
 
     /** @private @type {boolean} */
-    this.mAdded = false;
+    this.mAdded = false
   }
 
   /**
@@ -30,7 +30,7 @@ class Component extends MessageDispatcher {
    * @param  {GameObject} gameObject The owner of this component.
    * @return {void}
    */
-  onAdded(gameObject) { }
+  onAdded(gameObject) {}
 
   /**
    * Called when detached from GameObject.
@@ -39,7 +39,7 @@ class Component extends MessageDispatcher {
    * @param  {GameObject} gameObject The owner of this component.
    * @return {void}
    */
-  onRemoved(gameObject) { }
+  onRemoved(gameObject) {}
 
   /**
    * Called at every update.
@@ -47,7 +47,7 @@ class Component extends MessageDispatcher {
    * @protected
    * @return {void}
    */
-  onUpdate() { }
+  onUpdate() {}
 
   /**
    * Called after all updates have been executed but before DisplayObject's onRender. GameObject itself does not have onRender method so Component#onRender will not be called on GameObjects.
@@ -56,7 +56,7 @@ class Component extends MessageDispatcher {
    * @protected
    * @return {void}
    */
-  onRender() { }
+  onRender() {}
 
   /**
    * Detaches this Component from its parent GameObject.
@@ -64,10 +64,9 @@ class Component extends MessageDispatcher {
    * @returns {void}
    */
   removeFromParent() {
-    if (this.mGameObject === null)
-      return;
+    if (this.mGameObject === null) return
 
-    this.mGameObject.removeComponent(this);
+    this.mGameObject.removeComponent(this)
   }
 
   /**
@@ -77,16 +76,16 @@ class Component extends MessageDispatcher {
    * @returns {GameObject}
    */
   get gameObject() {
-    return this.mGameObject;
+    return this.mGameObject
   }
-  
+
   /**
    * Returns this Component owner GameObject.
    * @readonly
    * @return {GameObject|null}
    */
   get parent() {
-    return this.mGameObject;
+    return this.mGameObject
   }
 
   /**
@@ -97,10 +96,9 @@ class Component extends MessageDispatcher {
    * @return {Stage|null}
    */
   get stage() {
-    if (this.mGameObject === null)
-      return null;
+    if (this.mGameObject === null) return null
 
-    return this.mGameObject.stage;
+    return this.mGameObject.stage
   }
 
   /**
@@ -112,9 +110,9 @@ class Component extends MessageDispatcher {
    */
   get path() {
     if (this.mGameObject !== null)
-      return this.mGameObject.path + '#' + this.constructor.name;
+      return this.mGameObject.path + '#' + this.constructor.name
 
-    return this.constructor.name;
+    return this.constructor.name
   }
 }
 
@@ -123,4 +121,4 @@ class Component extends MessageDispatcher {
  * @type {number}
  * @nocollapse
  */
-Component.ID = 0;
+Component.ID = 0

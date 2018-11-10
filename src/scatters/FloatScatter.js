@@ -14,32 +14,32 @@ class FloatScatter extends Scatter {
    * @param {?function(number):number} [ease=null]     Easing function.
    */
   constructor(min, max = NaN, ease = null) {
-    super();
+    super()
 
     /**
      * A min value.
      * @type {number}
      */
-    this.min = min;
+    this.min = min
 
     /**
      * A max value.
      * @type {number}
      */
-    this.max = isNaN(max) ? min : max;
+    this.max = isNaN(max) ? min : max
 
     /**
      * Optional easing function.
      * @type {?function(number):number}
      */
-    this.ease = ease;
+    this.ease = ease
 
     /**
      * Cached last value of `getValueAt` result.
      * @readonly
      * @type {number}
      */
-    this.value = 0;
+    this.value = 0
   }
 
   /**
@@ -50,11 +50,10 @@ class FloatScatter extends Scatter {
    * @return {number} Number at given position.
    */
   getValueAt(t) {
-    if (this.ease !== null)
-      t = this.ease(t);
+    if (this.ease !== null) t = this.ease(t)
 
-    this.value = this.min + t * (this.max - this.min);
-    return this.value;
+    this.value = this.min + t * (this.max - this.min)
+    return this.value
   }
 
   /**
@@ -65,8 +64,8 @@ class FloatScatter extends Scatter {
    */
   static fromObject(...values) {
     if (values[0] instanceof FloatScatter)
-      return /** @type {FloatScatter} */ (values[0]);
-    
-    return new FloatScatter(...values);
+      return /** @type {FloatScatter} */ (values[0])
+
+    return new FloatScatter(...values)
   }
 }

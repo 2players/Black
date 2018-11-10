@@ -12,8 +12,8 @@ class MessageDispatcher {
    * @param {boolean} [checkForStage=false]
    */
   constructor(checkForStage = false) {
-    this.mBindings = null;
-    this.checkForStage = checkForStage;
+    this.mBindings = null
+    this.checkForStage = checkForStage
   }
 
   /**
@@ -26,31 +26,33 @@ class MessageDispatcher {
    * @return {MessageBinding}
    */
   on(name, callback, context) {
-    return this.__on(name, callback, false, context);
+    return this.__on(name, callback, false, context)
   }
 
   /**
    * Removes all bindings by given message name.
-   * 
+   *
    * @public
    * @param {...string} names One or more message name.
    * @returns {void}
    */
   off(...names) {
     for (let i = 0; i < names.length; i++) {
-      const name = names[i];
+      const name = names[i]
 
-      let earIndex = name.indexOf('@');
+      let earIndex = name.indexOf('@')
       if (earIndex !== -1) {
-        Debug.error('Removing overheard bindings is not allowed.');
-        return;
+        Debug.error('Removing overheard bindings is not allowed.')
+        return
       }
 
-      if (this.mBindings !== null && this.mBindings.hasOwnProperty(name) === true) {
-        let bindings = this.mBindings[name].slice();
+      if (
+        this.mBindings !== null &&
+        this.mBindings.hasOwnProperty(name) === true
+      ) {
+        let bindings = this.mBindings[name].slice()
 
-        for (let i = 0; i < bindings.length; i++)
-          this.__off(bindings[i]);
+        for (let i = 0; i < bindings.length; i++) this.__off(bindings[i])
       }
     }
   }
@@ -65,12 +67,12 @@ class MessageDispatcher {
    * @return {MessageBinding}
    */
   once(name, callback, context) {
-    return this.__on(name, callback, true, context);
+    return this.__on(name, callback, true, context)
   }
 
   /**
    * Posts message with a given params.
-   * 
+   *
    * Adding `~` character to the begging of the name will bubble message to the top of the tree.
    *
    * @public
@@ -79,27 +81,27 @@ class MessageDispatcher {
    * @return {void}
    */
   post(name, ...params) {
-    let message = this.__draftMessage(name);
+    let message = this.__draftMessage(name)
 
     if (message.type === MessageType.DIRECT)
-      this.__invoke(this, message, ...params);
+      this.__invoke(this, message, ...params)
     else if (message.type === MessageType.BUBBLE)
-      this.__postBubbles(this, message, true, ...params);
+      this.__postBubbles(this, message, true, ...params)
 
     if (message.canceled === false)
-      this.__invokeOverheard(this, message, ...params);
+      this.__invokeOverheard(this, message, ...params)
 
-    Message.pool.release(message);
+    Message.pool.release(message)
   }
 
   /**
    * Returns parent MessageDispatcher.
-   * 
+   *
    * @readonly
    * @return {MessageDispatcher|null}
    */
   get parent() {
-    return null;
+    return null
   }
 
   /**
@@ -109,7 +111,7 @@ class MessageDispatcher {
    * @return {Stage|null}
    */
   get stage() {
-    return null;
+    return null
   }
 
   /**
@@ -120,7 +122,7 @@ class MessageDispatcher {
    * @return {string|null}
    */
   get path() {
-    return null;
+    return null
   }
 
   /**
@@ -133,111 +135,124 @@ class MessageDispatcher {
    * @return {MessageBinding}
    */
   __on(name, callback, isOnce = false, context = null) {
-    Debug.assert(name !== null, 'name cannot be null.');
-    Debug.assert(name.trim().length > 0, 'name cannot be null.');
-    Debug.assert(!(name.indexOf('~') === 0), 'Using `~` is not tot allowed here.');
-    Debug.assert(callback !== null, 'callback cannot be null.');
+    Debug.assert(name !== null, 'name cannot be null.')
+    Debug.assert(name.trim().length > 0, 'name cannot be null.')
+    Debug.assert(
+      !(name.indexOf('~') === 0),
+      'Using `~` is not tot allowed here.'
+    )
+    Debug.assert(callback !== null, 'callback cannot be null.')
 
-    let earIndex = name.indexOf('@');
+    let earIndex = name.indexOf('@')
     if (earIndex !== -1) {
-      let messageName = name.substring(0, earIndex);
-      let pathPattern = name.substring(earIndex + 1);
-      let global = MessageDispatcher.mOverheardHandlers;
+      let messageName = name.substring(0, earIndex)
+      let pathPattern = name.substring(earIndex + 1)
+      let global = MessageDispatcher.mOverheardHandlers
 
-      if (global.hasOwnProperty(messageName) === false)
-        global[messageName] = [];
+      if (global.hasOwnProperty(messageName) === false) global[messageName] = []
 
-      let bindings = global[messageName];
-      let binding = new MessageBinding(this, messageName, callback, isOnce, context, BindingType.OVERHEARD, pathPattern);
-      bindings.push(binding);
-      return binding;
+      let bindings = global[messageName]
+      let binding = new MessageBinding(
+        this,
+        messageName,
+        callback,
+        isOnce,
+        context,
+        BindingType.OVERHEARD,
+        pathPattern
+      )
+      bindings.push(binding)
+      return binding
     }
 
-    if (this.mBindings === null)
-      this.mBindings = {};
+    if (this.mBindings === null) this.mBindings = {}
 
-    if (this.mBindings.hasOwnProperty(name) === false)
-      this.mBindings[name] = [];
+    if (this.mBindings.hasOwnProperty(name) === false) this.mBindings[name] = []
 
-    let binding = new MessageBinding(this, name, callback, isOnce, context, BindingType.REGULAR);
-    this.mBindings[name].push(binding);
+    let binding = new MessageBinding(
+      this,
+      name,
+      callback,
+      isOnce,
+      context,
+      BindingType.REGULAR
+    )
+    this.mBindings[name].push(binding)
 
-    return binding;
+    return binding
   }
 
   /**
    * @ignore
-   * @param {MessageBinding} binding 
+   * @param {MessageBinding} binding
    */
   __off(binding) {
     if (binding.type === BindingType.REGULAR) {
-      if (this.mBindings === null)
-        return;
+      if (this.mBindings === null) return
 
-      if (this.mBindings.hasOwnProperty(binding.name) === false)
-        return;
+      if (this.mBindings.hasOwnProperty(binding.name) === false) return
 
-      let bindings = this.mBindings[binding.name];
-      const ix = bindings.indexOf(binding);
-      if (ix === -1)
-        return;
+      let bindings = this.mBindings[binding.name]
+      const ix = bindings.indexOf(binding)
+      if (ix === -1) return
 
-      bindings.splice(ix, 1);
+      bindings.splice(ix, 1)
     } else if (binding.type === BindingType.OVERHEARD) {
-      let global = MessageDispatcher.mOverheardHandlers;
-      if (global.hasOwnProperty(binding.name) === false)
-        return;
+      let global = MessageDispatcher.mOverheardHandlers
+      if (global.hasOwnProperty(binding.name) === false) return
 
-      let bindings = global[binding.name];
+      let bindings = global[binding.name]
 
-      const ix = bindings.indexOf(binding);
-      if (ix === -1)
-        return;
+      const ix = bindings.indexOf(binding)
+      if (ix === -1) return
 
-      bindings.splice(ix, 1);
+      bindings.splice(ix, 1)
     }
   }
 
   /**
    * @private
    * @ignore
-   * @param {MessageDispatcher} sender 
-   * @param {Message} message 
-   * @param {...*} params 
+   * @param {MessageDispatcher} sender
+   * @param {Message} message
+   * @param {...*} params
    * @return {void}
    */
   __invoke(sender, message, ...params) {
-    if (message.canceled === true)
-      return;
+    if (message.canceled === true) return
 
-    if (this.mBindings === null)
-      return;
+    if (this.mBindings === null) return
 
-    if (this.checkForStage === true && this !== Black.stage && this.stage === null)
-      return;
+    if (
+      this.checkForStage === true &&
+      this !== Black.stage &&
+      this.stage === null
+    )
+      return
 
-    let bindings = (this.mBindings[message.name]);
+    let bindings = this.mBindings[message.name]
 
-    if (bindings === undefined || bindings.length === 0)
-      return;
+    if (bindings === undefined || bindings.length === 0) return
 
-    let cloned = bindings.slice(0);
+    let cloned = bindings.slice(0)
 
     for (let i = 0; i < cloned.length; i++) {
-      message.target = this;
+      message.target = this
 
-      let binding = cloned[i];
+      let binding = cloned[i]
 
-      if (this.checkForStage === true && binding.owner.stage === Black.stage && binding.owner.stage === null)
-        continue;
+      if (
+        this.checkForStage === true &&
+        binding.owner.stage === Black.stage &&
+        binding.owner.stage === null
+      )
+        continue
 
-      binding.callback.call(binding.context, message, ...params);
+      binding.callback.call(binding.context, message, ...params)
 
-      if (binding.isOnce === true)
-        this.__off(binding);
+      if (binding.isOnce === true) this.__off(binding)
 
-      if (message.canceled === true)
-        return;
+      if (message.canceled === true) return
     }
   }
 
@@ -250,39 +265,38 @@ class MessageDispatcher {
    * @return {void}
    */
   __invokeOverheard(sender, message, ...params) {
-    if (message.canceled === true)
-      return;
+    if (message.canceled === true) return
 
-    let bindings = MessageDispatcher.mOverheardHandlers[message.name];
+    let bindings = MessageDispatcher.mOverheardHandlers[message.name]
 
-    if (bindings === undefined || bindings.length === 0)
-      return;
+    if (bindings === undefined || bindings.length === 0) return
 
-    let cloned = bindings.slice(0);
+    let cloned = bindings.slice(0)
 
     for (let i = 0; i < cloned.length; i++) {
-      let binding = cloned[i];
+      let binding = cloned[i]
 
-      if (this.checkForStage === true && binding.owner.stage === Black.stage && binding.owner.stage === null)
-        continue;
+      if (
+        this.checkForStage === true &&
+        binding.owner.stage === Black.stage &&
+        binding.owner.stage === null
+      )
+        continue
 
-      if (!this.__checkPath(sender.path, binding))
-        continue;
+      if (!this.__checkPath(sender.path, binding)) continue
 
-      message.target = this;
-      binding.callback.call(binding.context, message, ...params);
+      message.target = this
+      binding.callback.call(binding.context, message, ...params)
 
-      if (binding.isOnce === true)
-        this.__off(binding);
+      if (binding.isOnce === true) this.__off(binding)
 
-      if (message.canceled === true)
-        return;
+      if (message.canceled === true) return
     }
   }
 
   /**
    * Message will always reach the stage even if some of the middle nodes were removed during process of invocation.
-   * 
+   *
    * @private
    * @ignore
    * @param {*}  sender
@@ -292,46 +306,45 @@ class MessageDispatcher {
    * @return {void}
    */
   __postBubbles(sender, message, toTop, ...params) {
-    message.origin = this;
+    message.origin = this
 
-    let list = [this];
+    let list = [this]
 
-    let current = this;
+    let current = this
     while (current.parent !== null) {
-      list.push(current.parent);
-      current = current.parent;
+      list.push(current.parent)
+      current = current.parent
     }
 
     for (let i = 0; i < list.length; i++) {
-      let dispatcher = list[i];
-      dispatcher.__invoke(sender, message, ...params);
+      let dispatcher = list[i]
+      dispatcher.__invoke(sender, message, ...params)
 
-      if (message.canceled === true)
-        return;
+      if (message.canceled === true) return
     }
   }
 
   /**
    * @private
    * @ignore
-   * 
-   * @param {string} name 
+   *
+   * @param {string} name
    * @returns {Message}
    */
   __draftMessage(name) {
-    const message = Message.pool.get();
-    message.__reset();
+    const message = Message.pool.get()
+    message.__reset()
 
-    message.sender = this;
+    message.sender = this
 
     if (name.charAt(0) === '~') {
-      message.name = name.substr(1);
-      message.type = MessageType.BUBBLE;
+      message.name = name.substr(1)
+      message.type = MessageType.BUBBLE
     } else {
-      message.name = name;
+      message.name = name
     }
 
-    return message;
+    return message
   }
 
   /**
@@ -342,16 +355,14 @@ class MessageDispatcher {
    * @returns {boolean}
    */
   __checkPath(path, binding) {
-    if (path === null || binding.pathPattern === null)
-      return false;
+    if (path === null || binding.pathPattern === null) return false
 
-    if (path === binding.pathPattern)
-      return true;
+    if (path === binding.pathPattern) return true
 
     if (binding.pathPattern.indexOf('*') === -1)
-      return path === binding.pathPattern;
+      return path === binding.pathPattern
 
-    return binding.glob.test(path);
+    return binding.glob.test(path)
   }
 }
 
@@ -359,4 +370,4 @@ class MessageDispatcher {
  * @private
  * @type {Object.<string, Array>}
  */
-MessageDispatcher.mOverheardHandlers = {};
+MessageDispatcher.mOverheardHandlers = {}

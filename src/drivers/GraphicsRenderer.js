@@ -7,6 +7,6 @@
 /* @echo EXPORT */
 class GraphicsRenderer extends Renderer {
   constructor() {
-    super();
+    super()
   }
 }

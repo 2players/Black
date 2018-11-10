@@ -14,44 +14,44 @@ class Graphics extends DisplayObject {
    * @param {boolean} trim Flag to determine the passed graphicsData needs trim.
    */
   constructor(graphicsData = null, trim = false) {
-    super();
+    super()
 
     /** @private @type {Rectangle} */
-    this.mBounds = new Rectangle();
+    this.mBounds = new Rectangle()
 
     /**
      * For internal usage
      *
      * @private @type {Rectangle|null} */
-    this.mLocalBounds = null;
+    this.mLocalBounds = null
 
     /** @private @type {GraphicsData|null} */
-    this.mGraphicsData = null;
+    this.mGraphicsData = null
 
     /** @private @type {number} */
-    this.mDataOffsetX = 0;
+    this.mDataOffsetX = 0
 
     /** @private @type {number} */
-    this.mDataOffsetY = 0;
+    this.mDataOffsetY = 0
 
     /** @private @type {boolean} */
-    this.mTrim = trim;
+    this.mTrim = trim
 
     if (graphicsData === null) {
-      this.mGraphicsData = new GraphicsData();
+      this.mGraphicsData = new GraphicsData()
     } else if (typeof graphicsData === 'string') {
-      this.mGraphicsData = AssetManager.default.getGraphicsData(graphicsData);
+      this.mGraphicsData = AssetManager.default.getGraphicsData(graphicsData)
     } else {
-      this.mGraphicsData = graphicsData;
+      this.mGraphicsData = graphicsData
     }
 
     if (trim) {
-      this.mGraphicsData.onGetLocalBounds(this, new Matrix());
+      this.mGraphicsData.onGetLocalBounds(this, new Matrix())
 
       if (this.mLocalBounds) {
-        this.mDataOffsetX = this.mLocalBounds.x;
-        this.mDataOffsetY = this.mLocalBounds.y;
-        this.mLocalBounds = null;
+        this.mDataOffsetX = this.mLocalBounds.x
+        this.mDataOffsetY = this.mLocalBounds.y
+        this.mLocalBounds = null
       }
     }
   }
@@ -60,33 +60,33 @@ class Graphics extends DisplayObject {
    * @inheritDoc
    */
   getRenderer() {
-    return Black.driver.getRenderer('Graphics', this);
+    return Black.driver.getRenderer('Graphics', this)
   }
 
   /**
    * @inheritDoc
    */
   onGetLocalBounds(outRect = undefined) {
-    outRect = outRect || new Rectangle();
+    outRect = outRect || new Rectangle()
 
     if (this.mClipRect !== null) {
-      this.mClipRect.copyTo(outRect);
-      return outRect;
+      this.mClipRect.copyTo(outRect)
+      return outRect
     }
 
-    this.mGraphicsData.onGetLocalBounds(this, new Matrix());
+    this.mGraphicsData.onGetLocalBounds(this, new Matrix())
 
-    this.mLocalBounds && outRect.copyFrom(this.mLocalBounds);
-    this.mLocalBounds = null;
+    this.mLocalBounds && outRect.copyFrom(this.mLocalBounds)
+    this.mLocalBounds = null
 
     if (!this.mTrim) {
-      outRect.width += Math.max(0, outRect.x);
-      outRect.height += Math.max(0, outRect.y);
-      outRect.x = Math.min(0, outRect.x);
-      outRect.y = Math.min(0, outRect.y);
+      outRect.width += Math.max(0, outRect.x)
+      outRect.height += Math.max(0, outRect.y)
+      outRect.x = Math.min(0, outRect.x)
+      outRect.y = Math.min(0, outRect.y)
     }
 
-    return outRect;
+    return outRect
   }
 
   /**
@@ -101,8 +101,22 @@ class Graphics extends DisplayObject {
    * @param {number=} [miterLimit=3] Miter limit.
    * @returns {void}
    */
-  lineStyle(lineWidth = 0, color = 0, alpha = 1, caps = CapsStyle.NONE, joints = JointStyle.MITER, miterLimit = 3) {
-    this.mGraphicsData.lineStyle(lineWidth, color, alpha, caps, joints, miterLimit);
+  lineStyle(
+    lineWidth = 0,
+    color = 0,
+    alpha = 1,
+    caps = CapsStyle.NONE,
+    joints = JointStyle.MITER,
+    miterLimit = 3
+  ) {
+    this.mGraphicsData.lineStyle(
+      lineWidth,
+      color,
+      alpha,
+      caps,
+      joints,
+      miterLimit
+    )
   }
 
   /**
@@ -114,7 +128,7 @@ class Graphics extends DisplayObject {
    * @returns {void}
    */
   fillStyle(color = 0, alpha = 1) {
-    this.mGraphicsData.fillStyle(color, alpha);
+    this.mGraphicsData.fillStyle(color, alpha)
   }
 
   /**
@@ -126,7 +140,7 @@ class Graphics extends DisplayObject {
    * @returns {void}
    */
   fillGradient(gradient) {
-    this.mGraphicsData.fillGradient(gradient);
+    this.mGraphicsData.fillGradient(gradient)
   }
 
   /**
@@ -138,7 +152,7 @@ class Graphics extends DisplayObject {
    * @returns {void}
    */
   fillPattern(pattern) {
-    this.mGraphicsData.fillPattern(pattern);
+    this.mGraphicsData.fillPattern(pattern)
   }
 
   /**
@@ -148,9 +162,9 @@ class Graphics extends DisplayObject {
    * @returns {void}
    */
   clear() {
-    this.mBounds.zero();
-    this.mGraphicsData.clear();
-    this.setTransformDirty();
+    this.mBounds.zero()
+    this.mGraphicsData.clear()
+    this.setTransformDirty()
   }
 
   /**
@@ -162,7 +176,7 @@ class Graphics extends DisplayObject {
    * @returns {void}
    */
   moveTo(x, y) {
-    this.mGraphicsData.moveTo(x, y);
+    this.mGraphicsData.moveTo(x, y)
   }
 
   /**
@@ -174,7 +188,7 @@ class Graphics extends DisplayObject {
    * @returns {void}
    */
   lineTo(x, y) {
-    this.mGraphicsData.lineTo(x, y);
+    this.mGraphicsData.lineTo(x, y)
   }
 
   /**
@@ -190,7 +204,7 @@ class Graphics extends DisplayObject {
    * @returns {void}
    */
   arc(x, y, radius, startAngle, endAngle, anticlockwise = false) {
-    this.mGraphicsData.arc(x, y, radius, startAngle, endAngle, anticlockwise);
+    this.mGraphicsData.arc(x, y, radius, startAngle, endAngle, anticlockwise)
   }
 
   /**
@@ -203,7 +217,7 @@ class Graphics extends DisplayObject {
    * @returns {void}
    */
   circle(x, y, radius) {
-    this.mGraphicsData.circle(x, y, radius);
+    this.mGraphicsData.circle(x, y, radius)
   }
 
   /**
@@ -218,7 +232,7 @@ class Graphics extends DisplayObject {
    * @returns {void}
    */
   rect(x, y, width, height) {
-    this.mGraphicsData.rect(x, y, width, height);
+    this.mGraphicsData.rect(x, y, width, height)
   }
 
   /**
@@ -234,7 +248,7 @@ class Graphics extends DisplayObject {
    * @returns {void}
    */
   roundedRect(x, y, width, height, radius) {
-    this.mGraphicsData.roundedRect(x, y, width, height, radius);
+    this.mGraphicsData.roundedRect(x, y, width, height, radius)
   }
 
   /**
@@ -247,7 +261,7 @@ class Graphics extends DisplayObject {
    * @param {number} y
    */
   bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y) {
-    this.mGraphicsData.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y);
+    this.mGraphicsData.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y)
   }
 
   /**
@@ -258,7 +272,7 @@ class Graphics extends DisplayObject {
    * @param {number} y
    */
   quadraticCurveTo(cpx, cpy, x, y) {
-    this.mGraphicsData.quadraticCurveTo(cpx, cpy, x, y);
+    this.mGraphicsData.quadraticCurveTo(cpx, cpy, x, y)
   }
 
   /**
@@ -268,7 +282,7 @@ class Graphics extends DisplayObject {
    * @returns {void}
    */
   beginPath() {
-    this.mGraphicsData.beginPath();
+    this.mGraphicsData.beginPath()
   }
 
   /**
@@ -278,7 +292,7 @@ class Graphics extends DisplayObject {
    * @returns {void}
    */
   closePath() {
-    this.mGraphicsData.closePath();
+    this.mGraphicsData.closePath()
   }
 
   /**
@@ -291,7 +305,7 @@ class Graphics extends DisplayObject {
    * @returns {void}
    */
   setLineDash(segments) {
-    this.mGraphicsData.setLineDash(segments);
+    this.mGraphicsData.setLineDash(segments)
   }
 
   /**
@@ -301,8 +315,8 @@ class Graphics extends DisplayObject {
    * @returns {void}
    */
   stroke() {
-    this.mGraphicsData.stroke();
-    this.setTransformDirty();
+    this.mGraphicsData.stroke()
+    this.setTransformDirty()
   }
 
   /**
@@ -314,11 +328,11 @@ class Graphics extends DisplayObject {
    * @returns {void}
    */
   fill(isNonZero = true) {
-    this.mGraphicsData.fill(isNonZero);
-    this.setTransformDirty();
+    this.mGraphicsData.fill(isNonZero)
+    this.setTransformDirty()
   }
 
   createLinearGradient(x, y, width, height) {
-    return new GraphicsLinearGradient(x, y, width, height);
+    return new GraphicsLinearGradient(x, y, width, height)
   }
 }

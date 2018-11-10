@@ -13,30 +13,30 @@ class Collider extends Component {
    * @ignore
    */
   constructor() {
-    super();
+    super()
 
     /**
      * Dirty flag.
      * @private @type {boolean}
      */
-    this.mChanged = true;
+    this.mChanged = true
 
     /**
      * Global in stage coordinates center.
      * @private @type {Vector}
      */
-    this.mCenter = new Vector();
+    this.mCenter = new Vector()
 
     /**
      * Global in stage coordinates min x and y vertex.
      * @private @type {Vector}
      */
-    this.mMin = new Vector();
+    this.mMin = new Vector()
 
     /**
-     * Global in stage coordinates max x and y vertex. 
+     * Global in stage coordinates max x and y vertex.
      * @private @type {Vector} */
-    this.mMax = new Vector();
+    this.mMax = new Vector()
   }
 
   /**
@@ -47,8 +47,8 @@ class Collider extends Component {
    * @returns {boolean}
    */
   containsPoint(point) {
-    Debug.error('Abstract method.');
-    return false;
+    Debug.error('Abstract method.')
+    return false
   }
 
   /**
@@ -58,5 +58,5 @@ class Collider extends Component {
    * @param {Matrix} transform Game object world transformation with zero position.
    * @param {Vector} position  Rigid body position.
    */
-  refresh(transform, position) { }
+  refresh(transform, position) {}
 }

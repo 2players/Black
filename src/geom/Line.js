@@ -12,10 +12,10 @@ class Line {
    */
   constructor(start, end) {
     /** @type {Vector} The start point coordinates */
-    this.start = start;
+    this.start = start
 
     /** @type {Vector} The end point coordinates */
-    this.end = end;
+    this.end = end
   }
 
   /**
@@ -27,10 +27,10 @@ class Line {
    * @return {Line} This circle.
    */
   set(start, end) {
-    this.start = start;
-    this.end = end;
+    this.start = start
+    this.end = end
 
-    return this;
+    return this
   }
 
   /**
@@ -39,7 +39,7 @@ class Line {
    * @return {Line} Created line.
    */
   clone() {
-    return new Line(this.start.clone(), this.end.clone());
+    return new Line(this.start.clone(), this.end.clone())
   }
 
   /**
@@ -50,7 +50,7 @@ class Line {
    * @return {Line} Passed line.
    */
   copyTo(line) {
-    return line.set(this.start.clone(), this.end.clone());
+    return line.set(this.start.clone(), this.end.clone())
   }
 
   /**
@@ -61,7 +61,7 @@ class Line {
    * @return {Line} This circle.
    */
   copyFrom(line) {
-    return this.set(line.start.clone(), line.end.clone());
+    return this.set(line.start.clone(), line.end.clone())
   }
 
   /**
@@ -73,8 +73,12 @@ class Line {
    * @return {boolean} True if lines are identical.
    */
   equals(line, epsilon = Number.EPSILON) {
-    return (this.start.equals(line.start, epsilon) && this.end.equals(line.end, epsilon)) ||
-      (this.start.equals(line.end, epsilon) && this.end.equals(line.start, epsilon));
+    return (
+      (this.start.equals(line.start, epsilon) &&
+        this.end.equals(line.end, epsilon)) ||
+      (this.start.equals(line.end, epsilon) &&
+        this.end.equals(line.start, epsilon))
+    )
   }
 
   /**
@@ -83,9 +87,8 @@ class Line {
    * @return {number} Left X position.
    */
   get left() {
-    return Math.min(this.start.x, this.end.x);
+    return Math.min(this.start.x, this.end.x)
   }
-
 
   /**
    * right - Finds right X position.
@@ -93,7 +96,7 @@ class Line {
    * @return {number} Right X position.
    */
   get right() {
-    return Math.max(this.start.x, this.end.x);
+    return Math.max(this.start.x, this.end.x)
   }
 
   /**
@@ -102,7 +105,7 @@ class Line {
    * @return {number} Top Y position.
    */
   get top() {
-    return Math.min(this.start.y, this.end.y);
+    return Math.min(this.start.y, this.end.y)
   }
 
   /**
@@ -111,7 +114,7 @@ class Line {
    * @return {number} Bottom Y position.
    */
   get bottom() {
-    return Math.max(this.start.y, this.end.y);
+    return Math.max(this.start.y, this.end.y)
   }
 
   /**
@@ -120,11 +123,11 @@ class Line {
    * @return {Line} This line.
    */
   reverse() {
-    let start = this.start;
-    this.start = this.end;
-    this.end = start;
+    let start = this.start
+    this.start = this.end
+    this.end = start
 
-    return this;
+    return this
   }
 
   /**
@@ -136,9 +139,9 @@ class Line {
     this.end
       .subtract(this.start)
       .normalize()
-      .add(this.start);
+      .add(this.start)
 
-    return this;
+    return this
   }
 
   /**
@@ -150,9 +153,9 @@ class Line {
     this.end
       .subtract(this.start)
       .multiplyScalar(multiplier)
-      .add(this.start);
+      .add(this.start)
 
-    return this;
+    return this
   }
 
   /**
@@ -161,7 +164,7 @@ class Line {
    * @return {Line} Description
    */
   zero() {
-    return this.set(new Vector(), new Vector());
+    return this.set(new Vector(), new Vector())
   }
 
   /**
@@ -170,7 +173,7 @@ class Line {
    * @return {number} length.
    */
   length() {
-    return this.start.distance(this.end);
+    return this.start.distance(this.end)
   }
 
   /**
@@ -181,10 +184,12 @@ class Line {
    * @return {Vector} Center point.
    */
   center(outVector = undefined) {
-    outVector = outVector || new Vector();
-    return outVector.set((this.start.x + this.end.x) / 2, (this.start.y + this.end.y) / 2);
+    outVector = outVector || new Vector()
+    return outVector.set(
+      (this.start.x + this.end.x) / 2,
+      (this.start.y + this.end.y) / 2
+    )
   }
-
 
   /**
    * type - Description
@@ -192,7 +197,7 @@ class Line {
    * @return {string} Description
    */
   get type() {
-    return 'Line';
+    return 'Line'
   }
 
   /**
@@ -204,7 +209,7 @@ class Line {
    * @return {boolean} True if line contains point.
    */
   containsXY(x, y) {
-    return this.contains(new Vector(x, y));
+    return this.contains(new Vector(x, y))
   }
 
   /**
@@ -215,7 +220,9 @@ class Line {
    * @return {boolean} True if line contains point.
    */
   contains(vector) {
-    return this.start.distance(vector) + this.end.distance(vector) === this.length();
+    return (
+      this.start.distance(vector) + this.end.distance(vector) === this.length()
+    )
   }
 
   /**
@@ -226,25 +233,27 @@ class Line {
    * @return {boolean} True if intersects.
    */
   intersects(line) {
-    let start1 = this.start;
-    let end1 = this.end;
-    let start2 = line.start;
-    let end2 = line.end;
+    let start1 = this.start
+    let end1 = this.end
+    let start2 = line.start
+    let end2 = line.end
 
-    let denominator = ((end2.y - start2.y) * (end1.x - start1.x)) - ((end2.x - start2.x) * (end1.y - start1.y));
+    let denominator =
+      (end2.y - start2.y) * (end1.x - start1.x) -
+      (end2.x - start2.x) * (end1.y - start1.y)
 
     if (denominator === 0) {
-      return false;
+      return false
     }
 
-    let a = start1.y - start2.y;
-    let b = start1.x - start2.x;
-    let numerator1 = ((end2.x - start2.x) * a) - ((end2.y - start2.y) * b);
-    let numerator2 = ((end1.x - start1.x) * a) - ((end1.y - start1.y) * b);
-    a = numerator1 / denominator;
-    b = numerator2 / denominator;
+    let a = start1.y - start2.y
+    let b = start1.x - start2.x
+    let numerator1 = (end2.x - start2.x) * a - (end2.y - start2.y) * b
+    let numerator2 = (end1.x - start1.x) * a - (end1.y - start1.y) * b
+    a = numerator1 / denominator
+    b = numerator2 / denominator
 
-    return a >= 0 && a <= 1 && b > 0 && b < 1;
+    return a >= 0 && a <= 1 && b > 0 && b < 1
   }
 
   /**
@@ -255,43 +264,49 @@ class Line {
    * @return {boolean} True if intersects.
    */
   intersectsCircle(circle) {
-    let start = this.start;
-    let end = this.end;
+    let start = this.start
+    let end = this.end
 
     if (circle.contains(start) || circle.contains(end)) {
-      return true;
+      return true
     }
 
-    let distance = start.distance(end);
-    let directionX = (end.x - start.x) / distance;
-    let directionY = (end.y - start.y) / distance;
+    let distance = start.distance(end)
+    let directionX = (end.x - start.x) / distance
+    let directionY = (end.y - start.y) / distance
 
-    let t = directionX * (circle.x - start.x) + directionY * (circle.y - start.y);
+    let t =
+      directionX * (circle.x - start.x) + directionY * (circle.y - start.y)
 
-    let nearest = new Vector((t * directionX) + start.x, (t * directionY) + start.y);
-    let nearestDistance = nearest.distance(new Vector(circle.x, circle.y));
+    let nearest = new Vector(t * directionX + start.x, t * directionY + start.y)
+    let nearestDistance = nearest.distance(new Vector(circle.x, circle.y))
 
     if (nearestDistance < circle.r) {
-      let dt = Math.sqrt(Math.pow(circle.r, 2) - Math.pow(nearestDistance, 2));
+      let dt = Math.sqrt(Math.pow(circle.r, 2) - Math.pow(nearestDistance, 2))
 
-      let x1 = ((t - dt) * directionX + start.x);
-      let y1 = ((t - dt) * directionY + start.y);
-      let x2 = ((t + dt) * directionX + start.x);
-      let y2 = ((t + dt) * directionY + start.y);
+      let x1 = (t - dt) * directionX + start.x
+      let y1 = (t - dt) * directionY + start.y
+      let x2 = (t + dt) * directionX + start.x
+      let y2 = (t + dt) * directionY + start.y
 
-      return this.__isInBoundsXY(x1, y1) || this.__isInBoundsXY(x2, y2);
+      return this.__isInBoundsXY(x1, y1) || this.__isInBoundsXY(x2, y2)
     }
 
-    return false;
+    return false
   }
 
   __isInBoundsXY(x, y) {
-    let x1 = this.start.x;
-    let y1 = this.start.y;
-    let x2 = this.end.x;
-    let y2 = this.end.y;
+    let x1 = this.start.x
+    let y1 = this.start.y
+    let x2 = this.end.x
+    let y2 = this.end.y
 
-    return x > Math.min(x1, x2) && x < Math.max(x1, x2) && y > Math.min(y1, y2) && y < Math.max(y1, y2);
+    return (
+      x > Math.min(x1, x2) &&
+      x < Math.max(x1, x2) &&
+      y > Math.min(y1, y2) &&
+      y < Math.max(y1, y2)
+    )
   }
 
   // @ifdef DEBUG
@@ -303,7 +318,9 @@ class Line {
    * @return {string} Description.
    */
   toString(digits = 2) {
-    return `Line { start: ${this.start.toString(digits)}, end: ${this.end.toString(digits)} }`;
+    return `Line { start: ${this.start.toString(
+      digits
+    )}, end: ${this.end.toString(digits)} }`
   }
   // @endif
 }
@@ -313,4 +330,4 @@ class Line {
  * @nocollapse
  * @ignore
  */
-Line.__cache = new Line(new Vector(), new Vector());
+Line.__cache = new Line(new Vector(), new Vector())

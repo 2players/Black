@@ -1,21 +1,19 @@
 /**
  * The sound effect interface. Implementations can be attached to sound channel.
- * 
+ *
  * @cat audio
  */
 /* @echo EXPORT */
 class SoundEffect {
-
   /**
    * Creates new instance of SoundEffect.
    */
   constructor() {
+    /** @ignore @protected @type {AudioNode} */
+    this.mInputNode = null
 
     /** @ignore @protected @type {AudioNode} */
-    this.mInputNode = null;
-
-    /** @ignore @protected @type {AudioNode} */
-    this.mOutputNode = null;
+    this.mOutputNode = null
   }
 
   /**
@@ -23,8 +21,11 @@ class SoundEffect {
    * @return {AudioNode}
    */
   get _inputNode() {
-    Debug.assert(this.mInputNode != null, 'Input node must be specified in descendant class');
-    return this.mInputNode;
+    Debug.assert(
+      this.mInputNode != null,
+      'Input node must be specified in descendant class'
+    )
+    return this.mInputNode
   }
 
   /**
@@ -32,7 +33,10 @@ class SoundEffect {
    * @return {AudioNode}
    */
   get _outputNode() {
-    Debug.assert(this.mOutputNode != null, 'Output node must be specified in descendant class');
-    return this.mOutputNode;
+    Debug.assert(
+      this.mOutputNode != null,
+      'Output node must be specified in descendant class'
+    )
+    return this.mOutputNode
   }
 }

@@ -13,80 +13,80 @@ class Emitter extends DisplayObject {
    * Creates new Emitter instance.
    */
   constructor() {
-    super();
+    super()
 
     /** @private @type {Array<Texture>} */
-    this.mTextures = null;
+    this.mTextures = null
 
     /** @private @type {Array<Particle>} */
-    this.mParticles = [];
+    this.mParticles = []
 
     /** @private @type {Array<Particle>} */
-    this.mRecycled = [];
+    this.mRecycled = []
 
     /** @private @type {Array<Modifier>} */
-    this.mInitializers = [];
+    this.mInitializers = []
 
     /** @private @type {Array<Modifier>} */
-    this.mActions = [];
+    this.mActions = []
 
     /** @private @type {GameObject} */
-    this.mSpace = null;
+    this.mSpace = null
 
     /** @private @type {boolean} */
-    this.mIsLocal = true;
+    this.mIsLocal = true
 
     /** @private @type {number} */
-    this.mMaxParticles = 10000;
+    this.mMaxParticles = 10000
 
     /** @private @type {FloatScatter} */
-    this.mEmitCount = new FloatScatter(10);
+    this.mEmitCount = new FloatScatter(10)
 
     /** @private @type {FloatScatter} */
-    this.mEmitNumRepeats = new FloatScatter(Infinity);
+    this.mEmitNumRepeats = new FloatScatter(Infinity)
 
     /** @private @type {number} */
-    this.mEmitNumRepeatsLeft = this.mEmitNumRepeats.getValue();
+    this.mEmitNumRepeatsLeft = this.mEmitNumRepeats.getValue()
 
     /** @private @type {FloatScatter} */
-    this.mEmitDuration = new FloatScatter(1 / 60);
+    this.mEmitDuration = new FloatScatter(1 / 60)
 
     /** @private @type {number} */
-    this.mEmitDurationLeft = this.mEmitDuration.getValue();
+    this.mEmitDurationLeft = this.mEmitDuration.getValue()
 
     /** @private @type {FloatScatter} */
-    this.mEmitInterval = new FloatScatter(1 / 60);
+    this.mEmitInterval = new FloatScatter(1 / 60)
 
     /** @private @type {number} */
-    this.mEmitIntervalLeft = this.mEmitInterval.getValue();
+    this.mEmitIntervalLeft = this.mEmitInterval.getValue()
 
     /** @private @type {FloatScatter} */
-    this.mEmitDelay = new FloatScatter(1);
+    this.mEmitDelay = new FloatScatter(1)
 
     /** @private @type {number} */
-    this.mEmitDelayLeft = this.mEmitDelay.getValue();
+    this.mEmitDelayLeft = this.mEmitDelay.getValue()
 
     /** @private @type {number} */
-    this.mNextUpdateAt = 0;
+    this.mNextUpdateAt = 0
 
     /** @private @type {EmitterState} */
-    this.mState = EmitterState.PENDING;
+    this.mState = EmitterState.PENDING
 
     /** @private @type {Matrix} */
-    this.__tmpLocal = new Matrix();
+    this.__tmpLocal = new Matrix()
 
     /** @private @type {Matrix} */
-    this.__tmpWorld = new Matrix();
+    this.__tmpWorld = new Matrix()
 
     /** @private @type {EmitterSortOrder} */
-    this.mSortOrder = EmitterSortOrder.FRONT_TO_BACK;
+    this.mSortOrder = EmitterSortOrder.FRONT_TO_BACK
   }
 
   /**
    * @inheritDoc
    */
   getRenderer() {
-    return Black.driver.getRenderer('Emitter', this);
+    return Black.driver.getRenderer('Emitter', this)
   }
 
   /**
@@ -95,7 +95,7 @@ class Emitter extends DisplayObject {
    * @returns {void}
    */
   resetState() {
-    this.mState = EmitterState.PENDING;
+    this.mState = EmitterState.PENDING
   }
 
   /**
@@ -106,14 +106,12 @@ class Emitter extends DisplayObject {
    */
   add(...modifiers) {
     for (let i = 0; i < modifiers.length; i++) {
-      let ai = modifiers[i];
+      let ai = modifiers[i]
 
-      if (ai instanceof Modifier)
-        this.addModifier(ai);
-      else
-        super.add(ai);
+      if (ai instanceof Modifier) this.addModifier(ai)
+      else super.add(ai)
     }
-    return this;
+    return this
   }
 
   /**
@@ -123,12 +121,10 @@ class Emitter extends DisplayObject {
    * @return {Modifier}
    */
   addModifier(modifier) {
-    if (modifier.isInitializer)
-      this.mInitializers.push(modifier);
-    else
-      this.mActions.push(modifier);
+    if (modifier.isInitializer) this.mInitializers.push(modifier)
+    else this.mActions.push(modifier)
 
-    return modifier;
+    return modifier
   }
 
   /**
@@ -139,54 +135,53 @@ class Emitter extends DisplayObject {
    * @return {void}
    */
   updateNextTick(dt = 0) {
-    let t = Time.now;
-    let firstEmit = false;
+    let t = Time.now
+    let firstEmit = false
 
     if (this.mState === EmitterState.PENDING) {
-      this.mNextUpdateAt = t + this.mEmitDelayLeft;
-      this.mEmitDelayLeft -= dt;
+      this.mNextUpdateAt = t + this.mEmitDelayLeft
+      this.mEmitDelayLeft -= dt
 
       if (this.mEmitDelayLeft <= 0) {
-        this.mEmitDelayLeft = this.mEmitDelay.getValue();
-        this.mState = EmitterState.EMITTING;
-        firstEmit = true;
+        this.mEmitDelayLeft = this.mEmitDelay.getValue()
+        this.mState = EmitterState.EMITTING
+        firstEmit = true
       }
     }
 
     if (this.mState === EmitterState.EMITTING) {
       if (this.mEmitDurationLeft <= 0) {
-        this.mEmitDurationLeft = this.mEmitDuration.getValue();
+        this.mEmitDurationLeft = this.mEmitDuration.getValue()
 
-        this.mEmitNumRepeatsLeft--;
+        this.mEmitNumRepeatsLeft--
 
         if (this.mEmitNumRepeatsLeft <= 0) {
-          this.mState = EmitterState.FINISHED;
+          this.mState = EmitterState.FINISHED
 
-          this.post(Message.COMPLETE);
-          return;
+          this.post(Message.COMPLETE)
+          return
         } else {
-          this.mState = EmitterState.PENDING;
-          return;
+          this.mState = EmitterState.PENDING
+          return
         }
       } else {
         // we are getting value here each update to make sure we are up to date!
         if (firstEmit) {
           // for a first emit we do not want to add an extra delay. emit now!
-          this.mNextUpdateAt = t;
-          this.mEmitIntervalLeft = this.mEmitInterval.getValue();
-        }
-        else {
-          this.mEmitIntervalLeft -= dt;
-          this.mNextUpdateAt = t + this.mEmitIntervalLeft;
+          this.mNextUpdateAt = t
+          this.mEmitIntervalLeft = this.mEmitInterval.getValue()
+        } else {
+          this.mEmitIntervalLeft -= dt
+          this.mNextUpdateAt = t + this.mEmitIntervalLeft
           //console.log(this.mEmitIntervalLeft);
 
           // reset interval
           if (this.mEmitIntervalLeft <= 0)
-            this.mEmitIntervalLeft = this.mEmitInterval.getValue();
+            this.mEmitIntervalLeft = this.mEmitInterval.getValue()
         }
       }
 
-      this.mEmitDurationLeft -= dt;
+      this.mEmitDurationLeft -= dt
     }
   }
 
@@ -194,44 +189,42 @@ class Emitter extends DisplayObject {
    * @inheritDoc
    */
   onUpdate() {
-    let dt = Time.delta;
-    
+    let dt = Time.delta
+
     // rate logic
-    this.updateNextTick(dt);
+    this.updateNextTick(dt)
 
     if (Time.now >= this.mNextUpdateAt && this.mState === EmitterState.EMITTING)
-      this.__create(this.mEmitCount.getValue());
+      this.__create(this.mEmitCount.getValue())
 
     // main update login
-    const alength = this.mActions.length;
-    const plength = this.mParticles.length;
+    const alength = this.mActions.length
+    const plength = this.mParticles.length
 
-    for (let k = 0; k < alength; k++)
-      this.mActions[k].preUpdate(dt);
+    for (let k = 0; k < alength; k++) this.mActions[k].preUpdate(dt)
 
-    let particle;
+    let particle
 
-    let i = plength;
+    let i = plength
     while (i--) {
-      particle = this.mParticles[i];
+      particle = this.mParticles[i]
 
       for (let k = 0; k < alength; k++)
-        this.mActions[k].update(this, particle, dt);
+        this.mActions[k].update(this, particle, dt)
 
-      particle.update(dt);
+      particle.update(dt)
 
       if (particle.life === 0) {
-        this.mRecycled.push(particle);
-        this.mParticles.splice(i, 1);
+        this.mRecycled.push(particle)
+        this.mParticles.splice(i, 1)
       }
     }
 
-    for (let k = 0; k < alength; k++)
-      this.mActions[k].postUpdate(dt);
+    for (let k = 0; k < alength; k++) this.mActions[k].postUpdate(dt)
 
     // set dummy dirty flag so unchanged frames can be detected
     if (this.mVisible === true && this.mAlpha > 0)
-      this.setDirty(DirtyFlag.LOCAL, false);
+      this.setDirty(DirtyFlag.LOCAL, false)
   }
 
   /**
@@ -239,38 +232,37 @@ class Emitter extends DisplayObject {
    * @private
    */
   __create(amount) {
-    let matrix = this.worldTransformation.clone();
-    let minv = null;
+    let matrix = this.worldTransformation.clone()
+    let minv = null
 
     if (this.mIsLocal === false) {
-      minv = this.mSpace.worldTransformationInverted.clone();
-      matrix.prepend(minv);
+      minv = this.mSpace.worldTransformationInverted.clone()
+      matrix.prepend(minv)
     }
 
     for (let i = 0; i < amount; i++) {
-      let p = null;
+      let p = null
 
       if (this.mRecycled.length > 0) {
-        p = this.mRecycled.pop();
+        p = this.mRecycled.pop()
       } else {
-        if (this.mParticles.length >= this.mMaxParticles)
-          return;
+        if (this.mParticles.length >= this.mMaxParticles) return
 
-        p = new Particle();
+        p = new Particle()
       }
 
-      p.reset();
+      p.reset()
 
       for (let k = 0; k < this.mInitializers.length; k++)
-        this.mInitializers[k].update(this, p, 0);
+        this.mInitializers[k].update(this, p, 0)
 
       if (this.mIsLocal === false) {
-        matrix.transformXY(p.x, p.y, Vector.__cache);
-        p.x = Vector.__cache.x;
-        p.y = Vector.__cache.y;
+        matrix.transformXY(p.x, p.y, Vector.__cache)
+        p.x = Vector.__cache.x
+        p.y = Vector.__cache.y
       }
 
-      this.mParticles.push(p);
+      this.mParticles.push(p)
     }
   }
 
@@ -280,7 +272,7 @@ class Emitter extends DisplayObject {
    * @return {EmitterState}
    */
   get state() {
-    return this.mState;
+    return this.mState
   }
 
   /**
@@ -289,7 +281,7 @@ class Emitter extends DisplayObject {
    * @return {number}
    */
   get maxParticles() {
-    return this.mMaxParticles;
+    return this.mMaxParticles
   }
 
   /**
@@ -298,10 +290,9 @@ class Emitter extends DisplayObject {
    * @return {void}
    */
   set maxParticles(value) {
-    if (value < 0)
-      throw new Error('Bad argument error.');
+    if (value < 0) throw new Error('Bad argument error.')
 
-    this.mMaxParticles = value;
+    this.mMaxParticles = value
   }
 
   /**
@@ -310,7 +301,7 @@ class Emitter extends DisplayObject {
    * @return {FloatScatter}
    */
   get emitCount() {
-    return this.mEmitCount;
+    return this.mEmitCount
   }
 
   /**
@@ -319,7 +310,7 @@ class Emitter extends DisplayObject {
    * @return {void}
    */
   set emitCount(value) {
-    this.mEmitCount = value;
+    this.mEmitCount = value
   }
 
   /**
@@ -328,7 +319,7 @@ class Emitter extends DisplayObject {
    * @return {FloatScatter}
    */
   get emitNumRepeats() {
-    return this.mEmitNumRepeats;
+    return this.mEmitNumRepeats
   }
 
   /**
@@ -337,8 +328,8 @@ class Emitter extends DisplayObject {
    * @return {void}
    */
   set emitNumRepeats(value) {
-    this.mEmitNumRepeats = value;
-    this.mEmitNumRepeatsLeft = this.mEmitNumRepeats.getValue();
+    this.mEmitNumRepeats = value
+    this.mEmitNumRepeatsLeft = this.mEmitNumRepeats.getValue()
   }
 
   /**
@@ -347,7 +338,7 @@ class Emitter extends DisplayObject {
    * @return {FloatScatter}
    */
   get emitDuration() {
-    return this.mEmitDuration;
+    return this.mEmitDuration
   }
 
   /**
@@ -356,10 +347,9 @@ class Emitter extends DisplayObject {
    * @return {void}
    */
   set emitDuration(value) {
-    this.mEmitDuration = value;
-    this.mEmitDurationLeft = this.mEmitDuration.getValue();
+    this.mEmitDuration = value
+    this.mEmitDurationLeft = this.mEmitDuration.getValue()
   }
-
 
   /**
    * Gets/Sets
@@ -367,7 +357,7 @@ class Emitter extends DisplayObject {
    * @return {FloatScatter}
    */
   get emitInterval() {
-    return this.mEmitInterval;
+    return this.mEmitInterval
   }
 
   /**
@@ -376,10 +366,9 @@ class Emitter extends DisplayObject {
    * @return {void}
    */
   set emitInterval(value) {
-    this.mEmitInterval = value;
-    this.mEmitIntervalLeft = this.mEmitInterval.getValue();
+    this.mEmitInterval = value
+    this.mEmitIntervalLeft = this.mEmitInterval.getValue()
   }
-
 
   /**
    * Gets/Sets
@@ -387,7 +376,7 @@ class Emitter extends DisplayObject {
    * @return {FloatScatter}
    */
   get emitDelay() {
-    return this.mEmitDelay;
+    return this.mEmitDelay
   }
 
   /**
@@ -396,10 +385,9 @@ class Emitter extends DisplayObject {
    * @return {void}
    */
   set emitDelay(value) {
-    this.mEmitDelay = value;
-    this.mEmitDelayLeft = this.mEmitDelay.getValue();
+    this.mEmitDelay = value
+    this.mEmitDelayLeft = this.mEmitDelay.getValue()
   }
-
 
   /**
    * Gets/Sets the space where emitting simulation will happen, ignoring space transformation, so all forces are relative to global.
@@ -407,7 +395,7 @@ class Emitter extends DisplayObject {
    * @return {GameObject}
    */
   get space() {
-    return this.mSpace;
+    return this.mSpace
   }
 
   /**
@@ -416,9 +404,9 @@ class Emitter extends DisplayObject {
    * @return {void}
    */
   set space(gameObject) {
-    this.mSpace = gameObject;
-    this.mIsLocal = this.mSpace === null || this.mSpace === this;
-    this.setRenderDirty();
+    this.mSpace = gameObject
+    this.mIsLocal = this.mSpace === null || this.mSpace === this
+    this.setRenderDirty()
   }
 
   /**
@@ -427,7 +415,7 @@ class Emitter extends DisplayObject {
    * @return {Array<Texture>}
    */
   get textures() {
-    return this.mTextures;
+    return this.mTextures
   }
 
   /**
@@ -436,21 +424,24 @@ class Emitter extends DisplayObject {
    * @return {void}
    */
   set textures(value) {
-    this.mTextures = value;
+    this.mTextures = value
 
-    Debug.assert(!(this.mTextures === null || this.mTextures.length === 0), 'At least one texture must be provided.');
+    Debug.assert(
+      !(this.mTextures === null || this.mTextures.length === 0),
+      'At least one texture must be provided.'
+    )
 
-    this.setRenderDirty();
+    this.setRenderDirty()
   }
 
-   /**
+  /**
    * Sets the list of textures with given string. It uses AssetManager to find textures. Wildcard supported.
-   * 
+   *
    * @param {string} value
    * @return {void}
    */
   set texturesName(value) {
-    this.textures = AssetManager.default.getTextures(value);
+    this.textures = AssetManager.default.getTextures(value)
   }
 
   /**
@@ -459,7 +450,7 @@ class Emitter extends DisplayObject {
    * @return {EmitterSortOrder}
    */
   get sortOrder() {
-    return this.mSortOrder;
+    return this.mSortOrder
   }
 
   /**
@@ -468,7 +459,7 @@ class Emitter extends DisplayObject {
    * @return {void}
    */
   set sortOrder(value) {
-    this.mSortOrder = value;
-    this.setRenderDirty();
+    this.mSortOrder = value
+    this.setRenderDirty()
   }
 }

@@ -9,21 +9,19 @@ class Polygon {
    * @param  {Array<Vector>} vertices = [] Array of vertex points;
    */
   constructor(vertices = []) {
-
     /** @private @type {Array<Vector>} */
-    this.mVertices = vertices;
+    this.mVertices = vertices
 
     /** @private @type {Array<Line>} */
-    this.mLines = [];
+    this.mLines = []
 
     /** @private @type {Rectangle} */
-    this.mBounds = new Rectangle();
+    this.mBounds = new Rectangle()
 
     /** @private @type {Vector} */
-    this.mCenter = new Vector();
+    this.mCenter = new Vector()
 
-    if (vertices.length > 2)
-      this.refresh();
+    if (vertices.length > 2) this.refresh()
   }
 
   /**
@@ -33,9 +31,9 @@ class Polygon {
    * @return {Polygon} This polygon.
    */
   set(vertices) {
-    this.mVertices = vertices;
-    this.refresh();
-    return this;
+    this.mVertices = vertices
+    this.refresh()
+    return this
   }
 
   /**
@@ -45,14 +43,14 @@ class Polygon {
    * @return {Polygon} Passed polygon.
    */
   copyTo(polygon) {
-    let len = this.mVertices.length;
-    let vertices = [];
+    let len = this.mVertices.length
+    let vertices = []
 
     for (let i = 0; i < len; i++) {
-      vertices.push(this.mVertices[i].clone());
+      vertices.push(this.mVertices[i].clone())
     }
 
-    return polygon.set(vertices);
+    return polygon.set(vertices)
   }
 
   /**
@@ -62,15 +60,15 @@ class Polygon {
    * @return {Polygon} This polygon.
    */
   copyFrom(polygon) {
-    let polygonVertices = polygon.mVertices;
-    let len = polygonVertices.length;
-    let vertices = [];
+    let polygonVertices = polygon.mVertices
+    let len = polygonVertices.length
+    let vertices = []
 
     for (let i = 0; i < len; i++) {
-      vertices.push(polygonVertices[i].clone());
+      vertices.push(polygonVertices[i].clone())
     }
 
-    return this.set(vertices);
+    return this.set(vertices)
   }
 
   /**
@@ -79,15 +77,15 @@ class Polygon {
    * @return {Polygon} Created polygon.
    */
   clone() {
-    let thisVertices = this.mVertices;
-    let len = thisVertices.length;
-    let vertices = [];
+    let thisVertices = this.mVertices
+    let len = thisVertices.length
+    let vertices = []
 
     for (let i = 0; i < len; i++) {
-      vertices.push(thisVertices[i].clone());
+      vertices.push(thisVertices[i].clone())
     }
 
-    return new Polygon(vertices);
+    return new Polygon(vertices)
   }
 
   /**
@@ -97,7 +95,7 @@ class Polygon {
    * @returns {number}
    */
   get width() {
-    return this.mBounds.width;
+    return this.mBounds.width
   }
 
   /**
@@ -107,7 +105,7 @@ class Polygon {
    * @returns {number}
    */
   get height() {
-    return this.mBounds.height;
+    return this.mBounds.height
   }
 
   /**
@@ -118,7 +116,7 @@ class Polygon {
    * @return {boolean} True if polygon contains point.
    */
   containsXY(x, y) {
-    return this.contains(new Vector(x, y));
+    return this.contains(new Vector(x, y))
   }
 
   /**
@@ -128,23 +126,25 @@ class Polygon {
    * @return {boolean} True if polygon contains point.
    */
   contains(vector) {
-    let center = this.mCenter;
-    let lines = this.mLines;
-    let len = lines.length;
+    let center = this.mCenter
+    let lines = this.mLines
+    let len = lines.length
 
     if (center.equals(vector)) {
-      return true;
+      return true
     }
 
-    let intersectionLine = new Line(vector, center.clone());
-    let intersects = 0;
-    intersectionLine.scale((this.width + this.height) / intersectionLine.length());
+    let intersectionLine = new Line(vector, center.clone())
+    let intersects = 0
+    intersectionLine.scale(
+      (this.width + this.height) / intersectionLine.length()
+    )
 
     for (let i = 0; i < len; i++) {
-      intersects += lines[i].intersects(intersectionLine) ? 1 : 0;
+      intersects += lines[i].intersects(intersectionLine) ? 1 : 0
     }
 
-    return intersects % 2 !== 0;
+    return intersects % 2 !== 0
   }
 
   /**
@@ -153,15 +153,15 @@ class Polygon {
    * @return {number} perimeter.
    */
   get perimeter() {
-    let thisLines = this.mLines;
-    let len = thisLines.length;
-    let perimeter = 0;
+    let thisLines = this.mLines
+    let len = thisLines.length
+    let perimeter = 0
 
     for (let i = 0; i < len; i++) {
-      perimeter += thisLines[i].length();
+      perimeter += thisLines[i].length()
     }
 
-    return perimeter;
+    return perimeter
   }
 
   /**
@@ -172,23 +172,23 @@ class Polygon {
    */
   collide(polygon) {
     if (!this.mBounds.intersects(polygon.mBounds)) {
-      return false;
+      return false
     }
 
-    let thisLines = this.mLines;
-    let thisLen = thisLines.length;
-    let polygonLines = polygon.mLines;
-    let polygonLen = polygonLines.length;
+    let thisLines = this.mLines
+    let thisLen = thisLines.length
+    let polygonLines = polygon.mLines
+    let polygonLen = polygonLines.length
 
     for (let i = 0; i < thisLen; i++) {
       for (let j = 0; j < polygonLen; j++) {
         if (thisLines[i].intersects(polygonLines[j])) {
-          return true;
+          return true
         }
       }
     }
 
-    return false;
+    return false
   }
 
   /**
@@ -198,21 +198,26 @@ class Polygon {
    * @return {boolean} True if polygon collides with circle.
    */
   collideCircle(circle) {
-    let bounds = this.mBounds;
-    let lines = this.mLines;
+    let bounds = this.mBounds
+    let lines = this.mLines
 
-    if (bounds.left > circle.right || bounds.right < circle.left || bounds.top > circle.bottom || bounds.bottom < circle.top) {
-      return false;
+    if (
+      bounds.left > circle.right ||
+      bounds.right < circle.left ||
+      bounds.top > circle.bottom ||
+      bounds.bottom < circle.top
+    ) {
+      return false
     }
 
-    let len = lines.length;
+    let len = lines.length
     for (let i = 0; i < len; i++) {
       if (lines[i].intersectsCircle(circle)) {
-        return true;
+        return true
       }
     }
 
-    return false;
+    return false
   }
 
   /**
@@ -223,23 +228,23 @@ class Polygon {
    */
   collideRectangle(rectangle) {
     if (!this.mBounds.intersects(rectangle)) {
-      return false;
+      return false
     }
 
-    let thisLines = this.mLines;
-    let thisLen = thisLines.length;
-    let rectangleLines = rectangle.lines;
-    let rectangleLen = rectangleLines.length;
+    let thisLines = this.mLines
+    let thisLen = thisLines.length
+    let rectangleLines = rectangle.lines
+    let rectangleLen = rectangleLines.length
 
     for (let i = 0; i < thisLen; i++) {
       for (let j = 0; j < rectangleLen; j++) {
         if (thisLines[i].intersects(rectangleLines[j])) {
-          return true;
+          return true
         }
       }
     }
 
-    return false;
+    return false
   }
 
   /**
@@ -249,28 +254,31 @@ class Polygon {
    * @return {boolean} True if polygon overlaps second.
    */
   overlap(polygon) {
-    if (this.mBounds.width < polygon.mBounds.width || this.mBounds.height < polygon.mBounds.height) {
-      return false;
+    if (
+      this.mBounds.width < polygon.mBounds.width ||
+      this.mBounds.height < polygon.mBounds.height
+    ) {
+      return false
     }
 
     if (!this.contains(polygon.mCenter)) {
-      return false;
+      return false
     }
 
-    let thisLines = this.mLines;
-    let thisLen = thisLines.length;
-    let polygonLines = polygon.mLines;
-    let polygonLen = polygonLines.length;
+    let thisLines = this.mLines
+    let thisLen = thisLines.length
+    let polygonLines = polygon.mLines
+    let polygonLen = polygonLines.length
 
     for (let i = 0; i < thisLen; i++) {
       for (let j = 0; j < polygonLen; j++) {
         if (thisLines[i].intersects(polygonLines[j])) {
-          return false;
+          return false
         }
       }
     }
 
-    return true;
+    return true
   }
 
   /**
@@ -281,19 +289,19 @@ class Polygon {
    */
   overlapCircle(circle) {
     if (!this.containsXY(circle.x, circle.y)) {
-      return false;
+      return false
     }
 
-    let thisLines = this.mLines;
-    let len = thisLines.length;
+    let thisLines = this.mLines
+    let len = thisLines.length
 
     for (let i = 0; i < len; i++) {
       if (thisLines[i].intersectsCircle(circle)) {
-        return false;
+        return false
       }
     }
 
-    return true;
+    return true
   }
 
   /**
@@ -304,23 +312,23 @@ class Polygon {
    */
   overlapRectangle(rectangle) {
     if (!this.contains(rectangle.center())) {
-      return false;
+      return false
     }
 
-    let thisLines = this.mLines;
-    let thisLen = thisLines.length;
-    let rectangleLines = rectangle.lines;
-    let rectangleLen = rectangleLines.length;
+    let thisLines = this.mLines
+    let thisLen = thisLines.length
+    let rectangleLines = rectangle.lines
+    let rectangleLen = rectangleLines.length
 
     for (let i = 0; i < thisLen; i++) {
       for (let j = 0; j < rectangleLen; j++) {
         if (thisLines[i].intersects(rectangleLines[j])) {
-          return false;
+          return false
         }
       }
     }
 
-    return true;
+    return true
   }
 
   /**
@@ -329,39 +337,36 @@ class Polygon {
    * @return {Polygon} This polygon.
    */
   refresh() {
-    let center = this.mCenter;
-    let bounds = this.mBounds;
-    let vertices = this.mVertices;
-    let lines = this.mLines = [];
-    center.set(0, 0);
+    let center = this.mCenter
+    let bounds = this.mBounds
+    let vertices = this.mVertices
+    let lines = (this.mLines = [])
+    center.set(0, 0)
 
     // bounds
-    let maxX = -Number.MAX_VALUE;
-    let maxY = -Number.MAX_VALUE;
-    let minX = Number.MAX_VALUE;
-    let minY = Number.MAX_VALUE;
+    let maxX = -Number.MAX_VALUE
+    let maxY = -Number.MAX_VALUE
+    let minX = Number.MAX_VALUE
+    let minY = Number.MAX_VALUE
 
     for (let i = 0; i < vertices.length; i++) {
-      let vector = vertices[i];
-      center.add(vector);
+      let vector = vertices[i]
+      center.add(vector)
 
       // bounds
-      let {
-        x,
-        y
-      } = vector;
-      maxX = x > maxX ? x : maxX;
-      maxY = y > maxY ? y : maxY;
-      minX = x < minX ? x : minX;
-      minY = y < minY ? y : minY;
+      let { x, y } = vector
+      maxX = x > maxX ? x : maxX
+      maxY = y > maxY ? y : maxY
+      minX = x < minX ? x : minX
+      minY = y < minY ? y : minY
 
-      lines.push(new Line(vector, vertices[i + 1] || vertices[0]));
+      lines.push(new Line(vector, vertices[i + 1] || vertices[0]))
     }
 
-    center.multiplyScalar(1 / vertices.length);
-    bounds.set(minX, minY, maxX - minX, maxY - minY);
+    center.multiplyScalar(1 / vertices.length)
+    bounds.set(minX, minY, maxX - minX, maxY - minY)
 
-    return this;
+    return this
   }
 
   /**
@@ -370,18 +375,18 @@ class Polygon {
    * @return {Polygon} This polygon.
    */
   refreshCenter() {
-    let center = this.mCenter;
-    let vertices = this.mVertices;
-    let len = vertices.length;
-    center.set(0, 0);
+    let center = this.mCenter
+    let vertices = this.mVertices
+    let len = vertices.length
+    center.set(0, 0)
 
     for (let i = 0; i < len; i++) {
-      center.add(vertices[i]);
+      center.add(vertices[i])
     }
 
-    center.multiplyScalar(1 / vertices.length);
+    center.multiplyScalar(1 / vertices.length)
 
-    return this;
+    return this
   }
 
   /**
@@ -390,28 +395,28 @@ class Polygon {
    * @return {Polygon} This polygon.
    */
   refreshBounds() {
-    let bounds = this.mBounds;
-    let vertices = this.mVertices;
-    let maxX = -Number.MAX_VALUE;
-    let maxY = -Number.MAX_VALUE;
-    let minX = Number.MAX_VALUE;
-    let minY = Number.MAX_VALUE;
-    let len = vertices.length;
-    let x;
-    let y;
+    let bounds = this.mBounds
+    let vertices = this.mVertices
+    let maxX = -Number.MAX_VALUE
+    let maxY = -Number.MAX_VALUE
+    let minX = Number.MAX_VALUE
+    let minY = Number.MAX_VALUE
+    let len = vertices.length
+    let x
+    let y
 
     for (let i = 0; i < len; i++) {
-      x = vertices[i].x;
-      y = vertices[i].y;
-      maxX = x > maxX ? x : maxX;
-      maxY = y > maxY ? y : maxY;
-      minX = x < minX ? x : minX;
-      minY = y < minY ? y : minY;
+      x = vertices[i].x
+      y = vertices[i].y
+      maxX = x > maxX ? x : maxX
+      maxY = y > maxY ? y : maxY
+      minX = x < minX ? x : minX
+      minY = y < minY ? y : minY
     }
 
-    bounds.set(minX, minY, maxX - minX, maxY - minY);
+    bounds.set(minX, minY, maxX - minX, maxY - minY)
 
-    return this;
+    return this
   }
 
   /**
@@ -420,14 +425,14 @@ class Polygon {
    * @return {Polygon} This polygon.
    */
   refreshLines() {
-    let vertices = this.mVertices;
-    let lines = this.mLines = [];
+    let vertices = this.mVertices
+    let lines = (this.mLines = [])
 
     for (let i = 0; i < vertices.length; i += 2) {
-      lines.push(new Line(vertices[i], vertices[i + 1] || vertices[0]));
+      lines.push(new Line(vertices[i], vertices[i + 1] || vertices[0]))
     }
 
-    return this;
+    return this
   }
 
   /**
@@ -437,14 +442,14 @@ class Polygon {
    * @return {Polygon} Created polygon.
    */
   static fromPath(path) {
-    let vertices = [];
-    let path2 = path.split(' ');
+    let vertices = []
+    let path2 = path.split(' ')
 
     for (let i = 0; i < path2.length; i += 2) {
-      vertices.push(new Vector(Number(path2[i]), Number(path2[i + 1])));
+      vertices.push(new Vector(Number(path2[i]), Number(path2[i + 1])))
     }
 
-    return new Polygon(vertices);
+    return new Polygon(vertices)
   }
 
   /**
@@ -454,20 +459,20 @@ class Polygon {
    * @return {Polygon} This polygon.
    */
   setRotation(rotation) {
-    let center = this.mCenter;
-    let vertices = this.mVertices;
-    let cos = Math.cos(rotation);
-    let sin = Math.sin(rotation);
+    let center = this.mCenter
+    let vertices = this.mVertices
+    let cos = Math.cos(rotation)
+    let sin = Math.sin(rotation)
 
     for (let i = 0, len = vertices.length; i < len; i++) {
-      let vector = vertices[i];
+      let vector = vertices[i]
       vector
         .subtract(center)
         .set(vector.x * cos - vector.y * sin, vector.x * sin + vector.y * cos)
-        .add(center);
+        .add(center)
     }
 
-    return this.refresh();
+    return this.refresh()
   }
 
   /**
@@ -477,25 +482,25 @@ class Polygon {
    * @return {Polygon} This vertices.
    */
   setTranslation(point) {
-    let center = this.mCenter;
-    let vertices = this.mVertices;
-    let len = vertices.length;
-    point.subtract(center);
+    let center = this.mCenter
+    let vertices = this.mVertices
+    let len = vertices.length
+    point.subtract(center)
 
     for (let i = 0; i < len; i++) {
-      vertices[i].add(point);
+      vertices[i].add(point)
     }
 
-    return this.refresh();
+    return this.refresh()
   }
 
   /**
    * Returns array of vertices.
-   * 
+   *
    * @returns {Array<Vector>}
    */
   get vertices() {
-    return this.mVertices;
+    return this.mVertices
   }
 
   /**
@@ -503,7 +508,7 @@ class Polygon {
    * @returns {Vector}
    */
   get center() {
-    return this.mCenter;  
+    return this.mCenter
   }
 
   // @ifdef DEBUG
@@ -515,22 +520,24 @@ class Polygon {
    * @return {string} Description.
    */
   toString(digits = 2) {
-    let thisLines = this.mLines;
-    let thisVertices = this.mVertices;
-    let len = thisLines.length;
-    let vertices = '';
-    let lines = '';
+    let thisLines = this.mLines
+    let thisVertices = this.mVertices
+    let len = thisLines.length
+    let vertices = ''
+    let lines = ''
 
     for (let i = 0; i < len; i++) {
-      lines += thisLines[i].toString(digits);
+      lines += thisLines[i].toString(digits)
     }
 
-    len = thisVertices.length;
+    len = thisVertices.length
     for (let i = 0; i < len; i++) {
-      vertices += thisVertices[i].toString(digits);
+      vertices += thisVertices[i].toString(digits)
     }
 
-    return `Polygon { vertices: ${vertices}, bounds: ${this.mBounds.toString(digits)}, center: ${this.mCenter.toString()}, lines: ${lines} }`;
+    return `Polygon { vertices: ${vertices}, bounds: ${this.mBounds.toString(
+      digits
+    )}, center: ${this.mCenter.toString()}, lines: ${lines} }`
   }
 
   // @endif
@@ -541,4 +548,4 @@ class Polygon {
  * @type {Polygon}
  * @nocollapse
  */
-Polygon.__cache = new Polygon();
+Polygon.__cache = new Polygon()

@@ -12,16 +12,16 @@ class InitialColor extends Modifier {
    * @param {...(number|ColorScatter)} values Two color values.
    */
   constructor(...values) {
-    super();
+    super()
 
     /** @type {ColorScatter} Modifier's object to get values from.  */
-    this.scatter = ColorScatter.fromObject(...values);
+    this.scatter = ColorScatter.fromObject(...values)
   }
 
   /**
    * @inheritDoc
    */
   update(emitter, particle, dt) {
-    particle.color = this.scatter.getValue();
+    particle.color = this.scatter.getValue()
   }
 }

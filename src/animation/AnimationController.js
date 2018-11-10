@@ -10,19 +10,19 @@ class AnimationController extends Component {
    * Creates an instance of AnimationController
    */
   constructor() {
-    super();
+    super()
 
     /**
      * @private
      * @type {Object<string, AnimationInfo>}
      */
-    this.mAnimations = {};
+    this.mAnimations = {}
 
     /**
      * @private
      * @type {AnimationInfo|null}
      */
-    this.mCurrentAnim = null;
+    this.mCurrentAnim = null
   }
 
   /**
@@ -32,10 +32,13 @@ class AnimationController extends Component {
    * @returns {AnimationInfo} Animation object that exists with the specified name.
    */
   getByName(name) {
-    Debug.assert(name !== null, 'Animation must be set first.');
-    Debug.assert(this.mAnimations.hasOwnProperty(name), 'Animation must be set first.');
+    Debug.assert(name !== null, 'Animation must be set first.')
+    Debug.assert(
+      this.mAnimations.hasOwnProperty(name),
+      'Animation must be set first.'
+    )
 
-    return this.mAnimations[name];
+    return this.mAnimations[name]
   }
 
   /**
@@ -45,17 +48,20 @@ class AnimationController extends Component {
    * @returns {void}
    */
   remove(name) {
-    Debug.assert(name !== null, 'Animation name shall not be null.');
-    Debug.assert(this.mAnimations.hasOwnProperty(name) === true, 'Unable to find animation.');
+    Debug.assert(name !== null, 'Animation name shall not be null.')
+    Debug.assert(
+      this.mAnimations.hasOwnProperty(name) === true,
+      'Unable to find animation.'
+    )
 
-    let anim = this.mAnimations[name];
+    let anim = this.mAnimations[name]
 
     if (this.mCurrentAnim !== null && this.mCurrentAnim === anim) {
-      this.stop();
-      delete this.mAnimations[name];
+      this.stop()
+      delete this.mAnimations[name]
     }
 
-    this.mCurrentAnim = null;
+    this.mCurrentAnim = null
   }
 
   /**
@@ -68,14 +74,17 @@ class AnimationController extends Component {
    * @return {AnimationInfo} The newly created Animation Object.
    */
   add(name, textures, fps = 14, loop = true) {
-    Debug.assert(textures.length > 0, 'Animation cannot be empty.');
-    Debug.assert(fps > 0, 'FPS must be greater than 0.');
-    Debug.assert(this.mAnimations.hasOwnProperty(name) == false, 'Animation with same name already exists');
+    Debug.assert(textures.length > 0, 'Animation cannot be empty.')
+    Debug.assert(fps > 0, 'FPS must be greater than 0.')
+    Debug.assert(
+      this.mAnimations.hasOwnProperty(name) == false,
+      'Animation with same name already exists'
+    )
 
-    let anim = new AnimationInfo(this, name, textures, fps, loop);
-    this.mAnimations[name] = anim;
+    let anim = new AnimationInfo(this, name, textures, fps, loop)
+    this.mAnimations[name] = anim
 
-    return anim;
+    return anim
   }
 
   /**
@@ -85,18 +94,19 @@ class AnimationController extends Component {
    * @return {void}
    */
   play(name) {
-    Debug.assert(this.mAnimations.hasOwnProperty(name), 'Animation must be set first.');
+    Debug.assert(
+      this.mAnimations.hasOwnProperty(name),
+      'Animation must be set first.'
+    )
 
-    this.mCurrentAnim = this.mAnimations[name];
+    this.mCurrentAnim = this.mAnimations[name]
 
-    let texture = this.mCurrentAnim.__play();
+    let texture = this.mCurrentAnim.__play()
 
-    let sprite = /** @type {Sprite} */ (this.gameObject);
-    if (sprite === null)
-      return;
+    let sprite = /** @type {Sprite} */ (this.gameObject)
+    if (sprite === null) return
 
-    if (texture !== null)
-      sprite.texture = texture;
+    if (texture !== null) sprite.texture = texture
   }
 
   /**
@@ -105,37 +115,33 @@ class AnimationController extends Component {
    * @return {void}
    */
   stop() {
-    if (this.mCurrentAnim === null)
-      return;
+    if (this.mCurrentAnim === null) return
 
-    this.mCurrentAnim.__stop();
+    this.mCurrentAnim.__stop()
   }
 
   /**
    * Pauses active animation.
-   * 
+   *
    * @return {void}
    */
   pause() {
-    if (this.mCurrentAnim === null)
-      return;
+    if (this.mCurrentAnim === null) return
 
-    this.mCurrentAnim.__pause();
+    this.mCurrentAnim.__pause()
   }
 
   /**
    * @inheritDoc
    */
   onRender() {
-    if (this.mCurrentAnim === null)
-      return;
+    if (this.mCurrentAnim === null) return
 
-    let newTexture = this.mCurrentAnim.__update();
-    if (newTexture === null)
-      return;
+    let newTexture = this.mCurrentAnim.__update()
+    if (newTexture === null) return
 
-    let sprite = /** @type {Sprite} */ (this.gameObject);
-    sprite.texture = newTexture;
+    let sprite = /** @type {Sprite} */ (this.gameObject)
+    sprite.texture = newTexture
   }
 
   /**
@@ -144,6 +150,6 @@ class AnimationController extends Component {
    * @returns {AnimationInfo|null}
    */
   get currentAnimation() {
-    return this.mCurrentAnim;
+    return this.mCurrentAnim
   }
 }

@@ -12,18 +12,18 @@ class GraphicsPath {
    */
   constructor() {
     /** @type {Rectangle|null} */
-    this.bounds = null;
+    this.bounds = null
 
     /** @type {Array<number>} */
-    this.points = [];
+    this.points = []
 
     /** @type {number} */
-    this.maxLineWidth = 0;
+    this.maxLineWidth = 0
 
     /** @type {number} */
-    this.lastLineWidth = 0;
+    this.lastLineWidth = 0
 
     /** @type {number} */
-    this.lineMul = 0.5;
+    this.lineMul = 0.5
   }
 }

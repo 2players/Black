@@ -7,21 +7,20 @@
 class Circle {
   /**
    * Creates new Circle instance.
-   * 
+   *
    * @param  {number=} [x = 0] Position x.
    * @param  {number=} [y = 0] Position y.
    * @param  {number=} [r = 1] Radius.
    */
   constructor(x = 0, y = 0, r = 1) {
+    /** @private @type {number} */
+    this.x = x
 
     /** @private @type {number} */
-    this.x = x;
+    this.y = y
 
     /** @private @type {number} */
-    this.y = y;
-
-    /** @private @type {number} */
-    this.r = r;
+    this.r = r
   }
 
   /**
@@ -33,11 +32,11 @@ class Circle {
    * @return {Circle} This circle.
    */
   set(x, y, r) {
-    this.x = x;
-    this.y = y;
-    this.r = r;
+    this.x = x
+    this.y = y
+    this.r = r
 
-    return this;
+    return this
   }
 
   /**
@@ -46,7 +45,7 @@ class Circle {
    * @return {Circle} Created circle.
    */
   clone() {
-    return new Circle(this.x, this.y, this.r);
+    return new Circle(this.x, this.y, this.r)
   }
 
   /**
@@ -56,7 +55,7 @@ class Circle {
    * @return {Circle} Passed circle.
    */
   copyTo(circle) {
-    return circle.set(this.x, this.y, this.r);
+    return circle.set(this.x, this.y, this.r)
   }
 
   /**
@@ -66,7 +65,7 @@ class Circle {
    * @return {Circle} This circle.
    */
   copyFrom(circle) {
-    return this.set(circle.x, circle.y, circle.r);
+    return this.set(circle.x, circle.y, circle.r)
   }
 
   /**
@@ -77,8 +76,12 @@ class Circle {
    * @return {boolean} True if circles are identical.
    */
   equals(circle, epsilon = Number.EPSILON) {
-    return circle !== null && (Math.abs(this.x - circle.x) < epsilon) && (Math.abs(this.y - circle.y) < epsilon) &&
-      (Math.abs(this.r - circle.r) < epsilon);
+    return (
+      circle !== null &&
+      Math.abs(this.x - circle.x) < epsilon &&
+      Math.abs(this.y - circle.y) < epsilon &&
+      Math.abs(this.r - circle.r) < epsilon
+    )
   }
 
   /**
@@ -89,7 +92,7 @@ class Circle {
    * @return {boolean} True if circle contains point.
    */
   containsXY(x, y) {
-    return this.contains(new Vector(x, y));
+    return this.contains(new Vector(x, y))
   }
 
   /**
@@ -100,7 +103,7 @@ class Circle {
    */
   contains(vector) {
     // TODO: remove new Vector init
-    return new Vector(this.x, this.y).subtract(vector).length() <= this.r;
+    return new Vector(this.x, this.y).subtract(vector).length() <= this.r
   }
 
   /**
@@ -109,7 +112,7 @@ class Circle {
    * @return {Circle} Returns this.
    */
   zero() {
-    return this.set(0, 0, 0);
+    return this.set(0, 0, 0)
   }
 
   /**
@@ -119,8 +122,8 @@ class Circle {
    * @return {boolean} True if intersects.
    */
   intersects(circle) {
-    let d = new Vector(this.x, this.y).distance(new Vector(circle.x, circle.y));
-    return d <= this.r + circle.r && d >= this.r - circle.r;
+    let d = new Vector(this.x, this.y).distance(new Vector(circle.x, circle.y))
+    return d <= this.r + circle.r && d >= this.r - circle.r
   }
 
   /**
@@ -130,8 +133,8 @@ class Circle {
    * @return {boolean} True if collide.
    */
   collide(circle) {
-    let d = new Vector(this.x, this.y).distance(new Vector(circle.x, circle.y));
-    return d <= this.r + circle.r;
+    let d = new Vector(this.x, this.y).distance(new Vector(circle.x, circle.y))
+    return d <= this.r + circle.r
   }
 
   /**
@@ -142,13 +145,12 @@ class Circle {
    */
   overlap(circle) {
     if (this.r < circle.r) {
-      return false;
+      return false
     }
 
-    let d = new Vector(this.x, this.y).distance(new Vector(circle.x, circle.y));
-    return d <= this.r - circle.r;
+    let d = new Vector(this.x, this.y).distance(new Vector(circle.x, circle.y))
+    return d <= this.r - circle.r
   }
-
 
   /**
    * Represents center as vector.
@@ -157,14 +159,14 @@ class Circle {
    * @return {Vector} Center point.
    */
   center(outVector = undefined) {
-    outVector = outVector || new Vector();
-    return outVector.set(this.x, this.y);
+    outVector = outVector || new Vector()
+    return outVector.set(this.x, this.y)
   }
 
   static getCircumferencePoint(x, y, r, angle, outVector = undefined) {
-    outVector = outVector || new Vector();
-    outVector.set(x + r * Math.sin(angle), y + r * -Math.cos(angle));
-    return outVector;
+    outVector = outVector || new Vector()
+    outVector.set(x + r * Math.sin(angle), y + r * -Math.cos(angle))
+    return outVector
   }
 
   /**
@@ -173,7 +175,7 @@ class Circle {
    * @return {number} area.
    */
   get volume() {
-    return Math.PI * this.r * this.r;
+    return Math.PI * this.r * this.r
   }
 
   /**
@@ -182,7 +184,7 @@ class Circle {
    * @return {number} perimeter.
    */
   get perimeter() {
-    return 2 * Math.PI * this.r;
+    return 2 * Math.PI * this.r
   }
 
   /**
@@ -191,7 +193,7 @@ class Circle {
    * @return {number} Left X position.
    */
   get left() {
-    return this.x - this.r;
+    return this.x - this.r
   }
 
   /**
@@ -200,7 +202,7 @@ class Circle {
    * @return {number} Right X position.
    */
   get right() {
-    return this.x + this.r;
+    return this.x + this.r
   }
 
   /**
@@ -209,7 +211,7 @@ class Circle {
    * @return {number} Top Y position.
    */
   get top() {
-    return this.y - this.r;
+    return this.y - this.r
   }
 
   /**
@@ -218,7 +220,7 @@ class Circle {
    * @return {number} Bottom Y position.
    */
   get bottom() {
-    return this.y + this.r;
+    return this.y + this.r
   }
 
   /**
@@ -227,7 +229,7 @@ class Circle {
    * @return {Vector}
    */
   get topPoint() {
-    return new Vector(this.x, this.top);
+    return new Vector(this.x, this.top)
   }
 
   /**
@@ -236,7 +238,7 @@ class Circle {
    * @return {Vector}
    */
   get bottomPoint() {
-    return new Vector(this.x, this.bottom);
+    return new Vector(this.x, this.bottom)
   }
 
   // @ifdef DEBUG
@@ -248,7 +250,9 @@ class Circle {
    * @return {string} Returns string representation of this circle.
    */
   toString(digits = 2) {
-    return `Circle { x: ${this.x.toFixed(digits)}, y: ${this.y.toFixed(digits)}, r: ${this.r.toFixed(digits)} }`;
+    return `Circle { x: ${this.x.toFixed(digits)}, y: ${this.y.toFixed(
+      digits
+    )}, r: ${this.r.toFixed(digits)} }`
   }
   // @endif
 }
@@ -258,4 +262,4 @@ class Circle {
  * @type {Circle}
  * @nocollapse
  */
-Circle.__cache = new Circle();
+Circle.__cache = new Circle()

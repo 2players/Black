@@ -12,18 +12,18 @@ class InitialPosition extends Modifier {
    * @param {...(number|VectorScatter)} values Rectangle coordinates, its width and height.
    */
   constructor(...values) {
-    super();
+    super()
 
     /** @type {VectorScatter} Modifier's object to get values from.  */
-    this.scatter = VectorScatter.fromObject(...values);
+    this.scatter = VectorScatter.fromObject(...values)
   }
 
   /**
    * @inheritDoc
    */
   update(emitter, particle, dt) {
-    let v = this.scatter.getValue();
-    particle.x = v.x;
-    particle.y = v.y;
+    let v = this.scatter.getValue()
+    particle.x = v.x
+    particle.y = v.y
   }
 }

@@ -15,26 +15,34 @@ class AtlasTextureAsset extends Asset {
    * @param {string} dataUrl  Json URL.
    */
   constructor(name, imageUrl, dataUrl) {
-    super(name);
+    super(name)
 
     /** @private @type {number} */
-    this.mScale = 1 / Texture.getScaleFactorFromName(imageUrl);
+    this.mScale = 1 / Texture.getScaleFactorFromName(imageUrl)
 
     /** @private @type {ImageAssetLoader} */
-    this.mImageLoader = new ImageAssetLoader(imageUrl);
+    this.mImageLoader = new ImageAssetLoader(imageUrl)
 
     /** @private @type {XHRAssetLoader} */
-    this.mXHR = new XHRAssetLoader(dataUrl);
-    this.mXHR.mimeType = 'application/json';
+    this.mXHR = new XHRAssetLoader(dataUrl)
+    this.mXHR.mimeType = 'application/json'
 
-    this.addLoader(this.mImageLoader);
-    this.addLoader(this.mXHR);
+    this.addLoader(this.mImageLoader)
+    this.addLoader(this.mXHR)
   }
 
   /**
    * @inheritDoc
    */
   onAllLoaded() {
-    super.ready(new AtlasTexture(this.mImageLoader.data, /** @type {{meta: *, frames: Array<Object<Array<number>>>}} */(JSON.parse(this.mXHR.data)), this.mScale));
+    super.ready(
+      new AtlasTexture(
+        this.mImageLoader.data,
+        /** @type {{meta: *, frames: Array<Object<Array<number>>>}} */ JSON.parse(
+          this.mXHR.data
+        ),
+        this.mScale
+      )
+    )
   }
 }

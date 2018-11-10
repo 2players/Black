@@ -12,13 +12,13 @@ class Vector {
    * @param  {number=} [y=0] y-component.
    */
   constructor(x = 0, y = 0) {
-    Debug.isNumber(x, y);
-    
+    Debug.isNumber(x, y)
+
     /** @export @type {number} X coordinate of a point in the space. */
-    this.x = x;
+    this.x = x
 
     /** @export @type {number} Y coordinate of a point in the space. */
-    this.y = y;
+    this.y = y
   }
 
   /**
@@ -29,12 +29,12 @@ class Vector {
    * @return {Vector} This.
    */
   set(x = 0, y = 0) {
-    Debug.isNumber(x, y);
+    Debug.isNumber(x, y)
 
-    this.x = x;
-    this.y = y;
+    this.x = x
+    this.y = y
 
-    return this;
+    return this
   }
 
   /**
@@ -44,10 +44,10 @@ class Vector {
    * @return {Vector} This.
    */
   add(vector) {
-    this.x += vector.x;
-    this.y += vector.y;
+    this.x += vector.x
+    this.y += vector.y
 
-    return this;
+    return this
   }
 
   /**
@@ -57,10 +57,10 @@ class Vector {
    * @return {Vector} This.
    */
   subtract(vector) {
-    this.x -= vector.x;
-    this.y -= vector.y;
+    this.x -= vector.x
+    this.y -= vector.y
 
-    return this;
+    return this
   }
 
   /**
@@ -70,10 +70,10 @@ class Vector {
    * @return {number} The distance between two vectors.
    */
   distance(vector) {
-    let x = this.x - vector.x;
-    let y = this.y - vector.y;
+    let x = this.x - vector.x
+    let y = this.y - vector.y
 
-    return Math.sqrt((x * x) + (y * y));
+    return Math.sqrt(x * x + y * y)
   }
 
   /**
@@ -83,10 +83,10 @@ class Vector {
    * @return {number} The distance between two vectors.
    */
   distanceSqr(vector) {
-    let x = this.x - vector.x;
-    let y = this.y - vector.y;
+    let x = this.x - vector.x
+    let y = this.y - vector.y
 
-    return (x * x) + (y * y);
+    return x * x + y * y
   }
 
   /**
@@ -96,10 +96,10 @@ class Vector {
    * @return {Vector} This.
    */
   multiply(vector) {
-    this.x *= vector.x;
-    this.y *= vector.y;
+    this.x *= vector.x
+    this.y *= vector.y
 
-    return this;
+    return this
   }
 
   /**
@@ -109,12 +109,12 @@ class Vector {
    * @return {Vector} This.
    */
   multiplyScalar(scalar) {
-    Debug.isNumber(scalar);
+    Debug.isNumber(scalar)
 
-    this.x *= scalar;
-    this.y *= scalar;
+    this.x *= scalar
+    this.y *= scalar
 
-    return this;
+    return this
   }
 
   /**
@@ -124,7 +124,7 @@ class Vector {
    * @return {number} A scalar value representing dot product.
    */
   dot(vector) {
-    return this.x * vector.x + this.y * vector.y;
+    return this.x * vector.x + this.y * vector.y
   }
 
   /**
@@ -133,7 +133,7 @@ class Vector {
    * @return {number} The length of the vector.
    */
   length() {
-    return Math.sqrt(this.x * this.x + this.y * this.y);
+    return Math.sqrt(this.x * this.x + this.y * this.y)
   }
 
   /**
@@ -142,7 +142,7 @@ class Vector {
    * @return {number} Squared length.
    */
   lengthSqr() {
-    return this.x * this.x + this.y * this.y;
+    return this.x * this.x + this.y * this.y
   }
 
   /**
@@ -151,18 +151,18 @@ class Vector {
    * @returns {Vector} This.
    */
   normalize() {
-    let sum = this.lengthSqr();
+    let sum = this.lengthSqr()
 
     if (sum > 0) {
-      sum = Math.sqrt(sum);
-      this.x /= sum;
-      this.y /= sum;
+      sum = Math.sqrt(sum)
+      this.x /= sum
+      this.y /= sum
     } else {
-      this.x = 0;
-      this.y = 0;
+      this.x = 0
+      this.y = 0
     }
 
-    return this;
+    return this
   }
 
   /**
@@ -173,12 +173,12 @@ class Vector {
    * @return {Vector} This.
    */
   clamp(min, max) {
-    Debug.isNumber(min, max);
+    Debug.isNumber(min, max)
 
-    this.x = MathEx.clamp(this.x, min, max);
-    this.y = MathEx.clamp(this.y, min, max);
+    this.x = MathEx.clamp(this.x, min, max)
+    this.y = MathEx.clamp(this.y, min, max)
 
-    return this;
+    return this
   }
 
   /**
@@ -189,12 +189,12 @@ class Vector {
    * @return {Vector} This.
    */
   clampLength(min, max) {
-    Debug.isNumber(min, max);
+    Debug.isNumber(min, max)
 
-    let length = MathEx.clamp(this.length(), min, max);
-    this.normalize();
-    this.multiplyScalar(length);
-    return this;
+    let length = MathEx.clamp(this.length(), min, max)
+    this.normalize()
+    this.multiplyScalar(length)
+    return this
   }
 
   /**
@@ -205,12 +205,12 @@ class Vector {
    * @return {Vector} This.
    */
   lerp(vector, t) {
-    Debug.isNumber(t);
+    Debug.isNumber(t)
 
-    this.x = MathEx.lerp(this.x, vector.x, t);
-    this.y = MathEx.lerp(this.y, vector.y, t);
+    this.x = MathEx.lerp(this.x, vector.x, t)
+    this.y = MathEx.lerp(this.y, vector.y, t)
 
-    return this;
+    return this
   }
 
   /**
@@ -220,10 +220,10 @@ class Vector {
    * @return {Vector} Given vector.
    */
   copyTo(vector) {
-    vector.x = this.x;
-    vector.y = this.y;
+    vector.x = this.x
+    vector.y = this.y
 
-    return vector;
+    return vector
   }
 
   /**
@@ -233,10 +233,10 @@ class Vector {
    * @return {Vector} This.
    */
   copyFrom(vector) {
-    this.x = vector.x;
-    this.y = vector.y;
+    this.x = vector.x
+    this.y = vector.y
 
-    return this;
+    return this
   }
 
   /**
@@ -245,7 +245,7 @@ class Vector {
    * @return {Vector} New Vector instance.
    */
   clone() {
-    return new Vector(this.x, this.y);
+    return new Vector(this.x, this.y)
   }
 
   /**
@@ -256,7 +256,11 @@ class Vector {
    * @return {boolean} True if equal.
    */
   equals(vector, epsilon = Number.EPSILON) {
-    return vector !== null && (Math.abs(vector.x - this.x) < epsilon) && (Math.abs(vector.y - this.y) < epsilon);
+    return (
+      vector !== null &&
+      Math.abs(vector.x - this.x) < epsilon &&
+      Math.abs(vector.y - this.y) < epsilon
+    )
   }
 
   /**
@@ -265,7 +269,7 @@ class Vector {
    * @return {boolean} True if both components equal to zero.
    */
   isEmpty() {
-    return this.x === 0 && this.y === 0;
+    return this.x === 0 && this.y === 0
   }
 
   /**
@@ -276,12 +280,11 @@ class Vector {
    * @return {Vector} This rotated vector.
    */
   setRotationFrom(vector, rotation) {
-    Debug.isNumber(rotation);
+    Debug.isNumber(rotation)
 
-    return this
-      .subtract(vector)
+    return this.subtract(vector)
       .setRotation(rotation)
-      .add(vector);
+      .add(vector)
   }
 
   /**
@@ -291,12 +294,12 @@ class Vector {
    * @return {Vector} This rotated vector.
    */
   setRotation(rotation) {
-    Debug.isNumber(rotation);
+    Debug.isNumber(rotation)
 
-    let cos = Math.cos(rotation);
-    let sin = Math.sin(rotation);
+    let cos = Math.cos(rotation)
+    let sin = Math.sin(rotation)
 
-    return this.set(this.x * cos - this.y * sin, this.x * sin + this.y * cos);
+    return this.set(this.x * cos - this.y * sin, this.x * sin + this.y * cos)
   }
 
   /**
@@ -306,7 +309,7 @@ class Vector {
    * @return {number} Angle in radians.
    */
   angleBetween(vector) {
-    return Math.atan2(vector.y - this.y, vector.x - this.x);
+    return Math.atan2(vector.y - this.y, vector.x - this.x)
   }
 
   /**
@@ -315,7 +318,7 @@ class Vector {
    * @return {number} Angle in radians.
    */
   angle() {
-    return Math.atan2(this.y, this.x);
+    return Math.atan2(this.y, this.x)
   }
 
   /**
@@ -324,7 +327,7 @@ class Vector {
    * @return {Vector} This vector.
    */
   perp() {
-    return this.set(this.y, -this.x);
+    return this.set(this.y, -this.x)
   }
 
   /**
@@ -335,10 +338,10 @@ class Vector {
    * @return {Vector} New Vector object.
    */
   static fromAngle(angle, outVector) {
-    Debug.isNumber(angle);
+    Debug.isNumber(angle)
 
-    outVector = outVector || new Vector();
-    return outVector.set(Math.cos(angle), Math.sin(angle));
+    outVector = outVector || new Vector()
+    return outVector.set(Math.cos(angle), Math.sin(angle))
   }
 
   /**
@@ -349,12 +352,12 @@ class Vector {
    * @return {Vector}
    */
   static randomRange(vectorMin, vectorMax, outVector) {
-    outVector = outVector || new Vector();
+    outVector = outVector || new Vector()
 
-    outVector.x = Math.random() * (vectorMax.x - vectorMin.x) + vectorMin.x;
-    outVector.y = Math.random() * (vectorMax.y - vectorMin.y) + vectorMin.y;
+    outVector.x = Math.random() * (vectorMax.x - vectorMin.x) + vectorMin.x
+    outVector.y = Math.random() * (vectorMax.y - vectorMin.y) + vectorMin.y
 
-    return outVector;
+    return outVector
   }
 
   // @ifdef DEBUG
@@ -364,7 +367,9 @@ class Vector {
    * @return {string} Description
    */
   toString(digits = 2) {
-    return `Vector: { x: ${this.x.toFixed(digits)}, y: ${this.y.toFixed(digits)} }`;
+    return `Vector: { x: ${this.x.toFixed(digits)}, y: ${this.y.toFixed(
+      digits
+    )} }`
   }
   // @endif
 }
@@ -374,7 +379,7 @@ class Vector {
  * @type {Vector}
  * @nocollapse
  */
-Vector.__cache = new Vector();
+Vector.__cache = new Vector()
 
 /**
  * Recycled vectors pool.
@@ -382,4 +387,4 @@ Vector.__cache = new Vector();
  * @type {ObjectPool}
  * @nocollapse
  */
-Vector.pool = new ObjectPool(Vector);
+Vector.pool = new ObjectPool(Vector)

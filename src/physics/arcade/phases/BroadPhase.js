@@ -8,7 +8,7 @@ class BroadPhase {
   /**
    * Creates new instance of BroadPhase.
    */
-  constructor() { }
+  constructor() {}
 
   /**
    * Test collision in each pair. Sets inCollision flag to false if there is no collision in pair.
@@ -16,5 +16,5 @@ class BroadPhase {
    * @param {Array<Pair>} pairs All the arcade world colliders pairs.
    * @return {void}
    */
-  test(pairs) { }
+  test(pairs) {}
 }

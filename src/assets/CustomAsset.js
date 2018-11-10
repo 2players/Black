@@ -3,9 +3,9 @@
  *
  * @fires Asset#error
  * @fires Asset#complete
- * 
+ *
  * @cat assets
  * @extends Asset
  */
 /* @echo EXPORT */
-class CustomAsset extends Asset { }
+class CustomAsset extends Asset {}

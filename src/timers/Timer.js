@@ -2,82 +2,80 @@
  * Timer component.
  *
  * @cat timers
- * 
+ *
  * @fires Timer#complete
  * @fires Timer#tick
- * 
+ *
  * @extends Component
  */
 /* @echo EXPORT */
 class Timer extends Component {
   constructor(interval = 1, ticksCount = 1, startOnAdded = true) {
-    super();
-    
-    Debug.assert(interval > 0, 'the interval value must be greater than 0');
-    Debug.assert(ticksCount > 0, 'the ticksCount value must be greater than 0');
-    
-    /** @private @type {boolean} */
-    this.mStartOnAdded = startOnAdded;
+    super()
 
-    /** @private @type {number} */
-    this.mInterval = interval;
-
-    /** @private @type {number} */
-    this.mTicksCount = ticksCount;
+    Debug.assert(interval > 0, 'the interval value must be greater than 0')
+    Debug.assert(ticksCount > 0, 'the ticksCount value must be greater than 0')
 
     /** @private @type {boolean} */
-    this.mIsRunning = false;
+    this.mStartOnAdded = startOnAdded
 
     /** @private @type {number} */
-    this.mTick = 0;
+    this.mInterval = interval
 
     /** @private @type {number} */
-    this.mElapsedSeconds = 0;
+    this.mTicksCount = ticksCount
+
+    /** @private @type {boolean} */
+    this.mIsRunning = false
 
     /** @private @type {number} */
-    this.mTotalElapsedSeconds = 0;
+    this.mTick = 0
+
+    /** @private @type {number} */
+    this.mElapsedSeconds = 0
+
+    /** @private @type {number} */
+    this.mTotalElapsedSeconds = 0
   }
 
   /**
    * @inheritDoc
    */
   onAdded() {
-    if (this.mStartOnAdded)
-      this.start();
+    if (this.mStartOnAdded) this.start()
   }
 
   /**
    * @inheritDoc
    */
   onUpdate() {
-    if (this.mIsRunning === false)
-      return;
+    if (this.mIsRunning === false) return
 
-    this.mElapsedSeconds += Time.delta;
-    this.mTotalElapsedSeconds += Time.delta;
+    this.mElapsedSeconds += Time.delta
+    this.mTotalElapsedSeconds += Time.delta
 
     if (this.mElapsedSeconds >= this.mInterval) {
-      this.mElapsedSeconds = 0;
+      this.mElapsedSeconds = 0
 
-      const ticksPerUpdate = Math.max(1, ~~(Time.delta / this.mInterval));
+      const ticksPerUpdate = Math.max(1, ~~(Time.delta / this.mInterval))
       for (let i = 0; i < ticksPerUpdate; i++) {
-        this.mTick++;
+        this.mTick++
 
         /**
-        * Posted on every timer tick.
-        * @event Timer#tick
-        */
-        this.post('tick', this.mTick);
+         * Posted on every timer tick.
+         * @event Timer#tick
+         */
+        this.post('tick', this.mTick)
 
         if (this.mTick >= this.mTicksCount) {
-          this.mIsRunning = false;
+          this.mIsRunning = false
 
           /**
            * Posted on timer complete.
            * @event Timer#complete
            */
-          this.post('complete');
-          return;
+          this.post('complete')
+          return
         }
       }
     }
@@ -89,8 +87,8 @@ class Timer extends Component {
    * @return {Timer} Returns this.
    */
   start() {
-    this.mIsRunning = true;
-    return this;
+    this.mIsRunning = true
+    return this
   }
 
   /**
@@ -99,9 +97,9 @@ class Timer extends Component {
    * @return {Timer} Returns this.
    */
   stop() {
-    this.mIsRunning = false;
-    this.reset();
-    return this;
+    this.mIsRunning = false
+    this.reset()
+    return this
   }
 
   /**
@@ -110,8 +108,8 @@ class Timer extends Component {
    * @return {Timer} Returns this.
    */
   pause() {
-    this.mIsRunning = false;
-    return this;
+    this.mIsRunning = false
+    return this
   }
 
   /**
@@ -121,10 +119,10 @@ class Timer extends Component {
    * @return {Timer} Returns this.
    */
   reset() {
-    this.mTick = 0;
-    this.mElapsedSeconds = 0;
-    this.mTotalElapsedSeconds = 0;
-    return this;
+    this.mTick = 0
+    this.mElapsedSeconds = 0
+    this.mTotalElapsedSeconds = 0
+    return this
   }
 
   /** How many ticks left.
@@ -132,7 +130,7 @@ class Timer extends Component {
    * @return {number} Returns this.
    */
   get ticksLeft() {
-    return this.mTicksCount - this.mTick;
+    return this.mTicksCount - this.mTick
   }
 
   /** current tick index.
@@ -140,7 +138,7 @@ class Timer extends Component {
    * @return {number} Returns this.
    */
   get currentTick() {
-    return this.mTick;
+    return this.mTick
   }
 
   /**
@@ -149,7 +147,7 @@ class Timer extends Component {
    * @return {number}
    */
   get elapsedSeconds() {
-    return this.mElapsedSeconds;
+    return this.mElapsedSeconds
   }
 
   /** how many seconds left to the next tick.
@@ -157,7 +155,7 @@ class Timer extends Component {
    * @return {number} Returns this.
    */
   get secondsToNextTick() {
-    return this.mInterval - this.mElapsedSeconds;
+    return this.mInterval - this.mElapsedSeconds
   }
 
   /** If the timer is running, returns true, otherwise false.
@@ -165,7 +163,7 @@ class Timer extends Component {
    * @return {boolean} Returns this.
    */
   get isRunning() {
-    return this.mIsRunning === true;
+    return this.mIsRunning === true
   }
 
   /** If the number of ticks is less than the specified number, returns false, otherwise true.
@@ -173,7 +171,7 @@ class Timer extends Component {
    * @return {boolean} Returns this.
    */
   get isComplete() {
-    return this.mTick >= this.mTicksCount;
+    return this.mTick >= this.mTicksCount
   }
 
   /**
@@ -182,7 +180,7 @@ class Timer extends Component {
    * @return {number}
    */
   get ticksCount() {
-    return this.mTicksCount;
+    return this.mTicksCount
   }
 
   /**
@@ -191,8 +189,8 @@ class Timer extends Component {
    * @return {void}
    */
   set ticksCount(value) {
-    Debug.assert(value > 0, 'the ticksCount value must be greater than 0');
-    this.mTicksCount = value;
+    Debug.assert(value > 0, 'the ticksCount value must be greater than 0')
+    this.mTicksCount = value
   }
 
   /**
@@ -201,7 +199,7 @@ class Timer extends Component {
    * @return {number}
    */
   get interval() {
-    return this.mInterval;
+    return this.mInterval
   }
 
   /**
@@ -210,8 +208,8 @@ class Timer extends Component {
    * @return {void}
    */
   set interval(value) {
-    Debug.assert(value > 0, 'the interval value must be greater than 0');
-    this.mInterval = value;
+    Debug.assert(value > 0, 'the interval value must be greater than 0')
+    this.mInterval = value
   }
 
   /**
@@ -220,16 +218,16 @@ class Timer extends Component {
    * @return {number}
    */
   get totalElapsedSeconds() {
-    return this.mTotalElapsedSeconds;
+    return this.mTotalElapsedSeconds
   }
 
   /**
    * Sets/Gets whether the timer should start automatically when added to the root.
-   * 
+   *
    * @return {boolean}
    */
   get startOnAdded() {
-    return this.mStartOnAdded;
+    return this.mStartOnAdded
   }
 
   /**
@@ -238,6 +236,6 @@ class Timer extends Component {
    * @return {void}
    */
   set startOnAdded(value) {
-    this.mStartOnAdded = value;
+    this.mStartOnAdded = value
   }
 }

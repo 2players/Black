@@ -12,126 +12,126 @@ class GameObject extends MessageDispatcher {
    * Creates new instance of GameObject.
    */
   constructor() {
-    super(true);
+    super(true)
 
     /** @private @type {number} */
-    this.mId = ++GameObject.ID;
+    this.mId = ++GameObject.ID
 
     /** @private @type {string|null} */
-    this.mName = null;
+    this.mName = null
 
     /** @private @type {Array<Component>} */
-    this.mComponents = [];
+    this.mComponents = []
 
     /** @protected @type {Array<GameObject>} */
-    this.mChildren = [];
+    this.mChildren = []
 
     /** @private @type {number} */
-    this.mX = 0;
+    this.mX = 0
 
     /** @private @type {number} */
-    this.mY = 0;
+    this.mY = 0
 
     /** @private @type {number} */
-    this.mScaleX = 1;
+    this.mScaleX = 1
 
     /** @private @type {number} */
-    this.mScaleY = 1;
+    this.mScaleY = 1
 
     /** @protected @type {number} */
-    this.mPivotX = 0;
+    this.mPivotX = 0
 
     /** @protected @type {number} */
-    this.mPivotY = 0;
+    this.mPivotY = 0
 
     /** @protected @type {number} */
-    this.mSkewX = 0;
+    this.mSkewX = 0
 
     /** @protected @type {number} */
-    this.mSkewY = 0;
+    this.mSkewY = 0
 
     /** @protected @type {number|null} */
-    this.mAnchorX = null;
+    this.mAnchorX = null
 
     /** @protected @type {number|null} */
-    this.mAnchorY = null;
+    this.mAnchorY = null
 
     /** @protected @type {number} */
-    this.mPivotOffsetX = 0;
+    this.mPivotOffsetX = 0
 
     /** @protected @type {number} */
-    this.mPivotOffsetY = 0;
+    this.mPivotOffsetY = 0
 
     /** @protected @type {boolean} */
-    this.mAnchorChanged = false;
+    this.mAnchorChanged = false
 
     /** @private @type {number} */
-    this.mRotation = 0;
+    this.mRotation = 0
 
     /** @protected @type {Rectangle} */
-    this.mBoundsCache = new Rectangle();
+    this.mBoundsCache = new Rectangle()
 
     /** @private @type {Matrix} */
-    this.mLocalTransform = new Matrix();
+    this.mLocalTransform = new Matrix()
 
     /** @private @type {Matrix} */
-    this.mWorldTransform = new Matrix();
+    this.mWorldTransform = new Matrix()
 
     /** @private @type {Matrix} */
-    this.mWorldTransformInverted = new Matrix();
+    this.mWorldTransformInverted = new Matrix()
 
     /** @private @type {DirtyFlag} */
-    this.mDirty = DirtyFlag.DIRTY;
+    this.mDirty = DirtyFlag.DIRTY
 
     /** @protected @type {GameObject} */
-    this.mParent = null;
+    this.mParent = null
 
     /** @private @type {string|null} */
-    this.mTag = null;
+    this.mTag = null
 
     /** @private @type {boolean} */
-    this.mAdded = false;
+    this.mAdded = false
 
     /** @private @type {number} */
-    this.mNumChildrenRemoved = 0;
+    this.mNumChildrenRemoved = 0
 
     /** @private @type {number} */
-    this.mNumComponentsRemoved = 0;
+    this.mNumComponentsRemoved = 0
 
     /** @private @type {number} */
-    this.mDirtyFrameNum = 0;
+    this.mDirtyFrameNum = 0
 
     /** @private @type {boolean} */
-    this.mSuspendDirty = false;
+    this.mSuspendDirty = false
 
     // cache all colliders for fast access
     /** @private @type {Array<Collider>} */
-    this.mCollidersCache = [];
+    this.mCollidersCache = []
 
     /** @private @type {boolean} */
-    this.mChildOrComponentBeenAdded = false;
+    this.mChildOrComponentBeenAdded = false
 
     /** @private @type {Array<GameObject>} */
-    this.mChildrenClone = null;
+    this.mChildrenClone = null
 
     /** @private @type {Array<Component>} */
-    this.mComponentClone = null;
+    this.mComponentClone = null
   }
 
   make(values) {
     // can be helpful if there are many children
-    this.mSuspendDirty = true;
+    this.mSuspendDirty = true
 
     for (let property in values) {
       if (values.hasOwnProperty(property)) {
-        this[property] = values[property];
+        this[property] = values[property]
       }
     }
 
-    this.mSuspendDirty = false;
-    this.setTransformDirty();
+    this.mSuspendDirty = false
+    this.setTransformDirty()
 
-    return this;
+    return this
   }
 
   /**
@@ -140,30 +140,29 @@ class GameObject extends MessageDispatcher {
    * @returns {number}
    */
   get id() {
-    return this.mId;
+    return this.mId
   }
 
   /**
    * Returns true if object was clean for at least 1 update.
-   * 
+   *
    * Note: Make sure to apply all changes to this game object before checking for static.
-   * 
+   *
    * @param {boolean} [includeChildren=true]
    * @returns {boolean}
    */
   checkStatic(includeChildren = true) {
-    if (includeChildren === false)
-      return this.mDirtyFrameNum < Black.frameNum;
+    if (includeChildren === false) return this.mDirtyFrameNum < Black.frameNum
 
-    let isDynamic = false;
+    let isDynamic = false
     GameObject.forEach(this, x => {
       if (x.mDirtyFrameNum >= Black.frameNum) {
-        isDynamic = true;
-        return true;
+        isDynamic = true
+        return true
       }
-    });
+    })
 
-    return !isDynamic;
+    return !isDynamic
   }
 
   /**
@@ -171,14 +170,14 @@ class GameObject extends MessageDispatcher {
    *
    * @return {void}
    */
-  onAdded() { }
+  onAdded() {}
 
   /**
    * Called when object is removed from stage.
    *
    * @return {void}
    */
-  onRemoved() { }
+  onRemoved() {}
 
   /**
    * Sugar method for adding child `GameObjects` or `Components` in a simple manner.
@@ -188,30 +187,29 @@ class GameObject extends MessageDispatcher {
    */
   add(...gameObjectsAndOrComponents) {
     for (let i = 0; i < gameObjectsAndOrComponents.length; i++) {
-      let gooc = gameObjectsAndOrComponents[i];
+      let gooc = gameObjectsAndOrComponents[i]
 
       if (gooc instanceof GameObject)
-        this.addChild( /** @type {!GameObject} */(gooc));
-      else
-        this.addComponent( /** @type {!Component} */(gooc));
+        this.addChild(/** @type {!GameObject} */ (gooc))
+      else this.addComponent(/** @type {!Component} */ (gooc))
     }
 
-    return this;
+    return this
   }
 
   /**
-   * Adds a child `GameObject` instance to this `GameObject` instance. The child is added to the top of all other 
+   * Adds a child `GameObject` instance to this `GameObject` instance. The child is added to the top of all other
    * children in this GameObject instance.
    *
    * @param  {GameObject} child The GameObject instance to add as a child of this GameObject instance.
    * @return {GameObject}
    */
   addChild(child) {
-    return this.addChildAt(child, this.mChildren.length);
+    return this.addChildAt(child, this.mChildren.length)
   }
 
   /**
-   * Adds a child `GameObject` instance to this `GameObject` instance. The child is added to the top of all other 
+   * Adds a child `GameObject` instance to this `GameObject` instance. The child is added to the top of all other
    * children in this GameObject instance.
    *
    * @param  {GameObject} child The GameObject instance to add as a child of this GameObject instance.
@@ -219,28 +217,26 @@ class GameObject extends MessageDispatcher {
    * @return {GameObject} The GameObject instance that you pass in the child parameter.
    */
   addChildAt(child, index = 0) {
-    Debug.assert(child instanceof GameObject, 'Type error.');
+    Debug.assert(child instanceof GameObject, 'Type error.')
 
-    let numChildren = this.mChildren.length;
+    let numChildren = this.mChildren.length
 
     if (index < 0 || index > numChildren)
-      throw new Error('Child index is out of bounds.');
+      throw new Error('Child index is out of bounds.')
 
-    if (child.mParent === this)
-      return this.setChildIndex(child, index);
+    if (child.mParent === this) return this.setChildIndex(child, index)
 
     // this operation should be atomic. since __setParent can throw exception.
-    this.mChildren.splice(index, 0, child);
+    this.mChildren.splice(index, 0, child)
 
-    child.removeFromParent();
-    child.__setParent(this);
+    child.removeFromParent()
+    child.__setParent(this)
 
-    if (this.root instanceof Stage)
-      Black.instance.onChildrenAdded(child);
+    if (this.root instanceof Stage) Black.instance.onChildrenAdded(child)
 
-    this.mChildOrComponentBeenAdded = true;
+    this.mChildOrComponentBeenAdded = true
 
-    return child;
+    return child
   }
 
   /**
@@ -250,17 +246,15 @@ class GameObject extends MessageDispatcher {
    * @return {boolean}
    */
   __setParent(value) {
-    let p = value;
+    let p = value
 
-    while (p !== null && p !== this)
-      p = p.mParent;
+    while (p !== null && p !== this) p = p.mParent
 
-    if (p === this)
-      throw new Error('Object cannot be a child to itself.');
+    if (p === this) throw new Error('Object cannot be a child to itself.')
 
-    this.mParent = value;
-    this.setTransformDirty();
-    return true;
+    this.mParent = value
+    this.setTransformDirty()
+    return true
   }
 
   /**
@@ -271,24 +265,22 @@ class GameObject extends MessageDispatcher {
    * @returns {GameObject} The `GameObject` instance that you pass in the child parameter.
    */
   setChildIndex(child, index) {
-    let ix = this.mChildren.indexOf(child);
+    let ix = this.mChildren.indexOf(child)
 
     if (ix < 0)
-      throw new Error('Given child element was not found in children list.');
+      throw new Error('Given child element was not found in children list.')
 
-    if (ix === index)
-      return child;
+    if (ix === index) return child
 
     // NOTE: systems needs to know when trees changes
-    this.mChildren.splice(ix, 1);
-    this.mChildren.splice(index, 0, child);
+    this.mChildren.splice(ix, 1)
+    this.mChildren.splice(index, 0, child)
 
-    if (this.stage !== null)
-      Black.instance.onChildrenChanged(child);
+    if (this.stage !== null) Black.instance.onChildrenChanged(child)
 
-    this.setTransformDirty();
+    this.setTransformDirty()
 
-    return child;
+    return child
   }
 
   /**
@@ -297,10 +289,9 @@ class GameObject extends MessageDispatcher {
    * @return {void}
    */
   removeFromParent() {
-    if (this.mParent !== null)
-      this.mParent.removeChild(this);
+    if (this.mParent !== null) this.mParent.removeChild(this)
 
-    this.setTransformDirty();
+    this.setTransformDirty()
   }
 
   /**
@@ -310,14 +301,12 @@ class GameObject extends MessageDispatcher {
    * @return {GameObject} The `GameObject` instance that you pass in the child parameter.
    */
   removeChild(child) {
-    let ix = this.mChildren.indexOf(child);
+    let ix = this.mChildren.indexOf(child)
 
-    if (ix < 0)
-      return null;
+    if (ix < 0) return null
 
-    return this.removeChildAt(ix);
+    return this.removeChildAt(ix)
   }
-
 
   /**
    * Finds children by name.
@@ -327,11 +316,10 @@ class GameObject extends MessageDispatcher {
    */
   getChildByName(name) {
     for (let i = 0; i < this.mChildren.length; i++) {
-      if (this.mChildren[i].name === name)
-        return this.mChildren[i];
+      if (this.mChildren[i].name === name) return this.mChildren[i]
     }
 
-    return null;
+    return null
   }
 
   /**
@@ -342,22 +330,21 @@ class GameObject extends MessageDispatcher {
    */
   removeChildAt(index) {
     if (index < 0 || index > this.numChildren)
-      throw new Error('Child index is out of bounds.');
+      throw new Error('Child index is out of bounds.')
 
-    let hadRoot = this.stage !== null;
+    let hadRoot = this.stage !== null
 
-    let child = this.mChildren[index];
-    child.__setParent(null);
+    let child = this.mChildren[index]
+    child.__setParent(null)
 
-    this.mChildren.splice(index, 1);
+    this.mChildren.splice(index, 1)
 
-    if (hadRoot)
-      Black.instance.onChildrenRemoved(child);
+    if (hadRoot) Black.instance.onChildrenRemoved(child)
 
-    this.setTransformDirty();
-    this.mNumChildrenRemoved++;
+    this.setTransformDirty()
+    this.mNumChildrenRemoved++
 
-    return child;
+    return child
   }
 
   /**
@@ -367,7 +354,7 @@ class GameObject extends MessageDispatcher {
    * @return {GameObject} The `GameObject` at specified index.
    */
   getChildAt(index) {
-    return this.mChildren[index];
+    return this.mChildren[index]
   }
 
   /**
@@ -378,26 +365,27 @@ class GameObject extends MessageDispatcher {
    * @throws {Error}
    */
   addComponent(component) {
-    Debug.assert(component instanceof Component, 'Type error.');
+    Debug.assert(component instanceof Component, 'Type error.')
 
-    let instance = component;
+    let instance = component
 
     if (instance.gameObject)
-      throw new Error('Component cannot be added to two game objects at the same time.');
+      throw new Error(
+        'Component cannot be added to two game objects at the same time.'
+      )
 
-    this.mComponents.push(instance);
-    instance.mGameObject = this;
+    this.mComponents.push(instance)
+    instance.mGameObject = this
 
-    if (instance instanceof Collider)
-      this.mCollidersCache.push(instance);
+    if (instance instanceof Collider) this.mCollidersCache.push(instance)
 
     if (this.stage !== null || Black.stage === this) {
-      Black.instance.onComponentAdded(this, instance);
+      Black.instance.onComponentAdded(this, instance)
     }
 
-    this.mChildOrComponentBeenAdded = true;
+    this.mChildOrComponentBeenAdded = true
 
-    return instance;
+    return instance
   }
 
   /**
@@ -407,31 +395,28 @@ class GameObject extends MessageDispatcher {
    * @return {Component|null}
    */
   removeComponent(instance) {
-    if (!instance)
-      return null;
+    if (!instance) return null
 
-    Debug.assert(instance instanceof Component, 'Type error.');
+    Debug.assert(instance instanceof Component, 'Type error.')
 
-    let index = this.mComponents.indexOf(instance);
-    if (index > -1)
-      this.mComponents.splice(index, 1);
+    let index = this.mComponents.indexOf(instance)
+    if (index > -1) this.mComponents.splice(index, 1)
 
     // detach game object after or before?
-    instance.mGameObject = null;
+    instance.mGameObject = null
 
     if (instance instanceof Collider) {
-      let index = this.mCollidersCache.indexOf(instance);
-      if (index > -1)
-        this.mCollidersCache.splice(index, 1);
+      let index = this.mCollidersCache.indexOf(instance)
+      if (index > -1) this.mCollidersCache.splice(index, 1)
     }
 
     if (this.stage !== null || Black.stage === this) {
-      Black.instance.onComponentRemoved(this, instance);
+      Black.instance.onComponentRemoved(this, instance)
     }
 
-    this.mNumComponentsRemoved++;
+    this.mNumComponentsRemoved++
 
-    return instance;
+    return instance
   }
 
   /**
@@ -442,12 +427,11 @@ class GameObject extends MessageDispatcher {
    */
   getComponent(typeName) {
     for (let i = 0; i < this.mComponents.length; i++) {
-      let c = this.mComponents[i];
-      if (c instanceof typeName)
-        return c;
+      let c = this.mComponents[i]
+      if (c instanceof typeName) return c
     }
 
-    return null;
+    return null
   }
 
   /**
@@ -456,7 +440,7 @@ class GameObject extends MessageDispatcher {
    * @return {number}
    */
   get numComponents() {
-    return this.mComponents.length;
+    return this.mComponents.length
   }
 
   /**
@@ -467,9 +451,9 @@ class GameObject extends MessageDispatcher {
    */
   getComponentAt(index) {
     if (index >= 0 && index < this.mComponents.length)
-      return this.mComponents[index];
+      return this.mComponents[index]
 
-    return null;
+    return null
   }
 
   /**
@@ -480,46 +464,53 @@ class GameObject extends MessageDispatcher {
    */
   get localTransformation() {
     if (this.mDirty & DirtyFlag.LOCAL) {
-      this.mDirty ^= DirtyFlag.LOCAL;
+      this.mDirty ^= DirtyFlag.LOCAL
 
       if (this.mSkewX === 0.0 && this.mSkewY === 0.0) {
         if (this.mRotation === 0) {
-          return this.mLocalTransform.set(this.mScaleX, 0, 0, this.mScaleY, this.mX - this.mPivotX * this.mScaleX, this.mY - this.mPivotY * this.mScaleY);
+          return this.mLocalTransform.set(
+            this.mScaleX,
+            0,
+            0,
+            this.mScaleY,
+            this.mX - this.mPivotX * this.mScaleX,
+            this.mY - this.mPivotY * this.mScaleY
+          )
         } else {
-          let cos = Math.cos(this.mRotation);
-          let sin = Math.sin(this.mRotation);
-          let a = this.mScaleX * cos;
-          let b = this.mScaleX * sin;
-          let c = this.mScaleY * -sin;
-          let d = this.mScaleY * cos;
-          let tx = this.mX - this.mPivotX * a - this.mPivotY * c;
-          let ty = this.mY - this.mPivotX * b - this.mPivotY * d;
-          return this.mLocalTransform.set(a, b, c, d, tx, ty);
+          let cos = Math.cos(this.mRotation)
+          let sin = Math.sin(this.mRotation)
+          let a = this.mScaleX * cos
+          let b = this.mScaleX * sin
+          let c = this.mScaleY * -sin
+          let d = this.mScaleY * cos
+          let tx = this.mX - this.mPivotX * a - this.mPivotY * c
+          let ty = this.mY - this.mPivotX * b - this.mPivotY * d
+          return this.mLocalTransform.set(a, b, c, d, tx, ty)
         }
       } else {
-        this.mLocalTransform.identity();
-        this.mLocalTransform.scale(this.mScaleX, this.mScaleY);
-        this.mLocalTransform.skew(this.mSkewX, this.mSkewY);
-        this.mLocalTransform.rotate(this.mRotation);
+        this.mLocalTransform.identity()
+        this.mLocalTransform.scale(this.mScaleX, this.mScaleY)
+        this.mLocalTransform.skew(this.mSkewX, this.mSkewY)
+        this.mLocalTransform.rotate(this.mRotation)
 
-        let a = this.mLocalTransform.data[0];
-        let b = this.mLocalTransform.data[1];
-        let c = this.mLocalTransform.data[2];
-        let d = this.mLocalTransform.data[3];
-        let tx = this.mX;
-        let ty = this.mY;
+        let a = this.mLocalTransform.data[0]
+        let b = this.mLocalTransform.data[1]
+        let c = this.mLocalTransform.data[2]
+        let d = this.mLocalTransform.data[3]
+        let tx = this.mX
+        let ty = this.mY
 
         if (this.mPivotX !== 0.0 || this.mPivotY !== 0.0) {
-          tx = this.mX - a * this.mPivotX - c * this.mPivotY;
-          ty = this.mY - b * this.mPivotX - d * this.mPivotY;
+          tx = this.mX - a * this.mPivotX - c * this.mPivotY
+          ty = this.mY - b * this.mPivotX - d * this.mPivotY
         }
 
-        this.mLocalTransform.data[4] = tx;
-        this.mLocalTransform.data[5] = ty;
+        this.mLocalTransform.data[4] = tx
+        this.mLocalTransform.data[5] = ty
       }
     }
 
-    return this.mLocalTransform;
+    return this.mLocalTransform
   }
 
   /**
@@ -528,23 +519,30 @@ class GameObject extends MessageDispatcher {
    * @return {Matrix}
    */
   get worldTransformation() {
-    if (this.mDirty & DirtyFlag.ANCHOR && (this.mAnchorX !== null || this.mAnchorY !== null)) {
-      this.mDirty ^= DirtyFlag.ANCHOR;
+    if (
+      this.mDirty & DirtyFlag.ANCHOR &&
+      (this.mAnchorX !== null || this.mAnchorY !== null)
+    ) {
+      this.mDirty ^= DirtyFlag.ANCHOR
 
-      this.__updatePivots(this);
+      this.__updatePivots(this)
 
-      this.setDirty(/** @type {DirtyFlag} */ (DirtyFlag.LOCAL | DirtyFlag.WIRB), true);
+      this.setDirty(
+        /** @type {DirtyFlag} */ (DirtyFlag.LOCAL | DirtyFlag.WIRB),
+        true
+      )
     }
 
     if (this.mDirty & DirtyFlag.WORLD) {
-      this.mDirty ^= DirtyFlag.WORLD;
+      this.mDirty ^= DirtyFlag.WORLD
 
       if (this.mParent !== null)
-        this.mParent.worldTransformation.copyTo(this.mWorldTransform).append(this.localTransformation);
-      else
-        this.localTransformation.copyTo(this.mWorldTransform);
+        this.mParent.worldTransformation
+          .copyTo(this.mWorldTransform)
+          .append(this.localTransformation)
+      else this.localTransformation.copyTo(this.mWorldTransform)
     }
-    return this.mWorldTransform;
+    return this.mWorldTransform
   }
 
   /**
@@ -553,40 +551,40 @@ class GameObject extends MessageDispatcher {
    * @return {void}
    */
   set localTransformation(value) {
-    const PI_Q = Math.PI / 4.0;
+    const PI_Q = Math.PI / 4.0
 
-    let a = value.data[0];
-    let b = value.data[1];
-    let c = value.data[2];
-    let d = value.data[3];
-    let tx = value.data[4];
-    let ty = value.data[5];
+    let a = value.data[0]
+    let b = value.data[1]
+    let c = value.data[2]
+    let d = value.data[3]
+    let tx = value.data[4]
+    let ty = value.data[5]
 
-    this.mPivotX = this.mPivotX = 0;
-    this.mX = tx;
-    this.mY = ty;
+    this.mPivotX = this.mPivotX = 0
+    this.mX = tx
+    this.mY = ty
 
-    let skewX = Math.atan(-c / d);
-    let skewY = Math.atan(b / a);
+    let skewX = Math.atan(-c / d)
+    let skewY = Math.atan(b / a)
 
-    if (skewX != skewX)
-      skewX = 0.0;
-    if (skewY != skewY)
-      skewY = 0.0;
+    if (skewX != skewX) skewX = 0.0
+    if (skewY != skewY) skewY = 0.0
 
-    this.mScaleY = (skewX > -PI_Q && skewX < PI_Q) ? d / Math.cos(skewX) : -c / Math.sin(skewX);
-    this.mScaleX = (skewY > -PI_Q && skewY < PI_Q) ? a / Math.cos(skewY) : b / Math.sin(skewY);
+    this.mScaleY =
+      skewX > -PI_Q && skewX < PI_Q ? d / Math.cos(skewX) : -c / Math.sin(skewX)
+    this.mScaleX =
+      skewY > -PI_Q && skewY < PI_Q ? a / Math.cos(skewY) : b / Math.sin(skewY)
 
     if (MathEx.equals(skewX, skewY)) {
-      this.mRotation = skewX;
-      this.mSkewX = this.mSkewY = 0;
+      this.mRotation = skewX
+      this.mSkewX = this.mSkewY = 0
     } else {
-      this.mRotation = 0;
-      this.mSkewX = skewX;
-      this.mSkewY = skewY;
+      this.mRotation = 0
+      this.mSkewX = skewX
+      this.mSkewY = skewY
     }
 
-    this.setTransformDirty();
+    this.setTransformDirty()
   }
 
   /**
@@ -596,13 +594,13 @@ class GameObject extends MessageDispatcher {
    * @return {Matrix}
    */
   get worldTransformationInverted() {
-    if ((this.mDirty & DirtyFlag.WORLD_INV)) {
-      this.mDirty ^= DirtyFlag.WORLD_INV;
+    if (this.mDirty & DirtyFlag.WORLD_INV) {
+      this.mDirty ^= DirtyFlag.WORLD_INV
 
-      this.worldTransformation.copyTo(this.mWorldTransformInverted).invert();
+      this.worldTransformation.copyTo(this.mWorldTransformInverted).invert()
     }
 
-    return this.mWorldTransformInverted;
+    return this.mWorldTransformInverted
   }
 
   /**
@@ -611,35 +609,31 @@ class GameObject extends MessageDispatcher {
    * @return {void}
    */
   __update() {
-    this.onUpdate();
+    this.onUpdate()
 
-    if (this.mChildOrComponentBeenAdded === false)
-      return;
+    if (this.mChildOrComponentBeenAdded === false) return
 
     if (this.mComponents.length > 0) {
-      this.mComponentClone = this.mComponents.slice();
+      this.mComponentClone = this.mComponents.slice()
 
       for (let k = 0; k < this.mComponentClone.length; k++) {
-        if (this.mAdded === false)
-          break;
+        if (this.mAdded === false) break
 
-        let c = this.mComponentClone[k];
+        let c = this.mComponentClone[k]
 
-        if (c.mAdded === false)
-          break;
+        if (c.mAdded === false) break
 
-        c.onUpdate();
+        c.onUpdate()
       }
     }
 
     if (this.mChildren.length > 0) {
-      this.mChildrenClone = this.mChildren.slice();
+      this.mChildrenClone = this.mChildren.slice()
 
       for (let i = 0; i < this.mChildrenClone.length; i++) {
-        let child = this.mChildrenClone[i];
+        let child = this.mChildrenClone[i]
 
-        if (child.mAdded === true)
-          child.__update();
+        if (child.mAdded === true) child.__update()
       }
     }
   }
@@ -647,16 +641,16 @@ class GameObject extends MessageDispatcher {
   /**
    * Called at every engine update. The execution order of onFixedUpdate, onUpdate and onPostUpdate is
    * going from top to bottom of the display list.
-   * 
+   *
    * @protected
    * @return {void}
    */
-  onUpdate() { }
+  onUpdate() {}
 
   /**
-   * Called every time `GameObject` has to be rendered. Doesn't render itself. Collects render data to be processed by 
-   * video driver after. 
-   * 
+   * Called every time `GameObject` has to be rendered. Doesn't render itself. Collects render data to be processed by
+   * video driver after.
+   *
    * NOTE: Adding, removing or changing children elements inside onRender method can lead to unexpected behavior.
    *
    * @protected
@@ -666,7 +660,7 @@ class GameObject extends MessageDispatcher {
    * @return {Renderer}
    */
   onCollectRenderables(driver, parentRenderer, isBackBufferActive = false) {
-    return null;
+    return null
   }
 
   /**
@@ -677,13 +671,13 @@ class GameObject extends MessageDispatcher {
    * @return {Rectangle} bounds in local space without taking care about transformation matrix
    */
   onGetLocalBounds(outRect = undefined) {
-    outRect = outRect || new Rectangle();
-    return outRect.set(0, 0, 0, 0);
+    outRect = outRect || new Rectangle()
+    return outRect.set(0, 0, 0, 0)
   }
 
   /**
    * Returns world bounds of this object and all children if specified (true by default).
-   * 
+   *
    * `object.getBounds()` - relative to parent (default).<br>
    * `object.getBounds(object)` - local bounds.<br>
    * `object.getBounds(object.parent)` - relative to parent.<br>
@@ -695,78 +689,76 @@ class GameObject extends MessageDispatcher {
    * @return {Rectangle} Returns bounds of the object with/without all children.
    */
   getBounds(space = null, includeChildren = true, outRect = undefined) {
-    outRect = outRect || new Rectangle();
+    outRect = outRect || new Rectangle()
 
-    this.onGetLocalBounds(outRect);
+    this.onGetLocalBounds(outRect)
 
-    if (space == null)
-      space = this.mParent;
+    if (space == null) space = this.mParent
 
     if (space == this) {
       // local
     } else if (space == this.mParent) {
       if (includeChildren === false) {
-        let matrix = Matrix.pool.get();
-        matrix.copyFrom(this.localTransformation);
-        matrix.transformRect(outRect, outRect);
-        Matrix.pool.release(matrix);
-      }
-      else if (includeChildren === true && this.mDirty & DirtyFlag.BOUNDS) {
-        let matrix = Matrix.pool.get();
-        matrix.copyFrom(this.localTransformation);
-        matrix.transformRect(outRect, outRect);
-        Matrix.pool.release(matrix);
+        let matrix = Matrix.pool.get()
+        matrix.copyFrom(this.localTransformation)
+        matrix.transformRect(outRect, outRect)
+        Matrix.pool.release(matrix)
+      } else if (includeChildren === true && this.mDirty & DirtyFlag.BOUNDS) {
+        let matrix = Matrix.pool.get()
+        matrix.copyFrom(this.localTransformation)
+        matrix.transformRect(outRect, outRect)
+        Matrix.pool.release(matrix)
       } else {
-        outRect.copyFrom(this.mBoundsCache);
-        return outRect;
+        outRect.copyFrom(this.mBoundsCache)
+        return outRect
       }
     } else {
-      let matrix = Matrix.pool.get();
-      matrix.copyFrom(this.worldTransformation);
-      matrix.prepend(space.worldTransformationInverted);
-      matrix.transformRect(outRect, outRect);
-      Matrix.pool.release(matrix);
+      let matrix = Matrix.pool.get()
+      matrix.copyFrom(this.worldTransformation)
+      matrix.prepend(space.worldTransformationInverted)
+      matrix.transformRect(outRect, outRect)
+      Matrix.pool.release(matrix)
     }
 
     if (includeChildren === true) {
-      let childBounds = Rectangle.pool.get();
+      let childBounds = Rectangle.pool.get()
 
       for (let i = 0; i < this.mChildren.length; i++) {
-        childBounds.zero();
+        childBounds.zero()
 
-        this.mChildren[i].getBounds(space, includeChildren, childBounds);
-        outRect.union(childBounds);
+        this.mChildren[i].getBounds(space, includeChildren, childBounds)
+        outRect.union(childBounds)
       }
 
-      Rectangle.pool.release(childBounds);
+      Rectangle.pool.release(childBounds)
 
       if (space == this.mParent && this.mDirty & DirtyFlag.BOUNDS) {
-        this.mBoundsCache.copyFrom(outRect);
-        this.mDirty ^= DirtyFlag.BOUNDS;
+        this.mBoundsCache.copyFrom(outRect)
+        this.mDirty ^= DirtyFlag.BOUNDS
       }
     }
 
-    return outRect;
+    return outRect
   }
 
   /**
    * Returns stage relative bounds of this object excluding it's children;
-   * 
+   *
    * @param {Rectangle=} [outRect=null] Rectangle to be store resulting bounds in.
-   * @returns {Rectangle} 
+   * @returns {Rectangle}
    */
   getStageBounds(outRect = undefined) {
-    outRect = outRect || new Rectangle();
+    outRect = outRect || new Rectangle()
 
-    this.onGetLocalBounds(outRect);
+    this.onGetLocalBounds(outRect)
 
-    let matrix = Matrix.pool.get();
-    matrix.copyFrom(this.worldTransformation);
-    matrix.prepend(this.stage.worldTransformationInverted); // 120ms
-    matrix.transformRect(outRect, outRect); // 250ms
-    Matrix.pool.release(matrix);
+    let matrix = Matrix.pool.get()
+    matrix.copyFrom(this.worldTransformation)
+    matrix.prepend(this.stage.worldTransformationInverted) // 120ms
+    matrix.transformRect(outRect, outRect) // 250ms
+    Matrix.pool.release(matrix)
 
-    return outRect;
+    return outRect
   }
 
   /**
@@ -776,83 +768,79 @@ class GameObject extends MessageDispatcher {
    * @return {GameObject|null}
    */
   hitTest(localPoint) {
-    let c = /** @type {InputComponent}*/ (this.getComponent(InputComponent));
-    let touchable = c !== null && c.touchable;
-    let insideMask = this.onHitTestMask(localPoint);
+    let c = /** @type {InputComponent}*/ (this.getComponent(InputComponent))
+    let touchable = c !== null && c.touchable
+    let insideMask = this.onHitTestMask(localPoint)
 
-    if (touchable === false || insideMask === false)
-      return null;
+    if (touchable === false || insideMask === false) return null
 
-    let target = null;
-    let numChildren = this.mChildren.length;
+    let target = null
+    let numChildren = this.mChildren.length
 
     for (let i = numChildren - 1; i >= 0; --i) {
-      let child = this.mChildren[i];
+      let child = this.mChildren[i]
 
-      target = child.hitTest(localPoint);
+      target = child.hitTest(localPoint)
 
-      if (target !== null)
-        return target;
+      if (target !== null) return target
     }
 
-    if (this.onHitTest(localPoint) === true)
-      return this;
+    if (this.onHitTest(localPoint) === true) return this
 
-    return null;
+    return null
   }
 
   /**
    * @ignore
    * @protected
-   * @param {Vector} localPoint 
+   * @param {Vector} localPoint
    * @return {boolean}
    */
   onHitTest(localPoint) {
-    let contains = false;
+    let contains = false
 
     // BEGINOF: WTF
-    let tmpVector = /** @type {Vector}*/ (Vector.pool.get());
-    this.worldTransformationInverted.transformVector(localPoint, tmpVector);
+    let tmpVector = /** @type {Vector}*/ (Vector.pool.get())
+    this.worldTransformationInverted.transformVector(localPoint, tmpVector)
     // ENDOF: WTF
 
     if (this.mCollidersCache.length > 0) {
       for (let i = 0; i < this.mCollidersCache.length; i++) {
-        let collider = this.mCollidersCache[i];
+        let collider = this.mCollidersCache[i]
 
-        contains = collider.containsPoint(tmpVector);
-        if (contains === true)
-          return true;
+        contains = collider.containsPoint(tmpVector)
+        if (contains === true) return true
       }
     } else {
-      contains = this.localBounds.containsXY(tmpVector.x, tmpVector.y);
+      contains = this.localBounds.containsXY(tmpVector.x, tmpVector.y)
     }
 
-    Vector.pool.release(tmpVector);
-    return contains;
+    Vector.pool.release(tmpVector)
+    return contains
   }
 
   /**
    * @ignore
    * @protected
-   * @param {Vector} localPoint 
+   * @param {Vector} localPoint
    * @return {boolean}
    */
   onHitTestMask(localPoint) {
-    return true;
+    return true
   }
 
   /**
    * Returns local bounds of this object (without children).
    */
   get localBounds() {
-    return this.getBounds(this, false);
+    return this.getBounds(this, false)
   }
 
   /**
    * Returns parent-relative bounds (including children).
    */
   get bounds() {
-    return this.getBounds(this.mParent, true);
+    return this.getBounds(this.mParent, true)
   }
 
   /**
@@ -869,17 +857,26 @@ class GameObject extends MessageDispatcher {
    *
    * @return {GameObject} This.
    */
-  setTransform(x = 0, y = 0, r = 0, scaleX = 1, scaleY = 1, anchorX = 0, anchorY = 0, includeChildren = true) {
-    this.mX = x;
-    this.mY = y;
-    this.mRotation = r;
-    this.mScaleX = scaleX;
-    this.mScaleY = scaleY;
-    this.mAnchorX = anchorX;
-    this.mAnchorY = anchorY;
+  setTransform(
+    x = 0,
+    y = 0,
+    r = 0,
+    scaleX = 1,
+    scaleY = 1,
+    anchorX = 0,
+    anchorY = 0,
+    includeChildren = true
+  ) {
+    this.mX = x
+    this.mY = y
+    this.mRotation = r
+    this.mScaleX = scaleX
+    this.mScaleY = scaleY
+    this.mAnchorX = anchorX
+    this.mAnchorY = anchorY
 
-    this.setTransformDirty();
-    return this;
+    this.setTransformDirty()
+    return this
   }
 
   /**
@@ -890,15 +887,14 @@ class GameObject extends MessageDispatcher {
    * @return {Vector}
    */
   relativeTo(gameObject, outVector = null) {
-    outVector = outVector || new Vector();
-    outVector.set(this.x, this.y);
+    outVector = outVector || new Vector()
+    outVector.set(this.x, this.y)
 
-    if (this.parent == null || gameObject == null)
-      return outVector;
+    if (this.parent == null || gameObject == null) return outVector
 
-    this.parent.localToGlobal(outVector, outVector);
-    gameObject.globalToLocal(outVector, outVector);
-    return outVector;
+    this.parent.localToGlobal(outVector, outVector)
+    gameObject.globalToLocal(outVector, outVector)
+    return outVector
   }
 
   /**
@@ -909,7 +905,7 @@ class GameObject extends MessageDispatcher {
    * @return {Vector}
    */
   localToGlobal(localPoint, outVector = null) {
-    return this.worldTransformation.transformVector(localPoint, outVector);
+    return this.worldTransformation.transformVector(localPoint, outVector)
   }
 
   /**
@@ -920,7 +916,10 @@ class GameObject extends MessageDispatcher {
    * @return {Vector}
    */
   globalToLocal(globalPoint, outVector = null) {
-    return this.worldTransformationInverted.transformVector(globalPoint, outVector);
+    return this.worldTransformationInverted.transformVector(
+      globalPoint,
+      outVector
+    )
   }
   /**
    * Gets a count of children elements.
@@ -928,7 +927,7 @@ class GameObject extends MessageDispatcher {
    * @return {number}
    */
   get numChildren() {
-    return this.mChildren.length;
+    return this.mChildren.length
   }
 
   /**
@@ -938,7 +937,7 @@ class GameObject extends MessageDispatcher {
    * @return {string|null}
    */
   get name() {
-    return this.mName;
+    return this.mName
   }
 
   /**
@@ -948,7 +947,7 @@ class GameObject extends MessageDispatcher {
    * @return {void}
    */
   set name(value) {
-    this.mName = value;
+    this.mName = value
   }
 
   /**
@@ -957,7 +956,7 @@ class GameObject extends MessageDispatcher {
    * @return {number}
    */
   get x() {
-    return this.mX;
+    return this.mX
   }
 
   /**
@@ -967,13 +966,12 @@ class GameObject extends MessageDispatcher {
    * @return {void}
    */
   set x(value) {
-    if (this.mX == value)
-      return;
+    if (this.mX == value) return
 
-    Debug.assert(!isNaN(value), 'Value cannot be NaN');
+    Debug.assert(!isNaN(value), 'Value cannot be NaN')
 
-    this.mX = value;
-    this.setTransformDirty();
+    this.mX = value
+    this.setTransformDirty()
   }
 
   /**
@@ -983,7 +981,7 @@ class GameObject extends MessageDispatcher {
    * @return {number}
    */
   get y() {
-    return this.mY;
+    return this.mY
   }
 
   /**
@@ -993,13 +991,12 @@ class GameObject extends MessageDispatcher {
    * @return {void}
    */
   set y(value) {
-    if (this.mY == value)
-      return;
+    if (this.mY == value) return
 
-    Debug.assert(!isNaN(value), 'Value cannot be NaN');
+    Debug.assert(!isNaN(value), 'Value cannot be NaN')
 
-    this.mY = value;
-    this.setTransformDirty();
+    this.mY = value
+    this.setTransformDirty()
   }
 
   /**
@@ -1009,7 +1006,7 @@ class GameObject extends MessageDispatcher {
    * @return {number}
    */
   get pivotOffsetX() {
-    return this.mPivotOffsetX;
+    return this.mPivotOffsetX
   }
 
   /**
@@ -1019,15 +1016,14 @@ class GameObject extends MessageDispatcher {
    * @return {void}
    */
   set pivotOffsetX(value) {
-    if (this.mPivotOffsetX === value)
-      return;
+    if (this.mPivotOffsetX === value) return
 
-    Debug.assert(!isNaN(value), 'Value cannot be NaN');
+    Debug.assert(!isNaN(value), 'Value cannot be NaN')
 
-    this.mPivotOffsetX = value;
+    this.mPivotOffsetX = value
 
-    this.__updatePivots(this);
-    this.setTransformDirty();
+    this.__updatePivots(this)
+    this.setTransformDirty()
   }
 
   /**
@@ -1037,7 +1033,7 @@ class GameObject extends MessageDispatcher {
    * @return {number}
    */
   get pivotOffsetY() {
-    return this.mPivotOffsetY;
+    return this.mPivotOffsetY
   }
 
   /**
@@ -1047,97 +1043,94 @@ class GameObject extends MessageDispatcher {
    * @return {void}
    */
   set pivotOffsetY(value) {
-    if (this.mPivotOffsetY === value)
-      return;
+    if (this.mPivotOffsetY === value) return
 
-    Debug.assert(!isNaN(value), 'Value cannot be NaN');
+    Debug.assert(!isNaN(value), 'Value cannot be NaN')
 
-    this.mPivotOffsetY = value;
+    this.mPivotOffsetY = value
 
-    this.__updatePivots(this);
-    this.setTransformDirty();
+    this.__updatePivots(this)
+    this.setTransformDirty()
   }
 
   /**
    * Gets/Sets the x-coordinate of the object's origin in its local space in percent.
-   * 
+   *
    * @export
    * @ignore
    * @param {number|null} value
    * @return {void}
    */
   set anchorX(value) {
-    if (this.mAnchorX === value)
-      return;
+    if (this.mAnchorX === value) return
 
-    Debug.assert(value !== null && !isNaN(value), 'Value cannot be NaN');
+    Debug.assert(value !== null && !isNaN(value), 'Value cannot be NaN')
 
-    this.mAnchorX = value;
-    this.mAnchorChanged = true;
+    this.mAnchorX = value
+    this.mAnchorChanged = true
 
-    this.setTransformDirty();
+    this.setTransformDirty()
   }
 
   /**
    * Gets/Sets the y-coordinate of the object's origin in its local space in percent.
-   * 
+   *
    * @export
    * @ignore
    * @param {number|null} value
    * @return {void}
    */
   set anchorY(value) {
-    if (this.mAnchorY === value)
-      return;
+    if (this.mAnchorY === value) return
 
-    Debug.assert(value !== null && !isNaN(value), 'Value cannot be NaN');
+    Debug.assert(value !== null && !isNaN(value), 'Value cannot be NaN')
 
-    this.mAnchorY = value;
-    this.mAnchorChanged = true;
+    this.mAnchorY = value
+    this.mAnchorChanged = true
 
-    this.setTransformDirty();
+    this.setTransformDirty()
   }
 
   /**
    * Returns current anchor-x value in range from 0 to 1.
-   * 
+   *
    * @export
    * @returns {number|null}
    */
   get anchorX() {
-    return this.mAnchorX;
+    return this.mAnchorX
   }
 
   /**
    * Returns current anchor-y value in range from 0 to 1.
-   * 
+   *
    * @export
    * @returns {number|null}
    */
   get anchorY() {
-    return this.mAnchorY;
+    return this.mAnchorY
   }
 
   /**
    * Returns current pivot-x value in range from 0 to 1.
-   * 
+   *
    * @returns {number}
    */
   get pivotX() {
-    return this.mPivotX;
+    return this.mPivotX
   }
 
   /**
    * Returns current pivot-y value in range from 0 to 1.
-   * 
+   *
    * @returns {number}
    */
   get pivotY() {
-    return this.mPivotY;
+    return this.mPivotY
   }
 
   /**
-   * Sets the origin point relatively to its bounds. For example, setting x and y value to 0.5 will set origin to the 
+   * Sets the origin point relatively to its bounds. For example, setting x and y value to 0.5 will set origin to the
    * center of the object.
    *
    * @param {number}  [ax=0.5]               Align along x-axis.
@@ -1146,17 +1139,17 @@ class GameObject extends MessageDispatcher {
    * @return {GameObject} This.
    */
   alignAnchor(ax = 0.5, ay = 0.5) {
-    Debug.isNumber(ax, ay);
+    Debug.isNumber(ax, ay)
 
-    this.mAnchorX = ax;
-    this.anchorY = ay;
+    this.mAnchorX = ax
+    this.anchorY = ay
 
-    return this;
+    return this
   }
 
   /**
    * Sets anchor point to given position. See `alignPivotOffset`.
-   * 
+   *
    * @deprecated
    *
    * @param {number}  [ax=0.5]               Align along x-axis.
@@ -1164,7 +1157,7 @@ class GameObject extends MessageDispatcher {
    * @return {GameObject} This.
    */
   alignPivot(ax = 0.5, ay = 0.5) {
-    return this.alignPivotOffset(ax, ay);
+    return this.alignPivotOffset(ax, ay)
   }
 
   /**
@@ -1178,19 +1171,29 @@ class GameObject extends MessageDispatcher {
    * @return {GameObject} This.
    */
   alignPivotOffset(ax = 0.5, ay = 0.5, includeChildren = true) {
-    Debug.isNumber(ax, ay);
+    Debug.isNumber(ax, ay)
 
-    this.getBounds(this, includeChildren, Rectangle.__cache.zero());
+    this.getBounds(this, includeChildren, Rectangle.__cache.zero())
 
-    this.mPivotOffsetX = (Rectangle.__cache.width * ax);
-    this.mPivotOffsetY = (Rectangle.__cache.height * ay);
+    this.mPivotOffsetX = Rectangle.__cache.width * ax
+    this.mPivotOffsetY = Rectangle.__cache.height * ay
 
-    this.mPivotX = this.mAnchorX === null ? this.mPivotOffsetX + Rectangle.__cache.x : this.mPivotOffsetX + (Rectangle.__cache.width * this.mAnchorX) + Rectangle.__cache.x;
-    this.mPivotY = this.mAnchorY === null ? this.mPivotOffsetY + Rectangle.__cache.y : this.mPivotOffsetY + (Rectangle.__cache.height * this.mAnchorY) + Rectangle.__cache.y;
+    this.mPivotX =
+      this.mAnchorX === null
+        ? this.mPivotOffsetX + Rectangle.__cache.x
+        : this.mPivotOffsetX +
+          Rectangle.__cache.width * this.mAnchorX +
+          Rectangle.__cache.x
+    this.mPivotY =
+      this.mAnchorY === null
+        ? this.mPivotOffsetY + Rectangle.__cache.y
+        : this.mPivotOffsetY +
+          Rectangle.__cache.height * this.mAnchorY +
+          Rectangle.__cache.y
 
-    this.setTransformDirty();
+    this.setTransformDirty()
 
-    return this;
+    return this
   }
 
   /**
@@ -1200,7 +1203,7 @@ class GameObject extends MessageDispatcher {
    * @return {number}
    */
   get scaleX() {
-    return this.mScaleX;
+    return this.mScaleX
   }
 
   /**
@@ -1211,24 +1214,23 @@ class GameObject extends MessageDispatcher {
    * @return {void}
    */
   set scaleX(value) {
-    if (this.mScaleX == value)
-      return;
+    if (this.mScaleX == value) return
 
-    Debug.assert(!isNaN(value), 'Value cannot be NaN');
+    Debug.assert(!isNaN(value), 'Value cannot be NaN')
 
-    this.mScaleX = value;
-    this.setTransformDirty();
+    this.mScaleX = value
+    this.setTransformDirty()
   }
 
   /**
    * Gets/Sets the scale factor of this object along y-axis.
    *
    * @export
-   * 
+   *
    * @return {number}
    */
   get scaleY() {
-    return this.mScaleY;
+    return this.mScaleY
   }
 
   /**
@@ -1238,13 +1240,12 @@ class GameObject extends MessageDispatcher {
    * @return {void}
    */
   set scaleY(value) {
-    if (this.mScaleY == value)
-      return;
+    if (this.mScaleY == value) return
 
-    Debug.assert(!isNaN(value), 'Value cannot be NaN');
+    Debug.assert(!isNaN(value), 'Value cannot be NaN')
 
-    this.mScaleY = value;
-    this.setTransformDirty();
+    this.mScaleY = value
+    this.setTransformDirty()
   }
 
   /**
@@ -1253,24 +1254,23 @@ class GameObject extends MessageDispatcher {
    * @returns {number}
    */
   get scale() {
-    return this.scaleX;
+    return this.scaleX
   }
 
   /**
    * @export
    * @ignore
    * @param {number} value
-   * 
+   *
    * @returns {void}
    */
   set scale(value) {
-    if (this.mScaleX == value)
-      return;
+    if (this.mScaleX == value) return
 
-    Debug.assert(!isNaN(value), 'Value cannot be NaN');
+    Debug.assert(!isNaN(value), 'Value cannot be NaN')
 
-    this.mScaleX = this.mScaleY = value;
-    this.setTransformDirty();
+    this.mScaleX = this.mScaleY = value
+    this.setTransformDirty()
   }
 
   /**
@@ -1279,24 +1279,23 @@ class GameObject extends MessageDispatcher {
    * @returns {number}
    */
   get skewX() {
-    return this.mSkewX;
+    return this.mSkewX
   }
 
   /**
    * @export
    * @ignore
    * @param {number} value
-   * 
+   *
    * @returns {void}
    */
   set skewX(value) {
-    if (this.mSkewX == value)
-      return;
+    if (this.mSkewX == value) return
 
-    Debug.assert(!isNaN(value), 'Value cannot be NaN');
+    Debug.assert(!isNaN(value), 'Value cannot be NaN')
 
-    this.mSkewX = value;
-    this.setTransformDirty();
+    this.mSkewX = value
+    this.setTransformDirty()
   }
 
   /**
@@ -1305,35 +1304,34 @@ class GameObject extends MessageDispatcher {
    * @returns {number}
    */
   get skewY() {
-    return this.mSkewY;
+    return this.mSkewY
   }
 
   /**
    * @export
    * @ignore
    * @param {number} value
-   * 
+   *
    * @returns {void}
    */
   set skewY(value) {
-    if (this.mSkewY == value)
-      return;
+    if (this.mSkewY == value) return
 
-    Debug.assert(!isNaN(value), 'Value cannot be NaN');
+    Debug.assert(!isNaN(value), 'Value cannot be NaN')
 
-    this.mSkewY = value;
-    this.setTransformDirty();
+    this.mSkewY = value
+    this.setTransformDirty()
   }
 
   /**
    * Gets/Sets rotation in radians.
    *
    * @export
-   * 
+   *
    * @return {number}
    */
   get rotation() {
-    return this.mRotation;
+    return this.mRotation
   }
 
   /**
@@ -1343,13 +1341,12 @@ class GameObject extends MessageDispatcher {
    * @return {void}
    */
   set rotation(value) {
-    if (this.mRotation == value)
-      return;
+    if (this.mRotation == value) return
 
-    Debug.assert(!isNaN(value), 'Value cannot be NaN');
+    Debug.assert(!isNaN(value), 'Value cannot be NaN')
 
-    this.mRotation = value;
-    this.setTransformDirty();
+    this.mRotation = value
+    this.setTransformDirty()
   }
 
   /**
@@ -1358,22 +1355,21 @@ class GameObject extends MessageDispatcher {
    * @return {GameObject|null}
    */
   get parent() {
-    return this.mParent;
+    return this.mParent
   }
 
   /**
    * Returns top most parent object or this if there is no parents.
-   * 
+   *
    * @readonly
    * @return {GameObject}
    */
   get root() {
-    let current = this;
+    let current = this
 
-    while (current.mParent != null)
-      current = current.mParent;
+    while (current.mParent != null) current = current.mParent
 
-    return current;
+    return current
   }
 
   /**
@@ -1384,7 +1380,7 @@ class GameObject extends MessageDispatcher {
    * @return {Stage|null}
    */
   get stage() {
-    return this.mAdded === true ? Black.stage : null;
+    return this.mAdded === true ? Black.stage : null
   }
 
   /**
@@ -1393,7 +1389,7 @@ class GameObject extends MessageDispatcher {
    * @return {number}
    */
   get width() {
-    return this.getBounds(this.mParent).width;
+    return this.getBounds(this.mParent).width
   }
 
   /**
@@ -1402,13 +1398,12 @@ class GameObject extends MessageDispatcher {
    * @return {void}
    */
   set width(value) {
-    Debug.assert(!isNaN(value), 'Value cannot be NaN');
+    Debug.assert(!isNaN(value), 'Value cannot be NaN')
 
-    this.scaleX = 1;
-    const currentWidth = this.width;
+    this.scaleX = 1
+    const currentWidth = this.width
 
-    if (currentWidth != 0.0)
-      this.scaleX = value / currentWidth;
+    if (currentWidth != 0.0) this.scaleX = value / currentWidth
   }
 
   /**
@@ -1417,7 +1412,7 @@ class GameObject extends MessageDispatcher {
    * @return {number}
    */
   get height() {
-    return this.getBounds(this.mParent).height;
+    return this.getBounds(this.mParent).height
   }
 
   /**
@@ -1426,15 +1421,13 @@ class GameObject extends MessageDispatcher {
    * @return {void}
    */
   set height(value) {
-    Debug.assert(!isNaN(value), 'Value cannot be NaN');
+    Debug.assert(!isNaN(value), 'Value cannot be NaN')
 
-    this.scaleY = 1;
-    const currentHeight = this.height;
+    this.scaleY = 1
+    const currentHeight = this.height
 
-    if (currentHeight != 0)
-      this.scaleY = value / currentHeight;
+    if (currentHeight != 0) this.scaleY = value / currentHeight
   }
-
 
   /**
    * Returns width of this GameObject in local space without including children
@@ -1444,9 +1437,8 @@ class GameObject extends MessageDispatcher {
    * @return {number}
    */
   get localWidth() {
-    return this.getBounds(this, false).width;
+    return this.getBounds(this, false).width
   }
-
 
   /**
    * Returns height of this GameObject in local space without including children
@@ -1456,7 +1448,7 @@ class GameObject extends MessageDispatcher {
    * @return {number}
    */
   get localHeight() {
-    return this.getBounds(this, false).height;
+    return this.getBounds(this, false).height
   }
 
   // TODO: precache
@@ -1469,19 +1461,18 @@ class GameObject extends MessageDispatcher {
    * @return {string|null}
    */
   get path() {
-    if (this.mParent !== null)
-      return this.mParent.path + '/' + this.mName;
+    if (this.mParent !== null) return this.mParent.path + '/' + this.mName
 
-    return this.mName;
+    return this.mName
   }
 
   /**
-  * Gets/Sets tag of this GameObject.
-  *
-  * @return {string|null}
-  */
+   * Gets/Sets tag of this GameObject.
+   *
+   * @return {string|null}
+   */
   get tag() {
-    return this.mTag;
+    return this.mTag
   }
 
   /**
@@ -1490,15 +1481,13 @@ class GameObject extends MessageDispatcher {
    * @return {void}
    */
   set tag(value) {
-    if (this.mTag === value)
-      return;
+    if (this.mTag === value) return
 
     /** @type {string|null} */
-    let old = this.mTag;
-    this.mTag = value;
+    let old = this.mTag
+    this.mTag = value
 
-    if (this.mAdded)
-      Black.instance.onTagUpdated(this, old, value);
+    if (this.mAdded) Black.instance.onTagUpdated(this, old, value)
   }
 
   /**
@@ -1509,20 +1498,17 @@ class GameObject extends MessageDispatcher {
    * @return {*}
    */
   spawn(gen, ctx = null) {
-    let iter = gen.apply(ctx == null ? this : ctx);
+    let iter = gen.apply(ctx == null ? this : ctx)
 
     function step(it) {
-      if (it.done)
-        return;
+      if (it.done) return
 
-      if (typeof it.value === 'function')
-        it.value(x => step(iter.next(x)));
-      else
-        step(iter.next(it.value));
+      if (typeof it.value === 'function') it.value(x => step(iter.next(x)))
+      else step(iter.next(it.value))
     }
 
-    step(iter.next());
-    return iter;
+    step(iter.next())
+    return iter
   }
 
   /**
@@ -1532,7 +1518,11 @@ class GameObject extends MessageDispatcher {
    * @return {function(?):?}
    */
   wait(seconds = 1) {
-    return cb => setTimeout(cb.bind(this, (/** @type {number} */(seconds) * 1000)), (/** @type {number} */(seconds) * 1000));
+    return cb =>
+      setTimeout(
+        cb.bind(this, /** @type {number} */ (seconds * 1000)),
+        /** @type {number} */ (seconds * 1000)
+      )
   }
 
   /**
@@ -1542,7 +1532,7 @@ class GameObject extends MessageDispatcher {
    * @return {function(?):?}
    */
   waitMessage(message) {
-    return cb => this.once(message, cb.bind(this));
+    return cb => this.once(message, cb.bind(this))
   }
 
   /**
@@ -1555,27 +1545,37 @@ class GameObject extends MessageDispatcher {
   setDirty(flag, includeChildren = true) {
     if (includeChildren) {
       GameObject.forEach(this, x => {
-        x.mDirty |= flag;
-        x.mDirtyFrameNum = Black.frameNum;
-      });
+        x.mDirty |= flag
+        x.mDirtyFrameNum = Black.frameNum
+      })
     } else {
-      this.mDirty |= flag;
-      this.mDirtyFrameNum = Black.frameNum;
+      this.mDirty |= flag
+      this.mDirtyFrameNum = Black.frameNum
     }
 
-    Renderer.__dirty = true;
+    Renderer.__dirty = true
   }
 
   /**
    * @private
    * @ignore
-   * @param {GameObject} go 
+   * @param {GameObject} go
    */
   __updatePivots(go) {
-    go.getBounds(go, true, Rectangle.__cache.zero());
+    go.getBounds(go, true, Rectangle.__cache.zero())
 
-    go.mPivotX = go.mAnchorX === null ? go.mPivotOffsetX + Rectangle.__cache.x : go.mPivotOffsetX + (Rectangle.__cache.width * go.mAnchorX) + Rectangle.__cache.x;
-    go.mPivotY = go.mAnchorY === null ? go.mPivotOffsetY + Rectangle.__cache.y : go.mPivotOffsetY + (Rectangle.__cache.height * go.mAnchorY) + Rectangle.__cache.y;
+    go.mPivotX =
+      go.mAnchorX === null
+        ? go.mPivotOffsetX + Rectangle.__cache.x
+        : go.mPivotOffsetX +
+          Rectangle.__cache.width * go.mAnchorX +
+          Rectangle.__cache.x
+    go.mPivotY =
+      go.mAnchorY === null
+        ? go.mPivotOffsetY + Rectangle.__cache.y
+        : go.mPivotOffsetY +
+          Rectangle.__cache.height * go.mAnchorY +
+          Rectangle.__cache.y
   }
 
   /**
@@ -1585,14 +1585,14 @@ class GameObject extends MessageDispatcher {
    * @return {void}
    */
   setParentDirty(flag) {
-    let current = this;
+    let current = this
     while (current != null) {
-      current.mDirty |= flag;
-      current.mDirtyFrameNum = Black.frameNum;
-      current = current.mParent;
+      current.mDirty |= flag
+      current.mDirtyFrameNum = Black.frameNum
+      current = current.mParent
     }
 
-    Renderer.__dirty = true;
+    Renderer.__dirty = true
   }
 
   /**
@@ -1601,13 +1601,17 @@ class GameObject extends MessageDispatcher {
    * @returns {void}
    */
   setTransformDirty() {
-    if (this.mSuspendDirty === true)
-      return;
+    if (this.mSuspendDirty === true) return
 
-    this.setDirty(/** @type {DirtyFlag} */(DirtyFlag.LOCAL | DirtyFlag.BOUNDS), false);
-    this.setDirty(DirtyFlag.WIRB, true);
+    this.setDirty(
+      /** @type {DirtyFlag} */ (DirtyFlag.LOCAL | DirtyFlag.BOUNDS),
+      false
+    )
+    this.setDirty(DirtyFlag.WIRB, true)
 
-    this.setParentDirty(/** @type {DirtyFlag} */(DirtyFlag.BOUNDS | DirtyFlag.ANCHOR));
+    this.setParentDirty(
+      /** @type {DirtyFlag} */ (DirtyFlag.BOUNDS | DirtyFlag.ANCHOR)
+    )
   }
 
   /**
@@ -1616,10 +1620,9 @@ class GameObject extends MessageDispatcher {
    * @returns {void}
    */
   setRenderDirty() {
-    if (this.mSuspendDirty === true)
-      return;
+    if (this.mSuspendDirty === true) return
 
-    this.setDirty(DirtyFlag.RENDER, true);
+    this.setDirty(DirtyFlag.RENDER, true)
   }
 
   /**
@@ -1628,16 +1631,13 @@ class GameObject extends MessageDispatcher {
    * @return {void}
    */
   set touchable(value) {
-    let c = /** @type {InputComponent}*/ (this.getComponent(InputComponent));
+    let c = /** @type {InputComponent}*/ (this.getComponent(InputComponent))
 
     if (value === true) {
-      if (c === null)
-        this.addComponent(new InputComponent());
-      else
-        c.touchable = true;
+      if (c === null) this.addComponent(new InputComponent())
+      else c.touchable = true
     } else {
-      if (c !== null)
-        this.removeComponent(c);
+      if (c !== null) this.removeComponent(c)
     }
   }
 
@@ -1647,8 +1647,8 @@ class GameObject extends MessageDispatcher {
    * @return {boolean}
    */
   get touchable() {
-    let c = /** @type {InputComponent} */ (this.getComponent(InputComponent));
-    return c !== null && c.touchable === true;
+    let c = /** @type {InputComponent} */ (this.getComponent(InputComponent))
+    return c !== null && c.touchable === true
   }
 
   // TODO: rename method
@@ -1661,34 +1661,30 @@ class GameObject extends MessageDispatcher {
    * @return {Rectangle}
    */
   static getBoundsWithPoints(points, worldTransformation, outRect) {
-    outRect = outRect || new Rectangle();
+    outRect = outRect || new Rectangle()
 
-    let minX = Number.MAX_VALUE;
-    let maxX = -Number.MAX_VALUE;
-    let minY = Number.MAX_VALUE;
-    let maxY = -Number.MAX_VALUE;
-    let xx = 0;
-    let yy = 0;
-    let tmpVector = new Vector();
+    let minX = Number.MAX_VALUE
+    let maxX = -Number.MAX_VALUE
+    let minY = Number.MAX_VALUE
+    let maxY = -Number.MAX_VALUE
+    let xx = 0
+    let yy = 0
+    let tmpVector = new Vector()
 
     for (let i = 0; i < points.length; i += 2) {
-      worldTransformation.transformXY(points[i], points[i + 1], tmpVector);
+      worldTransformation.transformXY(points[i], points[i + 1], tmpVector)
 
-      if (minX > tmpVector.x)
-        minX = tmpVector.x;
+      if (minX > tmpVector.x) minX = tmpVector.x
 
-      if (maxX < tmpVector.x)
-        maxX = tmpVector.x;
+      if (maxX < tmpVector.x) maxX = tmpVector.x
 
-      if (minY > tmpVector.y)
-        minY = tmpVector.y;
+      if (minY > tmpVector.y) minY = tmpVector.y
 
-      if (maxY < tmpVector.y)
-        maxY = tmpVector.y;
+      if (maxY < tmpVector.y) maxY = tmpVector.y
     }
 
-    outRect.set(minX, minY, maxX - minX, maxY - minY);
-    return outRect;
+    outRect.set(minX, minY, maxX - minX, maxY - minY)
+    return outRect
   }
 
   /**
@@ -1699,12 +1695,12 @@ class GameObject extends MessageDispatcher {
    * @return {boolean} True if intersects.
    */
   static intersects(gameObject, point) {
-    let tmpVector = new Vector();
-    let inv = gameObject.worldTransformationInverted;
+    let tmpVector = new Vector()
+    let inv = gameObject.worldTransformationInverted
 
-    inv.transformVector(point, tmpVector);
+    inv.transformVector(point, tmpVector)
 
-    return gameObject.localBounds.containsXY(tmpVector.x, tmpVector.y);
+    return gameObject.localBounds.containsXY(tmpVector.x, tmpVector.y)
   }
 
   /**
@@ -1716,19 +1712,24 @@ class GameObject extends MessageDispatcher {
    * @return {boolean} True if intersects.
    */
   static intersectsAt(gameObject, point, outVector = undefined) {
-    outVector = outVector || new Vector();
+    outVector = outVector || new Vector()
 
-    Vector.__cache.set();
+    Vector.__cache.set()
 
-    gameObject.worldTransformationInverted.transformVector(point, Vector.__cache);
-    let contains = gameObject.localBounds.containsXY(Vector.__cache.x, Vector.__cache.y);
+    gameObject.worldTransformationInverted.transformVector(
+      point,
+      Vector.__cache
+    )
+    let contains = gameObject.localBounds.containsXY(
+      Vector.__cache.x,
+      Vector.__cache.y
+    )
 
-    if (contains === false)
-      return false;
+    if (contains === false) return false
 
-    outVector.x = Vector.__cache.x - gameObject.localBounds.x;
-    outVector.y = Vector.__cache.y - gameObject.localBounds.y;
-    return true;
+    outVector.x = Vector.__cache.x - gameObject.localBounds.x
+    outVector.y = Vector.__cache.y - gameObject.localBounds.y
+    return true
   }
 
   /**
@@ -1739,25 +1740,24 @@ class GameObject extends MessageDispatcher {
    * @return {GameObject|null} Intersecting object or null.
    */
   static intersectsWith(gameObject, point) {
-    let obj = null;
+    let obj = null
     for (let i = gameObject.numChildren - 1; i >= 0; --i) {
-      let child = gameObject.mChildren[i];
+      let child = gameObject.mChildren[i]
 
-      obj = GameObject.intersectsWith(child, point);
-      if (obj != null)
-        return obj;
+      obj = GameObject.intersectsWith(child, point)
+      if (obj != null) return obj
 
-      let inside = GameObject.intersects(child, point);
+      let inside = GameObject.intersects(child, point)
       if (inside) {
-        obj = child;
-        break;
+        obj = child
+        break
       }
     }
 
     if (obj === null && GameObject.intersects(gameObject, point))
-      return gameObject;
+      return gameObject
 
-    return null;
+    return null
   }
 
   /**
@@ -1767,10 +1767,9 @@ class GameObject extends MessageDispatcher {
    * @returns {Array<GameObject>|null} Array of GameObject or null if not found.
    */
   static findWithTag(tag) {
-    if (Black.instance.mTagCache.hasOwnProperty(tag) === false)
-      return null;
+    if (Black.instance.mTagCache.hasOwnProperty(tag) === false) return null
 
-    return Black.instance.mTagCache[tag];
+    return Black.instance.mTagCache[tag]
   }
 
   /**
@@ -1781,27 +1780,26 @@ class GameObject extends MessageDispatcher {
    * @return {Array<Component>} Array of Component or empty array.
    */
   static findComponents(gameObject, type) {
-    Debug.assert(gameObject !== null, 'gameObject cannot be null.');
-    Debug.assert(type !== null, 'type cannot be null.');
+    Debug.assert(gameObject !== null, 'gameObject cannot be null.')
+    Debug.assert(type !== null, 'type cannot be null.')
 
     /** @type {Array<Component>} */
-    let list = [];
+    let list = []
 
     /** @type {function(GameObject, function(new:Component)):void} */
-    let f = function (gameObject, type) {
+    let f = function(gameObject, type) {
       for (let i = 0; i < gameObject.mComponents.length; i++) {
-        let c = gameObject.mComponents[i];
-        if (c instanceof type)
-          list.push(c);
+        let c = gameObject.mComponents[i]
+        if (c instanceof type) list.push(c)
       }
 
       for (let i = 0; i < gameObject.mChildren.length; i++)
-        f(gameObject.mChildren[i], type);
-    };
+        f(gameObject.mChildren[i], type)
+    }
 
-    f(gameObject, type);
+    f(gameObject, type)
 
-    return list;
+    return list
   }
 
   /**
@@ -1812,20 +1810,16 @@ class GameObject extends MessageDispatcher {
    * @return {void}
    */
   static forEach(gameObject, action) {
-    if (gameObject == null)
-      gameObject = Black.stage;
+    if (gameObject == null) gameObject = Black.stage
 
-    let r = action(gameObject);
-    if (r == true)
-      return;
+    let r = action(gameObject)
+    if (r == true) return
 
     for (let i = 0; i < gameObject.mChildren.length; i++) {
-      r = GameObject.forEach(gameObject.mChildren[i], action);
-      if (r == true)
-        return;
+      r = GameObject.forEach(gameObject.mChildren[i], action)
+      if (r == true) return
     }
   }
-
 
   /**
    * Finds object by its name. If node is not passed the root will be taken as
@@ -1837,19 +1831,16 @@ class GameObject extends MessageDispatcher {
    * @return {GameObject} GameObject or null.
    */
   static find(name, node) {
-    if (node == null)
-      node = Black.stage;
+    if (node == null) node = Black.stage
 
-    if (node.name === name)
-      return node;
+    if (node.name === name) return node
 
     for (let i = 0; i < node.numChildren; i++) {
-      let r = GameObject.find(name, node.getChildAt(i));
-      if (r != null)
-        return r;
+      let r = GameObject.find(name, node.getChildAt(i))
+      if (r != null) return r
     }
 
-    return null;
+    return null
   }
 
   /**
@@ -1862,19 +1853,16 @@ class GameObject extends MessageDispatcher {
    * @return {GameObject} GameObject or null.
    */
   static findById(id, node) {
-    if (node == null)
-      node = Black.stage;
+    if (node == null) node = Black.stage
 
-    if (node.id === id)
-      return node;
+    if (node.id === id) return node
 
     for (let i = 0; i < node.numChildren; i++) {
-      let r = GameObject.findById(id, node.getChildAt(i));
-      if (r !== null)
-        return r;
+      let r = GameObject.findById(id, node.getChildAt(i))
+      if (r !== null) return r
     }
 
-    return null;
+    return null
   }
 }
 
@@ -1883,7 +1871,7 @@ class GameObject extends MessageDispatcher {
  * @type {number}
  * @nocollapse
  */
-GameObject.ID = 0;
+GameObject.ID = 0
 
 /**
  * @cat core
@@ -1891,14 +1879,14 @@ GameObject.ID = 0;
  */
 /* @echo EXPORT */
 const DirtyFlag = {
-  CLEAN: 0,         // Object is 100% cached
-  LOCAL: 1,         // Local transformation is dirty 
-  WORLD: 2,         // World transformation is dirty 
-  WORLD_INV: 4,     // Inverted world transformation is dirty 
-  RENDER: 8,        // Object needs to be rendered 
+  CLEAN: 0, // Object is 100% cached
+  LOCAL: 1, // Local transformation is dirty
+  WORLD: 2, // World transformation is dirty
+  WORLD_INV: 4, // Inverted world transformation is dirty
+  RENDER: 8, // Object needs to be rendered
   RENDER_CACHE: 16, // In case object renders to bitmap internally, bitmap needs to be updated
-  ANCHOR: 32,       // 
-  BOUNDS: 64,       // Parent-relative bounds needs update
-  DIRTY: 0xffffff,  // Everything is dirty, you, me, everything!
-  WIRB: 78
-};
+  ANCHOR: 32, //
+  BOUNDS: 64, // Parent-relative bounds needs update
+  DIRTY: 0xffffff, // Everything is dirty, you, me, everything!
+  WIRB: 78,
+}

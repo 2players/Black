@@ -12,18 +12,18 @@ class InitialAnchor extends Modifier {
    * @param {...(number|VectorScatter)} values
    */
   constructor(...values) {
-    super();
+    super()
 
     /** @type {VectorScatter} Modifier's object to get values from.  */
-    this.scatter = VectorScatter.fromObject(...values);
+    this.scatter = VectorScatter.fromObject(...values)
   }
 
   /**
    * @inheritDoc
    */
   update(emitter, particle, dt) {
-    let v = this.scatter.getValue();
-    particle.anchorX = v.x;
-    particle.anchorY = v.y;
+    let v = this.scatter.getValue()
+    particle.anchorX = v.x
+    particle.anchorY = v.y
   }
 }

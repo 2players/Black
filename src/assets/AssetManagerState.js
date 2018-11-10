@@ -1,6 +1,6 @@
 /**
  * Represents current state of the AssetManager.
- * 
+ *
  * @cat assets
  * @static
  * @constant
@@ -8,7 +8,7 @@
  */
 /* @echo EXPORT */
 const AssetManagerState = {
-  NONE     : 'none',
-  LOADING  : 'loading',
-  FINISHED : 'finished'
-};
+  NONE: 'none',
+  LOADING: 'loading',
+  FINISHED: 'finished',
+}

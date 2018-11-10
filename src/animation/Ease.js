@@ -8,12 +8,12 @@
 class Ease {
   /**
    * linear
-   * 
+   *
    * @param {number} k Value between 0 and 1
    * @return {number}
    */
   static linear(k) {
-    return k;
+    return k
   }
 
   /**
@@ -23,7 +23,7 @@ class Ease {
    * @return {number}
    */
   static quadraticIn(k) {
-    return k * k;
+    return k * k
   }
 
   /**
@@ -33,7 +33,7 @@ class Ease {
    * @return {number}
    */
   static quadraticOut(k) {
-    return k * (2 - k);
+    return k * (2 - k)
   }
 
   /**
@@ -43,10 +43,9 @@ class Ease {
    * @return {number}
    */
   static quadraticInOut(k) {
-    if ((k *= 2) < 1)
-      return 0.5 * k * k;
+    if ((k *= 2) < 1) return 0.5 * k * k
 
-    return -0.5 * (--k * (k - 2) - 1);
+    return -0.5 * (--k * (k - 2) - 1)
   }
 
   /**
@@ -56,7 +55,7 @@ class Ease {
    * @return {number}
    */
   static cubicIn(k) {
-    return k * k * k;
+    return k * k * k
   }
 
   /**
@@ -66,7 +65,7 @@ class Ease {
    * @return {number}
    */
   static cubicOut(k) {
-    return --k * k * k + 1;
+    return --k * k * k + 1
   }
 
   /**
@@ -76,10 +75,9 @@ class Ease {
    * @return {number}
    */
   static cubicInOut(k) {
-    if ((k *= 2) < 1)
-      return 0.5 * k * k * k;
+    if ((k *= 2) < 1) return 0.5 * k * k * k
 
-    return 0.5 * ((k -= 2) * k * k + 2);
+    return 0.5 * ((k -= 2) * k * k + 2)
   }
 
   /**
@@ -89,17 +87,17 @@ class Ease {
    * @return {number}
    */
   static quarticIn(k) {
-    return k * k * k * k;
+    return k * k * k * k
   }
 
   /**
    * quarticOut
-   * 
+   *
    * @param {number} k Value between 0 and 1
    * @return {number}
    */
   static quarticOut(k) {
-    return 1 - (--k * k * k * k);
+    return 1 - --k * k * k * k
   }
 
   /**
@@ -109,10 +107,9 @@ class Ease {
    * @return {number}
    */
   static quarticInOut(k) {
-    if ((k *= 2) < 1)
-      return 0.5 * k * k * k * k;
+    if ((k *= 2) < 1) return 0.5 * k * k * k * k
 
-    return -0.5 * ((k -= 2) * k * k * k - 2);
+    return -0.5 * ((k -= 2) * k * k * k - 2)
   }
 
   /**
@@ -122,7 +119,7 @@ class Ease {
    * @return {number}
    */
   static quinticIn(k) {
-    return k * k * k * k * k;
+    return k * k * k * k * k
   }
 
   /**
@@ -132,7 +129,7 @@ class Ease {
    * @return {number}
    */
   static quinticOut(k) {
-    return --k * k * k * k * k + 1;
+    return --k * k * k * k * k + 1
   }
 
   /**
@@ -142,10 +139,9 @@ class Ease {
    * @return {number}
    */
   static quinticInOut(k) {
-    if ((k *= 2) < 1)
-      return 0.5 * k * k * k * k * k;
+    if ((k *= 2) < 1) return 0.5 * k * k * k * k * k
 
-    return 0.5 * ((k -= 2) * k * k * k * k + 2);
+    return 0.5 * ((k -= 2) * k * k * k * k + 2)
   }
 
   /**
@@ -155,7 +151,7 @@ class Ease {
    * @return {number}
    */
   static sinusoidalIn(k) {
-    return 1 - Math.cos(k * Math.PI / 2);
+    return 1 - Math.cos((k * Math.PI) / 2)
   }
 
   /**
@@ -165,7 +161,7 @@ class Ease {
    * @return {number}
    */
   static sinusoidalOut(k) {
-    return Math.sin(k * Math.PI / 2);
+    return Math.sin((k * Math.PI) / 2)
   }
 
   /**
@@ -175,7 +171,7 @@ class Ease {
    * @return {number}
    */
   static sinusoidalInOut(k) {
-    return 0.5 * (1 - Math.cos(Math.PI * k));
+    return 0.5 * (1 - Math.cos(Math.PI * k))
   }
 
   /**
@@ -185,7 +181,7 @@ class Ease {
    * @return {number}
    */
   static exponentialIn(k) {
-    return k === 0 ? 0 : Math.pow(1024, k - 1);
+    return k === 0 ? 0 : Math.pow(1024, k - 1)
   }
 
   /**
@@ -195,7 +191,7 @@ class Ease {
    * @return {number}
    */
   static exponentialOut(k) {
-    return k === 1 ? 1 : 1 - Math.pow(2, -10 * k);
+    return k === 1 ? 1 : 1 - Math.pow(2, -10 * k)
   }
 
   /**
@@ -205,16 +201,13 @@ class Ease {
    * @return {number}
    */
   static exponentialInOut(k) {
-    if (k === 0)
-      return 0;
+    if (k === 0) return 0
 
-    if (k === 1)
-      return 1;
+    if (k === 1) return 1
 
-    if ((k *= 2) < 1)
-      return 0.5 * Math.pow(1024, k - 1);
+    if ((k *= 2) < 1) return 0.5 * Math.pow(1024, k - 1)
 
-    return 0.5 * (-Math.pow(2, -10 * (k - 1)) + 2);
+    return 0.5 * (-Math.pow(2, -10 * (k - 1)) + 2)
   }
 
   /**
@@ -224,7 +217,7 @@ class Ease {
    * @return {number}
    */
   static circularIn(k) {
-    return 1 - Math.sqrt(1 - k * k);
+    return 1 - Math.sqrt(1 - k * k)
   }
 
   /**
@@ -234,7 +227,7 @@ class Ease {
    * @return {number}
    */
   static circularOut(k) {
-    return Math.sqrt(1 - (--k * k));
+    return Math.sqrt(1 - --k * k)
   }
 
   /**
@@ -244,10 +237,9 @@ class Ease {
    * @return {number}
    */
   static circularInOut(k) {
-    if ((k *= 2) < 1)
-      return -0.5 * (Math.sqrt(1 - k * k) - 1);
+    if ((k *= 2) < 1) return -0.5 * (Math.sqrt(1 - k * k) - 1)
 
-    return 0.5 * (Math.sqrt(1 - (k -= 2) * k) + 1);
+    return 0.5 * (Math.sqrt(1 - (k -= 2) * k) + 1)
   }
 
   /**
@@ -257,13 +249,11 @@ class Ease {
    * @return {number}
    */
   static elasticIn(k) {
-    if (k === 0)
-      return 0;
+    if (k === 0) return 0
 
-    if (k === 1)
-      return 1;
+    if (k === 1) return 1
 
-    return -Math.pow(2, 10 * (k - 1)) * Math.sin((k - 1.1) * 5 * Math.PI);
+    return -Math.pow(2, 10 * (k - 1)) * Math.sin((k - 1.1) * 5 * Math.PI)
   }
 
   /**
@@ -273,13 +263,11 @@ class Ease {
    * @return {number}
    */
   static elasticOut(k) {
-    if (k === 0)
-      return 0;
+    if (k === 0) return 0
 
-    if (k === 1)
-      return 1;
+    if (k === 1) return 1
 
-    return Math.pow(2, -10 * k) * Math.sin((k - 0.1) * 5 * Math.PI) + 1;
+    return Math.pow(2, -10 * k) * Math.sin((k - 0.1) * 5 * Math.PI) + 1
   }
 
   /**
@@ -289,19 +277,20 @@ class Ease {
    * @return {number}
    */
   static elasticInOut(k) {
-    if (k === 0)
-      return 0;
+    if (k === 0) return 0
 
-    if (k === 1)
-      return 1;
+    if (k === 1) return 1
 
-    k *= 2;
+    k *= 2
 
     if (k < 1)
-      return -0.5 * Math.pow(2, 10 * (k - 1)) * Math.sin((k - 1.1) * 5 * Math.PI);
+      return (
+        -0.5 * Math.pow(2, 10 * (k - 1)) * Math.sin((k - 1.1) * 5 * Math.PI)
+      )
 
-    return 0.5 * Math.pow(2, -10 * (k - 1)) * Math.sin((k - 1.1) * 5 * Math.PI) + 1;
-
+    return (
+      0.5 * Math.pow(2, -10 * (k - 1)) * Math.sin((k - 1.1) * 5 * Math.PI) + 1
+    )
   }
 
   /**
@@ -311,8 +300,8 @@ class Ease {
    * @return {number}
    */
   static backIn(k) {
-    const s = 1.70158;
-    return k * k * ((s + 1) * k - s);
+    const s = 1.70158
+    return k * k * ((s + 1) * k - s)
   }
 
   /**
@@ -322,8 +311,8 @@ class Ease {
    * @return {number}
    */
   static backOut(k) {
-    const s = 1.70158;
-    return --k * k * ((s + 1) * k + s) + 1;
+    const s = 1.70158
+    return --k * k * ((s + 1) * k + s) + 1
   }
 
   /**
@@ -333,12 +322,11 @@ class Ease {
    * @return {number}
    */
   static backInOut(k) {
-    const s = 1.70158 * 1.525;
+    const s = 1.70158 * 1.525
 
-    if ((k *= 2) < 1)
-      return 0.5 * (k * k * ((s + 1) * k - s));
+    if ((k *= 2) < 1) return 0.5 * (k * k * ((s + 1) * k - s))
 
-    return 0.5 * ((k -= 2) * k * ((s + 1) * k + s) + 2);
+    return 0.5 * ((k -= 2) * k * ((s + 1) * k + s) + 2)
   }
 
   /**
@@ -348,7 +336,7 @@ class Ease {
    * @return {number}
    */
   static bounceIn(k) {
-    return 1 - Ease.bounceOut(1 - k);
+    return 1 - Ease.bounceOut(1 - k)
   }
 
   /**
@@ -358,14 +346,11 @@ class Ease {
    * @return {number}
    */
   static bounceOut(k) {
-    if (k < (1 / 2.75))
-      return 7.5625 * k * k;
-    else if (k < (2 / 2.75))
-      return 7.5625 * (k -= (1.5 / 2.75)) * k + 0.75;
-    else if (k < (2.5 / 2.75))
-      return 7.5625 * (k -= (2.25 / 2.75)) * k + 0.9375;
+    if (k < 1 / 2.75) return 7.5625 * k * k
+    else if (k < 2 / 2.75) return 7.5625 * (k -= 1.5 / 2.75) * k + 0.75
+    else if (k < 2.5 / 2.75) return 7.5625 * (k -= 2.25 / 2.75) * k + 0.9375
 
-    return 7.5625 * (k -= (2.625 / 2.75)) * k + 0.984375;
+    return 7.5625 * (k -= 2.625 / 2.75) * k + 0.984375
   }
 
   /**
@@ -375,10 +360,9 @@ class Ease {
    * @return {number}
    */
   static bounceInOut(k) {
-    if (k < 0.5)
-      return Ease.bounceIn(k * 2) * 0.5;
+    if (k < 0.5) return Ease.bounceIn(k * 2) * 0.5
 
-    return Ease.bounceOut(k * 2 - 1) * 0.5 + 0.5;
+    return Ease.bounceOut(k * 2 - 1) * 0.5 + 0.5
   }
 
   /**
@@ -388,6 +372,6 @@ class Ease {
    * @return {number}
    */
   static smootherStep(k) {
-    return k * k * k * (k * (6.0 * k - 15.0) + 10.0);
+    return k * k * k * (k * (6.0 * k - 15.0) + 10.0)
   }
 }

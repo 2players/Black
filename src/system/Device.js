@@ -13,35 +13,33 @@ class Device {
      * @private
      * @type {Device}
      */
-    Device.mInstance = this;
+    Device.mInstance = this
 
     /**
      * @private
      * @type {number}
      */
-    this.mPixelRatio = 0;
+    this.mPixelRatio = 0
 
-    Device.mInstance.mPixelRatio = Device.getDevicePixelRatio();
+    Device.mInstance.mPixelRatio = Device.getDevicePixelRatio()
   }
 
   /**
    * Returns current OS name.
-   * 
+   *
    * @return {string}
    */
   static get os() {
-    let userAgent = navigator.userAgent || navigator.vendor || window.opera;
+    let userAgent = navigator.userAgent || navigator.vendor || window.opera
 
-    if (/windows phone/i.test(userAgent))
-      return 'Windows Phone';
+    if (/windows phone/i.test(userAgent)) return 'Windows Phone'
 
-    if (/android/i.test(userAgent))
-      return 'Android';
+    if (/android/i.test(userAgent)) return 'Android'
 
-    if (/iPad|iPhone|iPod/.test(userAgent)/* && !window.MSStream*/)
-      return 'iOS';
+    if (/iPad|iPhone|iPod/.test(userAgent) /* && !window.MSStream*/)
+      return 'iOS'
 
-    return 'unknown';
+    return 'unknown'
   }
 
   /**
@@ -50,14 +48,12 @@ class Device {
    * @return {boolean}
    */
   static get isTouch() {
-    let hasEvent = 'ontouchstart' in window;
-    if (hasEvent)
-      return true;
+    let hasEvent = 'ontouchstart' in window
+    if (hasEvent) return true
 
-    if (navigator.maxTouchPoints > 0)
-      return true;
+    if (navigator.maxTouchPoints > 0) return true
 
-    return false;
+    return false
   }
 
   /**
@@ -66,7 +62,7 @@ class Device {
    * @return {boolean}
    */
   static get isMobile() {
-    return /Mobi/.test(navigator.userAgent);
+    return /Mobi/.test(navigator.userAgent)
   }
 
   /**
@@ -75,7 +71,7 @@ class Device {
    * @return {number}
    */
   static get pixelRatio() {
-    return Device.mInstance.mPixelRatio;
+    return Device.mInstance.mPixelRatio
   }
 
   /**
@@ -84,7 +80,9 @@ class Device {
    * @return {boolean}
    */
   static get webAudioSupported() {
-    return window['AudioContext'] != null || window['webkitAudioContext'] != null;
+    return (
+      window['AudioContext'] != null || window['webkitAudioContext'] != null
+    )
   }
 
   /**
@@ -95,35 +93,39 @@ class Device {
    * @return {number} Description
    */
   static getDevicePixelRatio() {
-    if (window.screen.systemXDPI !== undefined && window.screen.logicalXDPI !== undefined && window.screen.systemXDPI > window.screen.logicalXDPI)
-      return window.screen.systemXDPI / window.screen.logicalXDPI;
+    if (
+      window.screen.systemXDPI !== undefined &&
+      window.screen.logicalXDPI !== undefined &&
+      window.screen.systemXDPI > window.screen.logicalXDPI
+    )
+      return window.screen.systemXDPI / window.screen.logicalXDPI
     else if (window.devicePixelRatio !== undefined)
-      return window.devicePixelRatio;
+      return window.devicePixelRatio
 
-    return 1;
+    return 1
   }
 
   /**
    * Returns true if device is in landscape orientation.
-   * 
+   *
    * @public
    * @readonly
    * @returns {boolean}
    */
   static get isLandscape() {
-    let size = Black.instance.viewport.size;
-    return size.width >= size.height;
+    let size = Black.instance.viewport.size
+    return size.width >= size.height
   }
 
   /**
    * Returns true if device is in portrait orientation.
-   * 
+   *
    * @public
    * @readonly
    * @returns {boolean}
    */
   static get isPortrait() {
-    return !Device.isLandscape;
+    return !Device.isLandscape
   }
 }
 
@@ -132,4 +134,4 @@ class Device {
  * @type {Device}
  * @nocollapse
  */
-Device.mInstance = null;
+Device.mInstance = null

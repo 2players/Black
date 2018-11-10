@@ -6,24 +6,23 @@
  */
 /* @echo EXPORT */
 class CircleToCirclePair extends Pair {
-
   /**
    * Creates new instance of CircleToCirclePair.
    */
   constructor() {
-    super();
+    super()
 
     /**
-     * Collider from body a. 
+     * Collider from body a.
      * @public @type {CircleCollider|null}
      */
-    this.a = null;
+    this.a = null
 
     /**
-     * Collider from body b. 
+     * Collider from body b.
      * @public @type {CircleCollider|null}
      */
-    this.b = null;
+    this.b = null
   }
 
   /**
@@ -39,44 +38,44 @@ class CircleToCirclePair extends Pair {
    * @return {Pair} This
    */
   set(a, b, bodyA, bodyB) {
-    this.a = a;
-    this.b = b;
-    this.bodyA = bodyA;
-    this.bodyB = bodyB;
+    this.a = a
+    this.b = b
+    this.bodyA = bodyA
+    this.bodyB = bodyB
 
-    return this;
+    return this
   }
 
   /**
    * @inheritDoc
    */
   test() {
-    const a = this.a;
-    const b = this.b;
-    const offsetX = b.mCenter.x - a.mCenter.x;
-    const offsetY = b.mCenter.y - a.mCenter.y;
-    const totalRadius = a.mRadius + b.mRadius;
+    const a = this.a
+    const b = this.b
+    const offsetX = b.mCenter.x - a.mCenter.x
+    const offsetY = b.mCenter.y - a.mCenter.y
+    const totalRadius = a.mRadius + b.mRadius
 
     if (offsetX === 0 && offsetY === 0) {
-      this.mOverlap = totalRadius;
-      this.mNormal.set(1, 0);
+      this.mOverlap = totalRadius
+      this.mNormal.set(1, 0)
 
-      return this.mInCollision = true;
+      return (this.mInCollision = true)
     }
 
-    const totalRadiusSq = totalRadius * totalRadius;
-    const distanceSq = offsetX * offsetX + offsetY * offsetY;
+    const totalRadiusSq = totalRadius * totalRadius
+    const distanceSq = offsetX * offsetX + offsetY * offsetY
 
     if (distanceSq > totalRadiusSq) {
-      return this.mInCollision = false;
+      return (this.mInCollision = false)
     }
 
-    const dist = Math.sqrt(distanceSq);
-    this.mOverlap = totalRadius - dist;
-    this.mNormal.set(offsetX / dist, offsetY / dist);
+    const dist = Math.sqrt(distanceSq)
+    this.mOverlap = totalRadius - dist
+    this.mNormal.set(offsetX / dist, offsetY / dist)
 
-    return this.mInCollision = true;
+    return (this.mInCollision = true)
   }
 }
 
-CircleToCirclePair.pool = new ObjectPool(CircleToCirclePair, 100);
+CircleToCirclePair.pool = new ObjectPool(CircleToCirclePair, 100)

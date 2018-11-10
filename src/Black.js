@@ -13,118 +13,128 @@
 class Black extends MessageDispatcher {
   /**
    * Creates a new Black instance.
-   * 
+   *
    * First parameter has to be a id of the HTML div element the game will be rendered to.
    * Second parameter has to be `GameObject` class which will be the root object of your application.
    * Third parameter has to be a class name of `VideoNullDriver` subclass eg `CanvasDriver`.
    * Fourth parameter is optional array of System to use,
-   * 
+   *
    * @example
    * // Creates new Black instance with MyGame as a root class, CanvasDriver as renderer and Arcade physics as a system.
    * new Black('game-container', MyGame, CanvasDriver, [Arcade]);
-   * 
+   *
    * @param {string}                                                       containerElementId The id of an DOM element.
    * @param {function(new: GameObject)}                                    gameClass          Type name of an GameObject to start execution from.
    * @param {function(new: VideoNullDriver, HTMLElement, number, number)}  videoDriverClass   Type name of an VideoDriver (VideoNullDriver, DOMDriver or CanvasDriver)
    * @param {Array<function(new: System)>  }                               systemClasses      The list of systems to be initialized with Black engine.
    */
-  constructor(containerElementId, gameClass, videoDriverClass, systemClasses = null) {
-    super();
+  constructor(
+    containerElementId,
+    gameClass,
+    videoDriverClass,
+    systemClasses = null
+  ) {
+    super()
 
-    Black.instance = this;
+    Black.instance = this
 
-    console.log('%c                         >>> BLACK <<<                         ', 'background: #000; color: #fff;');
+    console.log(
+      '%c                         >>> BLACK <<<                         ',
+      'background: #000; color: #fff;'
+    )
 
     /** @private @type {string} */
-    this.mContainerElementId = containerElementId;
+    this.mContainerElementId = containerElementId
 
     /** @private @type {HTMLElement} */
-    this.mContainerElement = /** @type {!HTMLElement} */ (document.getElementById(this.mContainerElementId));
+    this.mContainerElement = /** @type {!HTMLElement} */ (document.getElementById(
+      this.mContainerElementId
+    ))
 
     if (!this.mContainerElement)
-      throw new Error('Container element was not found');
+      throw new Error('Container element was not found')
 
     /** @private @type {function(new: VideoNullDriver, HTMLElement, number, number)} */
-    this.mVideoDriverClass = videoDriverClass;
+    this.mVideoDriverClass = videoDriverClass
 
     /** @private @type {Array<function(new: System)>} */
-    this.mSystemClasses = systemClasses;
+    this.mSystemClasses = systemClasses
 
     /** @private @type {number} */
-    this.mStageWidth = this.mContainerElement.clientWidth;
+    this.mStageWidth = this.mContainerElement.clientWidth
 
     /** @private @type {number} */
-    this.mStageHeight = this.mContainerElement.clientHeight;
+    this.mStageHeight = this.mContainerElement.clientHeight
 
     /** @private @type {number} */
-    this.mLastUpdateTime = 0;
+    this.mLastUpdateTime = 0
 
     /** @private @type {number} */
-    this.mLastRenderTime = 0;
+    this.mLastRenderTime = 0
 
     /** @private @type {Array<System>} */
-    this.mSystems = [];
+    this.mSystems = []
 
     /** @private @type {GameObject|null} */
-    this.mGameObject = null;
+    this.mGameObject = null
 
     /** @private @type {boolean} */
-    this.mIsRunning = false;
+    this.mIsRunning = false
 
     /** @private @type {boolean} */
-    this.mIsStarted = false;
+    this.mIsStarted = false
 
     /** @private @type {boolean} */
-    this.mIsPanic = false;
+    this.mIsPanic = false
 
     /** @private @type {number} */
-    this.mRAFHandle = -1; // not sure
+    this.mRAFHandle = -1 // not sure
 
     /** @private @type {Viewport} */
-    this.mViewport = null;
+    this.mViewport = null
 
     /** @private @type {VideoNullDriver} */
-    this.mVideo = null;
+    this.mVideo = null
 
     /** @private @type {boolean} */
-    this.mPaused = false;
+    this.mPaused = false
 
     /** @private @type {boolean} */
-    this.mUnpausing = false;
+    this.mUnpausing = false
 
     /** @private @type {boolean} */
-    this.mPauseOnHide = true;
+    this.mPauseOnHide = true
 
     /** @private @type {boolean} */
-    this.mPauseOnBlur = true;
+    this.mPauseOnBlur = true
 
     /** @private @type {Object<string, Array>} */
-    this.mTagCache = {};
+    this.mTagCache = {}
 
     /** @private @type {function(new: GameObject)} */
-    this.mGameClass = gameClass;
+    this.mGameClass = gameClass
 
     /** @private @type {GameObject|null} */
-    this.mGame = null;
+    this.mGame = null
 
     /** @private @type {Stage} */
-    this.mStage = null;
+    this.mStage = null
 
     /** @private @type {boolean} */
-    this.mWasStopped = false;
+    this.mWasStopped = false
 
     /** @private @type {SplashScreen} */
-    this.mSplashScreen = new SplashScreen();
+    this.mSplashScreen = new SplashScreen()
 
     /** @private @type {Array<number>} */
-    this.mFrameTimes = [];
+    this.mFrameTimes = []
 
     /** @private @type {boolean} */
-    this.mUseHiDPR = Device.isMobile;
+    this.mUseHiDPR = Device.isMobile
 
-    this.__bootViewport();
+    this.__bootViewport()
 
-    this.__update = this.__update.bind(this);
+    this.__update = this.__update.bind(this)
   }
 
   /**
@@ -133,14 +143,14 @@ class Black extends MessageDispatcher {
    * @return {void}
    */
   pause() {
-    this.mPaused = true;
+    this.mPaused = true
 
     /**
      * Posted after engine entered paused state.
      *
      * @event Black#paused
      */
-    this.post('paused');
+    this.post('paused')
   }
 
   /**
@@ -149,19 +159,18 @@ class Black extends MessageDispatcher {
    * @return {void}
    */
   resume() {
-    if (this.mPaused === true)
-      this.mUnpausing = true;
+    if (this.mPaused === true) this.mUnpausing = true
   }
 
   __setUnpaused() {
-    this.mPaused = false;
+    this.mPaused = false
 
     /**
      * Posted after engine is unpaused.
      *
      * @event Black#unpaused
      */
-    this.post('unpaused');
+    this.post('unpaused')
   }
 
   /**
@@ -169,7 +178,7 @@ class Black extends MessageDispatcher {
    * @returns {void}
    */
   __bootViewport() {
-    this.mViewport = new Viewport(this.mContainerElement);
+    this.mViewport = new Viewport(this.mContainerElement)
   }
 
   /**
@@ -177,11 +186,10 @@ class Black extends MessageDispatcher {
    * @returns {void}
    */
   __bootSystems() {
-    if (this.mSystemClasses === null)
-      return;
+    if (this.mSystemClasses === null) return
 
     for (let i = 0; i < this.mSystemClasses.length; i++)
-      this.__addSystem(new this.mSystemClasses[i]());
+      this.__addSystem(new this.mSystemClasses[i]())
   }
 
   /**
@@ -189,15 +197,14 @@ class Black extends MessageDispatcher {
    * @returns {void}
    */
   __bootStage() {
-    this.mStage = new Stage();
+    this.mStage = new Stage()
 
-    window.onblur = event => this.__onVisibilityChange(event);
-    window.onfocus = event => this.__onVisibilityChange(event);
-    window.onpagehide = event => this.__onVisibilityChange(event);
-    window.onpageshow = event => this.__onVisibilityChange(event);
+    window.onblur = event => this.__onVisibilityChange(event)
+    window.onfocus = event => this.__onVisibilityChange(event)
+    window.onpagehide = event => this.__onVisibilityChange(event)
+    window.onpageshow = event => this.__onVisibilityChange(event)
 
-    if (document.hidden && this.mPauseOnHide === true)
-      this.pause();
+    if (document.hidden && this.mPauseOnHide === true) this.pause()
   }
 
   /**
@@ -205,14 +212,11 @@ class Black extends MessageDispatcher {
    * @returns {void}
    */
   __onVisibilityChange(event) {
-    let type = event.type;
-    if (type === 'blur' && this.mPauseOnBlur === true)
-      this.pause();
-    else if (type === 'pagehide' && this.mPauseOnHide === true)
-      this.pause();
+    let type = event.type
+    if (type === 'blur' && this.mPauseOnBlur === true) this.pause()
+    else if (type === 'pagehide' && this.mPauseOnHide === true) this.pause()
     else if (type === 'focus' || type === 'pageshow') {
-      if (document.hidden === false)
-        this.resume();
+      if (document.hidden === false) this.resume()
     }
   }
 
@@ -223,12 +227,11 @@ class Black extends MessageDispatcher {
    */
   hasSystem(systemTypeName) {
     for (let i = 0; i < this.mSystems.length; i++) {
-      let c = this.mSystems[i];
-      if (c instanceof systemTypeName)
-        return true;
+      let c = this.mSystems[i]
+      if (c instanceof systemTypeName) return true
     }
 
-    return false;
+    return false
   }
 
   /**
@@ -237,8 +240,8 @@ class Black extends MessageDispatcher {
    * @return {System}
    */
   __addSystem(system) {
-    this.mSystems.push(system);
-    return system;
+    this.mSystems.push(system)
+    return system
   }
 
   /**
@@ -249,12 +252,11 @@ class Black extends MessageDispatcher {
    */
   getSystem(typeName) {
     for (let i = 0; i < this.mSystems.length; i++) {
-      let s = this.mSystems[i];
-      if (s instanceof typeName)
-        return s;
+      let s = this.mSystems[i]
+      if (s instanceof typeName) return s
     }
 
-    return null;
+    return null
   }
 
   /**
@@ -262,7 +264,11 @@ class Black extends MessageDispatcher {
    * @returns {void}
    */
   __bootVideo() {
-    this.mVideo = new this.mVideoDriverClass(this.mContainerElement, this.mStageWidth, this.mStageHeight);
+    this.mVideo = new this.mVideoDriverClass(
+      this.mContainerElement,
+      this.mStageWidth,
+      this.mStageHeight
+    )
   }
 
   /**
@@ -272,50 +278,48 @@ class Black extends MessageDispatcher {
    */
   start() {
     if (this.mWasStopped === true) {
-      Debug.error('Black engine cannot be re-started.');
-      return;
+      Debug.error('Black engine cannot be re-started.')
+      return
     }
 
-    Black.instance = this;
+    Black.instance = this
 
-    if (this.mIsStarted === true)
-      return;
+    if (this.mIsStarted === true) return
 
-    this.__bootSystems();
-    this.__bootStage();
-    this.__bootVideo();
+    this.__bootSystems()
+    this.__bootStage()
+    this.__bootVideo()
 
-    this.mStage.__refresh();
+    this.mStage.__refresh()
 
     /**
-     * Posted when all systems, stage and driver ready to be used. 
+     * Posted when all systems, stage and driver ready to be used.
      *
      * @event Black#ready
      */
-    this.post(Message.READY);
+    this.post(Message.READY)
 
-    this.mGameObject = new this.mGameClass();
-    this.mStage.addChild(this.mGameObject);
+    this.mGameObject = new this.mGameClass()
+    this.mStage.addChild(this.mGameObject)
 
-    const self = this;
+    const self = this
 
-    this.mIsStarted = true;
-    this.mVideo.start();
+    this.mIsStarted = true
+    this.mVideo.start()
 
-    this.mRAFHandle = window.requestAnimationFrame(function (timestamp) {
+    this.mRAFHandle = window.requestAnimationFrame(function(timestamp) {
       // TODO: do first update here
-      self.mIsRunning = true;
+      self.mIsRunning = true
 
       // show splash screen
-      if (SplashScreen.enabled === true)
-        self.mSplashScreen.show();
+      if (SplashScreen.enabled === true) self.mSplashScreen.show()
 
-      self.mLastUpdateTime = timestamp;
-      self.mLastRenderTime = self.mLastUpdateTime;
+      self.mLastUpdateTime = timestamp
+      self.mLastRenderTime = self.mLastUpdateTime
 
       // Start the main loop.
-      self.__update(timestamp, true);
-    });
+      self.__update(timestamp, true)
+    })
   }
 
   /**
@@ -324,11 +328,14 @@ class Black extends MessageDispatcher {
    * @return {void}
    */
   stop() {
-    this.mIsStarted = false;
-    this.mIsRunning = false;
-    window.cancelAnimationFrame(this.mRAFHandle);
+    this.mIsStarted = false
+    this.mIsRunning = false
+    window.cancelAnimationFrame(this.mRAFHandle)
 
-    console.log('%c                        <<< BYE BYE >>>                        ', 'background: #000; color: #fff;');
+    console.log(
+      '%c                        <<< BYE BYE >>>                        ',
+      'background: #000; color: #fff;'
+    )
   }
 
   /**
@@ -340,69 +347,72 @@ class Black extends MessageDispatcher {
   __update(timestamp, forceUpdate) {
     // Calculate FPS
     if (this.mPaused === true && this.mUnpausing === true) {
-      this.mUnpausing = false;
+      this.mUnpausing = false
 
-      this.mLastUpdateTime = timestamp;
-      this.mLastRenderTime = this.mLastUpdateTime;
+      this.mLastUpdateTime = timestamp
+      this.mLastRenderTime = this.mLastUpdateTime
 
-      this.__setUnpaused();
+      this.__setUnpaused()
     }
 
-    this.mRAFHandle = window.requestAnimationFrame(/** @type {function(number)} */(this.__update));
+    this.mRAFHandle = window.requestAnimationFrame(
+      /** @type {function(number)} */ (this.__update)
+    )
 
-    if (this.mPaused === true)
-      return;
+    if (this.mPaused === true) return
 
-    let numTicks = Math.floor((timestamp - this.mLastUpdateTime) / Time.mDeltaTimeMs);
+    let numTicks = Math.floor(
+      (timestamp - this.mLastUpdateTime) / Time.mDeltaTimeMs
+    )
 
-    if (forceUpdate === true)
-      numTicks = 1;
+    if (forceUpdate === true) numTicks = 1
 
     if (numTicks > Black.maxUpdatesPerFrame) {
       /**
-       * Posted when engine is not able to achieve desired amount of updates per second. 
-       * 
-       * Usually happens when user switches to another tab in browser or update logic is too heavy to be executed 
-       * withing one update loop. Lowering `Black.ups` value can help if update is heavy. 
+       * Posted when engine is not able to achieve desired amount of updates per second.
+       *
+       * Usually happens when user switches to another tab in browser or update logic is too heavy to be executed
+       * withing one update loop. Lowering `Black.ups` value can help if update is heavy.
        * Increasing `Black.maxUpdatesPerFrame` can lead to dead lock.
        *
        * @event Black#looped
        */
-      this.post('looped', numTicks);
-      Debug.warn(`Unable to catch up ${numTicks} update(s).`);
+      this.post('looped', numTicks)
+      Debug.warn(`Unable to catch up ${numTicks} update(s).`)
 
-      numTicks = Black.maxUpdatesPerFrame;
+      numTicks = Black.maxUpdatesPerFrame
     }
 
-    Black.numUpdates = numTicks;
+    Black.numUpdates = numTicks
     for (let i = 0; i < numTicks; i++) {
-      Time.mActualTime += Time.delta;
-      Time.mTime = Time.mActualTime;
-      this.__internalUpdate();
-      this.__internalSystemPostUpdate();
+      Time.mActualTime += Time.delta
+      Time.mTime = Time.mActualTime
+      this.__internalUpdate()
+      this.__internalSystemPostUpdate()
     }
 
-    for (let l = timestamp - Time.mDeltaTimeMs; this.mLastUpdateTime < l;)
-      this.mLastUpdateTime += Time.mDeltaTimeMs;
+    for (let l = timestamp - Time.mDeltaTimeMs; this.mLastUpdateTime < l; )
+      this.mLastUpdateTime += Time.mDeltaTimeMs
 
     if (numTicks === 0)
-      Time.mAlphaTime = (timestamp - this.mLastUpdateTime) / Time.mDeltaTimeMs;
-    else
-      Time.mAlphaTime = 0;
+      Time.mAlphaTime = (timestamp - this.mLastUpdateTime) / Time.mDeltaTimeMs
+    else Time.mAlphaTime = 0
 
-    Time.mTime = Time.mActualTime + ((timestamp - this.mLastUpdateTime) * 0.001) * Time.mScale;
+    Time.mTime =
+      Time.mActualTime +
+      (timestamp - this.mLastUpdateTime) * 0.001 * Time.mScale
 
-    this.__internalSystemRender();
-    this.mVideo.beginFrame();
-    this.mVideo.render(this.mStage);
-    this.mVideo.endFrame();
+    this.__internalSystemRender()
+    this.mVideo.beginFrame()
+    this.mVideo.render(this.mStage)
+    this.mVideo.endFrame()
 
-    Black.__frameNum++;
+    Black.__frameNum++
 
-    this.mIsPanic = false;
-    Renderer.__dirty = false;
+    this.mIsPanic = false
+    Renderer.__dirty = false
 
-    this.mLastRenderTime = timestamp;
+    this.mLastRenderTime = timestamp
   }
 
   /**
@@ -410,12 +420,11 @@ class Black extends MessageDispatcher {
    * @return {void}
    */
   __internalUpdate() {
-    this.mViewport.__update();
+    this.mViewport.__update()
 
-    for (let i = 0; i < this.mSystems.length; i++)
-      this.mSystems[i].onUpdate();
+    for (let i = 0; i < this.mSystems.length; i++) this.mSystems[i].onUpdate()
 
-    this.mStage.__update();
+    this.mStage.__update()
   }
 
   /**
@@ -424,7 +433,7 @@ class Black extends MessageDispatcher {
    */
   __internalSystemPostUpdate() {
     for (let i = 0; i < this.mSystems.length; i++)
-      this.mSystems[i].onPostUpdate();
+      this.mSystems[i].onPostUpdate()
   }
 
   /**
@@ -432,8 +441,7 @@ class Black extends MessageDispatcher {
    * @return {void}
    */
   __internalSystemRender() {
-    for (let i = 0; i < this.mSystems.length; i++)
-      this.mSystems[i].onRender();
+    for (let i = 0; i < this.mSystems.length; i++) this.mSystems[i].onRender()
   }
 
   /**
@@ -447,18 +455,17 @@ class Black extends MessageDispatcher {
    */
   onTagUpdated(child, oldTag, newTag) {
     if (oldTag !== null) {
-      let arr = this.mTagCache[oldTag];
-      arr.splice(arr.indexOf(child), 1);
+      let arr = this.mTagCache[oldTag]
+      arr.splice(arr.indexOf(child), 1)
 
-      if (arr.length === 0)
-        delete this.mTagCache[oldTag];
+      if (arr.length === 0) delete this.mTagCache[oldTag]
     }
 
     if (newTag !== null) {
       if (this.mTagCache.hasOwnProperty(newTag) === false)
-        this.mTagCache[newTag] = [];
+        this.mTagCache[newTag] = []
 
-      this.mTagCache[newTag].push(child);
+      this.mTagCache[newTag].push(child)
     }
   }
 
@@ -470,30 +477,28 @@ class Black extends MessageDispatcher {
    * @return {void}
    */
   onChildrenAdded(child) {
-    Renderer.__dirty = true;
+    Renderer.__dirty = true
 
     for (let i = 0; i < this.mSystems.length; i++)
-      this.mSystems[i].onChildrenAdded(child);
+      this.mSystems[i].onChildrenAdded(child)
 
-    GameObject.forEach(child, (x) => {
-      if (x.mAdded === true)
-        return;
+    GameObject.forEach(child, x => {
+      if (x.mAdded === true) return
 
-      this.onTagUpdated(x, null, x.mTag);
+      this.onTagUpdated(x, null, x.mTag)
 
-      x.mAdded = true;
-      x.onAdded();
+      x.mAdded = true
+      x.onAdded()
 
       for (let i = 0; i < x.mComponents.length; i++) {
-        let c = x.mComponents[i];
+        let c = x.mComponents[i]
 
-        if (c.mAdded === true)
-          continue;
+        if (c.mAdded === true) continue
 
-        c.mAdded = true;
-        c.onAdded(x);
+        c.mAdded = true
+        c.onAdded(x)
       }
-    });
+    })
   }
 
   /**
@@ -504,10 +509,10 @@ class Black extends MessageDispatcher {
    * @return {void}
    */
   onChildrenChanged(child) {
-    Renderer.__dirty = true;
+    Renderer.__dirty = true
 
     for (let i = 0; i < this.mSystems.length; i++)
-      this.mSystems[i].onChildrenChanged(child);
+      this.mSystems[i].onChildrenChanged(child)
   }
 
   /**
@@ -518,38 +523,37 @@ class Black extends MessageDispatcher {
    * @return {void}
    */
   onChildrenRemoved(child) {
-    Renderer.__dirty = true;
+    Renderer.__dirty = true
 
     for (let i = 0; i < this.mSystems.length; i++)
-      this.mSystems[i].onChildrenRemoved(child);
+      this.mSystems[i].onChildrenRemoved(child)
 
     let forEach = (gameObject, action) => {
-      let cloned = gameObject.mChildren.slice();
-      action(gameObject);
+      let cloned = gameObject.mChildren.slice()
+      action(gameObject)
 
       for (let i = 0; i < cloned.length; i++) {
-        GameObject.forEach(cloned[i], action);
+        GameObject.forEach(cloned[i], action)
       }
-    };
+    }
 
-    GameObject.forEach(child, (x) => {
+    GameObject.forEach(child, x => {
       if (x.mAdded === true) {
-        this.onTagUpdated(x, null, x.mTag);
+        this.onTagUpdated(x, null, x.mTag)
 
-        x.mAdded = false;
-        x.onRemoved();
+        x.mAdded = false
+        x.onRemoved()
 
         for (let i = 0; i < x.mComponents.length; i++) {
-          let c = x.mComponents[i];
+          let c = x.mComponents[i]
 
-          if (c.mAdded === false)
-            continue;
+          if (c.mAdded === false) continue
 
-          c.mAdded = false;
-          c.onRemoved(x);
+          c.mAdded = false
+          c.onRemoved(x)
         }
       }
-    });
+    })
   }
 
   /**
@@ -561,16 +565,15 @@ class Black extends MessageDispatcher {
    * @return {void}
    */
   onComponentAdded(child, component) {
-    Renderer.__dirty = true;
+    Renderer.__dirty = true
 
     for (let i = 0; i < this.mSystems.length; i++)
-      this.mSystems[i].onComponentAdded(child, component);
+      this.mSystems[i].onComponentAdded(child, component)
 
-    if (component.mAdded === true)
-      return;
+    if (component.mAdded === true) return
 
-    component.mAdded = true;
-    component.onAdded(child);
+    component.mAdded = true
+    component.onAdded(child)
   }
 
   /**
@@ -582,16 +585,15 @@ class Black extends MessageDispatcher {
    * @return {void}
    */
   onComponentRemoved(child, component) {
-    Renderer.__dirty = true;
+    Renderer.__dirty = true
 
     for (let i = 0; i < this.mSystems.length; i++)
-      this.mSystems[i].onComponentRemoved(child, component);
+      this.mSystems[i].onComponentRemoved(child, component)
 
-    if (component.mAdded === false)
-      return;
+    if (component.mAdded === false) return
 
-    component.mAdded = false;
-    component.onRemoved(child);
+    component.mAdded = false
+    component.onRemoved(child)
   }
 
   /**
@@ -600,7 +602,7 @@ class Black extends MessageDispatcher {
    * @return {number}
    */
   get ups() {
-    return Time.mDeltaTimeMs * 0.001;
+    return Time.mDeltaTimeMs * 0.001
   }
 
   /**
@@ -609,11 +611,11 @@ class Black extends MessageDispatcher {
    * @return {void}
    */
   set ups(value) {
-    Debug.isNumber(value);
-    Debug.assert(value > 0);
+    Debug.isNumber(value)
+    Debug.assert(value > 0)
 
-    Time.mDeltaTimeMs = 1000 / value;
-    Time.mDeltaTime = Time.mDeltaTimeMs * 0.001;
+    Time.mDeltaTimeMs = 1000 / value
+    Time.mDeltaTime = Time.mDeltaTimeMs * 0.001
   }
 
   /**
@@ -622,7 +624,7 @@ class Black extends MessageDispatcher {
    * @return {Viewport}
    */
   get viewport() {
-    return this.mViewport;
+    return this.mViewport
   }
 
   /**
@@ -631,7 +633,7 @@ class Black extends MessageDispatcher {
    * @return {Element}
    */
   get containerElement() {
-    return this.mContainerElement;
+    return this.mContainerElement
   }
 
   /**
@@ -640,7 +642,7 @@ class Black extends MessageDispatcher {
    * @return {boolean}
    */
   get pauseOnHide() {
-    return this.mPauseOnHide;
+    return this.mPauseOnHide
   }
 
   /**
@@ -649,7 +651,7 @@ class Black extends MessageDispatcher {
    * @return {void}
    */
   set pauseOnHide(value) {
-    this.mPauseOnHide = value;
+    this.mPauseOnHide = value
   }
 
   /**
@@ -658,7 +660,7 @@ class Black extends MessageDispatcher {
    * @return {boolean}
    */
   get pauseOnBlur() {
-    return this.mPauseOnBlur;
+    return this.mPauseOnBlur
   }
 
   /**
@@ -667,7 +669,7 @@ class Black extends MessageDispatcher {
    * @return {void}
    */
   set pauseOnBlur(value) {
-    this.mPauseOnBlur = value;
+    this.mPauseOnBlur = value
   }
 
   /**
@@ -677,7 +679,7 @@ class Black extends MessageDispatcher {
    * @returns {boolean}
    */
   get isPaused() {
-    return this.mPaused;
+    return this.mPaused
   }
 
   /**
@@ -687,7 +689,7 @@ class Black extends MessageDispatcher {
    * @returns {Stage}
    */
   get stage() {
-    return this.mStage;
+    return this.mStage
   }
 
   /**
@@ -695,7 +697,7 @@ class Black extends MessageDispatcher {
    * @returns {string}
    */
   get containerElementId() {
-    return this.mContainerElementId;
+    return this.mContainerElementId
   }
 
   /**
@@ -704,37 +706,36 @@ class Black extends MessageDispatcher {
    * @returns {SplashScreen}
    */
   get splashScreen() {
-    return this.mSplashScreen;
+    return this.mSplashScreen
   }
 
-  
   /**
-   * Gets/sets whenever driver should be created with high DPR support. 
+   * Gets/sets whenever driver should be created with high DPR support.
    * NOTE: Cannot be changed at runtime.
-   * 
+   *
    * @returns {boolean}
    */
   get useHiDPR() {
-    return this.mUseHiDPR;
+    return this.mUseHiDPR
   }
-  
+
   /**
    * @ignore
    * @param {boolean} value
    * @returns {void}
    */
   set useHiDPR(value) {
-    this.mUseHiDPR = value;
+    this.mUseHiDPR = value
   }
 
   /**
    * `Black.magic`! Got it? Got it?!?! Same as `Math.random()` but much cooler.
-   * 
+   *
    * @readonly
    * @returns {number}
    */
   static get magic() {
-    return Math.random();
+    return Math.random()
   }
 
   /**
@@ -744,7 +745,7 @@ class Black extends MessageDispatcher {
    * @returns {VideoNullDriver}
    */
   static get driver() {
-    return Black.instance.mVideo;
+    return Black.instance.mVideo
   }
 
   /**
@@ -754,7 +755,7 @@ class Black extends MessageDispatcher {
    * @returns {Stage}
    */
   static get stage() {
-    return Black.instance.mStage;
+    return Black.instance.mStage
   }
 
   /**
@@ -764,7 +765,7 @@ class Black extends MessageDispatcher {
    * @returns {number}
    */
   static get frameNum() {
-    return Black.__frameNum;
+    return Black.__frameNum
   }
 }
 
@@ -773,24 +774,24 @@ class Black extends MessageDispatcher {
  * @type {number}
  * @private
  */
-Black.__frameNum = 0;
+Black.__frameNum = 0
 
 /**
  * Reference to the current Black instance.
  * @type {Black}
  * @static
  */
-Black.instance = null;
+Black.instance = null
 
-/** 
+/**
  * Indicates how many updates will be done during this frame.
- * 
+ *
  * @type {number}
  */
-Black.numUpdates = 0;
+Black.numUpdates = 0
 
-/** 
+/**
  * Limit for number of updates to be done per one RAF.
  * @public
  */
-Black.maxUpdatesPerFrame = 60;
+Black.maxUpdatesPerFrame = 60

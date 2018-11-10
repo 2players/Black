@@ -13,10 +13,10 @@ class RenderTarget {
    */
   constructor(width, height) {
     /** @private @type {number} */
-    this.mWidth = Math.ceil(width);
+    this.mWidth = Math.ceil(width)
 
     /** @private @type {number} */
-    this.mHeight = Math.ceil(height);
+    this.mHeight = Math.ceil(height)
   }
 
   /**
@@ -26,15 +26,14 @@ class RenderTarget {
    * @param {number} height The height of the surface.
    */
   resize(width, height) {
-    this.mWidth = width;
-    this.mHeight = height;
+    this.mWidth = width
+    this.mHeight = height
   }
 
   /**
    * Clears whole surface.
    */
-  clear() {
-  }
+  clear() {}
 
   /**
    * The width of the surface.
@@ -42,7 +41,7 @@ class RenderTarget {
    * @returns {number}
    */
   get width() {
-    return this.mWidth;
+    return this.mWidth
   }
 
   /**
@@ -51,7 +50,7 @@ class RenderTarget {
    * @returns {void}
    */
   set width(value) {
-    this.mWidth = value;
+    this.mWidth = value
   }
 
   /**
@@ -60,7 +59,7 @@ class RenderTarget {
    * @returns {number}
    */
   get height() {
-    return this.mHeight;
+    return this.mHeight
   }
 
   /**
@@ -69,6 +68,6 @@ class RenderTarget {
    * @returns {void}
    */
   set height(value) {
-    this.mHeight = value;
+    this.mHeight = value
   }
 }

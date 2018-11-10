@@ -12,16 +12,16 @@ class AlphaOverLife extends Modifier {
    * @param {...(number|FloatScatter)} values A starting and ending values of alpha property.
    */
   constructor(...values) {
-    super(false);
+    super(false)
 
     /** @type {FloatScatter} Modifier's object to get values from.  */
-    this.scatter = FloatScatter.fromObject(...values);
+    this.scatter = FloatScatter.fromObject(...values)
   }
 
   /**
    * @inheritDoc
    */
   update(emitter, particle, dt) {
-    particle.alpha = this.scatter.getValueAt(particle.energy);
+    particle.alpha = this.scatter.getValueAt(particle.energy)
   }
 }

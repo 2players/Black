@@ -13,59 +13,63 @@ class RenderTargetCanvas extends RenderTarget {
    * @param {number} height The height of the surface.
    */
   constructor(width, height) {
-    super(width, height);
+    super(width, height)
 
     /** @ignore @private @type {HTMLCanvasElement} */
-    this.mCanvas = /** @type {HTMLCanvasElement} */ (document.createElement('canvas'));
+    this.mCanvas = /** @type {HTMLCanvasElement} */ (document.createElement(
+      'canvas'
+    ))
 
     /** @ignore @private @type {CanvasRenderingContext2D} */
-    this.mCtx = /** @type {CanvasRenderingContext2D} */ (this.mCanvas.getContext('2d'));
+    this.mCtx = /** @type {CanvasRenderingContext2D} */ (this.mCanvas.getContext(
+      '2d'
+    ))
 
-    this.resize(width, height);
+    this.resize(width, height)
   }
 
   /**
    * @inheritDoc
    */
   resize(width, height) {
-    this.mCanvas.width = Math.ceil(width);
-    this.mCanvas.height = Math.ceil(height);
+    this.mCanvas.width = Math.ceil(width)
+    this.mCanvas.height = Math.ceil(height)
   }
 
   /**
    * @inheritDoc
    */
   clear() {
-    this.mCtx.setTransform(1, 0, 0, 1, 0, 0);
-    this.mCtx.clearRect(0, 0, this.mCanvas.width, this.mCanvas.height);
+    this.mCtx.setTransform(1, 0, 0, 1, 0, 0)
+    this.mCtx.clearRect(0, 0, this.mCanvas.width, this.mCanvas.height)
   }
 
   /**
    * @inheritDoc
    */
   get width() {
-    return this.mCanvas.width;
+    return this.mCanvas.width
   }
 
   /**
    * @inheritDoc
    */
   set width(val) {
-    this.mCanvas.width = val;
+    this.mCanvas.width = val
   }
 
   /**
    * @inheritDoc
    */
   get height() {
-    return this.mCanvas.height;
+    return this.mCanvas.height
   }
 
   /**
    * @inheritDoc
    */
   set height(val) {
-    this.mCanvas.height = val;
+    this.mCanvas.height = val
   }
 
   /**
@@ -74,7 +78,7 @@ class RenderTargetCanvas extends RenderTarget {
    * @returns {HTMLCanvasElement}
    */
   get native() {
-    return this.mCanvas;
+    return this.mCanvas
   }
 
   /**
@@ -83,6 +87,6 @@ class RenderTargetCanvas extends RenderTarget {
    * @returns {CanvasRenderingContext2D}
    */
   get context() {
-    return this.mCtx;
+    return this.mCtx
   }
 }

@@ -12,16 +12,16 @@ class InitialMass extends Modifier {
    * @param {...(number|FloatScatter)} values Min and max values.
    */
   constructor(...values) {
-    super();
+    super()
 
     /** @type {FloatScatter} Modifier's object to get values from.  */
-    this.scatter = FloatScatter.fromObject(...values);
+    this.scatter = FloatScatter.fromObject(...values)
   }
 
   /**
    * @inheritDoc
    */
   update(emitter, particle, dt) {
-    particle.mass = this.scatter.getValue();
+    particle.mass = this.scatter.getValue()
   }
 }

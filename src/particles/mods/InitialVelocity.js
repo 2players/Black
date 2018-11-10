@@ -12,19 +12,19 @@ class InitialVelocity extends Modifier {
    * @param {...(number|VectorScatter)} values Min and max vectors.
    */
   constructor(...values) {
-    super();
+    super()
 
     /** @type {VectorScatter} Modifier's object to get values from.  */
-    this.scatter = VectorScatter.fromObject(...values);
+    this.scatter = VectorScatter.fromObject(...values)
   }
 
   /**
    * @inheritDoc
    */
   update(emitter, particle, dt) {
-    this.scatter.getValue();
+    this.scatter.getValue()
 
-    particle.vx = this.scatter.value.x;
-    particle.vy = this.scatter.value.y;
+    particle.vx = this.scatter.value.x
+    particle.vy = this.scatter.value.y
   }
 }

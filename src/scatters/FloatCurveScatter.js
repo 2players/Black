@@ -12,15 +12,15 @@ class FloatCurveScatter extends Scatter {
    * @param {...number} points Coordinates: startX, startY, cpStartX, cpStartY, cpEndX, cpEndY, endX/start2X, endY/start2Y, cp2StartX, cp2StartX... 8 or 14 or 20...
    */
   constructor(...points) {
-    super();
+    super()
 
     /** @private @type {Curve} */
-    this.mCurve = new Curve();
-    this.mCurve.baked = true;
-    this.mCurve.set(...points);
+    this.mCurve = new Curve()
+    this.mCurve.baked = true
+    this.mCurve.set(...points)
 
     /** @private @type {Vector} */
-    this.mCache = new Vector();
+    this.mCache = new Vector()
   }
 
   /**
@@ -31,7 +31,7 @@ class FloatCurveScatter extends Scatter {
    * @return {number} A value on a curve at given position.
    */
   getValueAt(t) {
-    this.mCurve.interpolate(t, this.mCache);
-    return this.mCache.y;
+    this.mCurve.interpolate(t, this.mCache)
+    return this.mCache.y
   }
 }

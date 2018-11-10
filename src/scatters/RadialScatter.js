@@ -15,7 +15,7 @@ class RadialScatter extends VectorScatter {
    * @param {number} [maxRadius=NaN] The max radius value.
    */
   constructor(x, y, minRadius, maxRadius = NaN) {
-    super(x, y, minRadius, maxRadius);
+    super(x, y, minRadius, maxRadius)
   }
 
   /**
@@ -25,7 +25,7 @@ class RadialScatter extends VectorScatter {
    * @return {Vector} Vector object with random values withing defined range.
    */
   getValue() {
-    return this.getValueAt(Math.random());
+    return this.getValueAt(Math.random())
   }
 
   /**
@@ -37,16 +37,16 @@ class RadialScatter extends VectorScatter {
    */
   getValueAt(t) {
     // pick random radius
-    const r = this.maxX + t * (this.maxY - this.maxX);
+    const r = this.maxX + t * (this.maxY - this.maxX)
 
-    const angle = Math.random() * 2 * Math.PI; // MathEx.PI2?
-    const rSq = r * r;
-    const rx = this.minX + (Math.sqrt(rSq) * Math.cos(angle));
-    const ry = this.minY + (Math.sqrt(rSq) * Math.sin(angle));
+    const angle = Math.random() * 2 * Math.PI // MathEx.PI2?
+    const rSq = r * r
+    const rx = this.minX + Math.sqrt(rSq) * Math.cos(angle)
+    const ry = this.minY + Math.sqrt(rSq) * Math.sin(angle)
 
-    this.value.x = rx;
-    this.value.y = ry;
+    this.value.x = rx
+    this.value.y = ry
 
-    return this.value;
+    return this.value
   }
 }

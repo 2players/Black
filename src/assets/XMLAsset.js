@@ -14,18 +14,23 @@ class XMLAsset extends Asset {
    * @return {void}
    */
   constructor(name, url) {
-    super(name);
+    super(name)
 
     /** @private @type {XHRAssetLoader} */
-    this.mXHR = new XHRAssetLoader(url);
-    this.mXHR.mimeType = 'text/xml';
-    this.addLoader(this.mXHR);
+    this.mXHR = new XHRAssetLoader(url)
+    this.mXHR.mimeType = 'text/xml'
+    this.addLoader(this.mXHR)
   }
 
   /**
    * @inheritDoc
    */
   onAllLoaded() {
-    super.ready(new DOMParser().parseFromString(/** @type {string} */(this.mXHR.data), 'text/xml'));
+    super.ready(
+      new DOMParser().parseFromString(
+        /** @type {string} */ (this.mXHR.data),
+        'text/xml'
+      )
+    )
   }
 }

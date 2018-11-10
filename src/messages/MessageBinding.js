@@ -1,6 +1,6 @@
 /**
  * A bridge between callback and context.
- * 
+ *
  * @cat core
  */
 /* @echo EXPORT */
@@ -14,37 +14,45 @@ class MessageBinding {
    * @param {BindingType} [type=BindingType.REGULAR] Type of the binding.
    * @param {?string} [pathPattern=null]             Glob pattern to filter sender by name.
    */
-  constructor(owner, name, callback, isOnce, context = null, type = BindingType.REGULAR, pathPattern = null) {
+  constructor(
+    owner,
+    name,
+    callback,
+    isOnce,
+    context = null,
+    type = BindingType.REGULAR,
+    pathPattern = null
+  ) {
     /** @ignore @type {MessageDispatcher} */
-    this.owner = owner;
+    this.owner = owner
 
     /** @ignore @type {string} */
-    this.name = name;
+    this.name = name
 
     /** @ignore @type {Function} */
-    this.callback = callback;
+    this.callback = callback
 
     /** @ignore @type {boolean} */
-    this.isOnce = isOnce;
+    this.isOnce = isOnce
 
     /** @ignore @type {*} */
-    this.context = context;
+    this.context = context
 
     /** @ignore @type {?string} */
-    this.pathPattern = pathPattern;
+    this.pathPattern = pathPattern
 
     /** @ignore @type {Glob|null} */
-    this.glob = pathPattern == null ? null : new Glob(pathPattern);
+    this.glob = pathPattern == null ? null : new Glob(pathPattern)
 
     /** @ignore @type {BindingType} */
-    this.type = type;
+    this.type = type
   }
 
   /**
    * Destroys this binding.
    */
   off() {
-    this.owner.__off(this);
+    this.owner.__off(this)
   }
 
   /**
@@ -52,8 +60,8 @@ class MessageBinding {
    * @returns {MessageBinding}
    */
   __reset() {
-    this.owner = null;
-    this.pathPattern = null;
-    return this;
+    this.owner = null
+    this.pathPattern = null
+    return this
   }
 }

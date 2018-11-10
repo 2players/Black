@@ -12,19 +12,19 @@ class Acceleration extends Modifier {
    * @param {...(number|VectorScatter)} values An VectorScatter which defines acceleration direction.
    */
   constructor(...values) {
-    super(false);
+    super(false)
 
     /** @type {VectorScatter} Modifier's object to get values from.  */
-    this.scatter = VectorScatter.fromObject(...values);
+    this.scatter = VectorScatter.fromObject(...values)
   }
 
   /**
    * @inheritDoc
    */
   update(emitter, particle, dt) {
-    this.scatter.getValue();
-    
-    particle.ax += this.scatter.value.x;
-    particle.ay += this.scatter.value.y;
+    this.scatter.getValue()
+
+    particle.ax += this.scatter.value.x
+    particle.ay += this.scatter.value.y
   }
 }

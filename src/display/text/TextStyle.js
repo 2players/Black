@@ -6,7 +6,7 @@
 /* @echo EXPORT */
 class TextStyle {
   /**
-   * Creates instance of TextStyle.   
+   * Creates instance of TextStyle.
    * @param  {string=} family                                             Font name
    * @param  {number=} [color=0x0]                                        Text color as hexadecimal number eg 0xff0000 (total red)
    * @param  {number=} [size=14]                                          Text size
@@ -15,68 +15,86 @@ class TextStyle {
    * @param  {number=} [strokeThickness=0]                                Thickness of the stroke. 0 means that no stroke
    * @param  {number=} [strokeColor=0xffffff]                             Stroke color as hexadecimal number eg 0x00ff00 (total green)
    */
-  constructor(family = 'sans-serif', color = 0x000000, size = 14, style = TextStyle.FontStyle.NORMAL, weight = TextStyle.FontWeight.NORMAL, strokeThickness = 0, strokeColor = 0xffffff) {
+  constructor(
+    family = 'sans-serif',
+    color = 0x000000,
+    size = 14,
+    style = TextStyle.FontStyle.NORMAL,
+    weight = TextStyle.FontWeight.NORMAL,
+    strokeThickness = 0,
+    strokeColor = 0xffffff
+  ) {
     /** @type {string} */
-    this.name = 'def';
+    this.name = 'def'
 
     /** @type {string} */
-    this.family = family;
+    this.family = family
 
     /** @type {number} */
-    this.size = size;
+    this.size = size
 
     /** @type {number} */
-    this.color = color;
+    this.color = color
 
     /** @type {TextStyle.FontStyle} */
-    this.style = style;
+    this.style = style
 
     /** @type {TextStyle.FontWeight} */
-    this.weight = weight;
+    this.weight = weight
 
     /** @type {number} */
-    this.strokeThickness = strokeThickness;
+    this.strokeThickness = strokeThickness
 
     /** @type {number} */
-    this.strokeColor = strokeColor;
+    this.strokeColor = strokeColor
 
     /** @type {boolean} */
-    this.dropShadow = false;
+    this.dropShadow = false
 
     /** @type {number} */
-    this.shadowDistanceX = 0;
+    this.shadowDistanceX = 0
 
     /** @type {number} */
-    this.shadowDistanceY = 0;
+    this.shadowDistanceY = 0
 
     /** @type {number} */
-    this.shadowColor = 0x0;
+    this.shadowColor = 0x0
 
     /** @type {number} */
-    this.shadowAlpha = 1;
+    this.shadowAlpha = 1
 
     /** @type {number} */
-    this.shadowBlur = 0;
+    this.shadowBlur = 0
   }
 
-  clone(family = null, color = NaN, size = NaN, style = null, weight = null, strokeThickness = NaN, strokeColor = NaN) {
-    let ret = new TextStyle();
-    ret.family = family === null ? this.family : family;
-    ret.size = isNaN(size) ? this.size : size;
-    ret.color = isNaN(color) ? this.color : color;
-    ret.style = style === null ? this.style : style;
-    ret.weight = weight === null ? this.weight : weight;
-    ret.strokeThickness = isNaN(strokeThickness) ? this.strokeThickness : strokeThickness;
-    ret.strokeColor = isNaN(strokeColor) ? this.strokeColor : strokeColor;
+  clone(
+    family = null,
+    color = NaN,
+    size = NaN,
+    style = null,
+    weight = null,
+    strokeThickness = NaN,
+    strokeColor = NaN
+  ) {
+    let ret = new TextStyle()
+    ret.family = family === null ? this.family : family
+    ret.size = isNaN(size) ? this.size : size
+    ret.color = isNaN(color) ? this.color : color
+    ret.style = style === null ? this.style : style
+    ret.weight = weight === null ? this.weight : weight
+    ret.strokeThickness = isNaN(strokeThickness)
+      ? this.strokeThickness
+      : strokeThickness
+    ret.strokeColor = isNaN(strokeColor) ? this.strokeColor : strokeColor
 
-    ret.dropShadow = this.dropShadow;
-    ret.shadowAlpha = this.shadowAlpha;
-    ret.shadowBlur = this.shadowBlur;
-    ret.shadowColor = this.shadowColor;
-    ret.shadowDistanceX = this.shadowDistanceX;
-    ret.shadowDistanceY = this.shadowDistanceY;
+    ret.dropShadow = this.dropShadow
+    ret.shadowAlpha = this.shadowAlpha
+    ret.shadowBlur = this.shadowBlur
+    ret.shadowColor = this.shadowColor
+    ret.shadowDistanceX = this.shadowDistanceX
+    ret.shadowDistanceY = this.shadowDistanceY
 
-    return ret;
+    return ret
   }
 }
 
@@ -88,8 +106,8 @@ class TextStyle {
  */
 TextStyle.FontStyle = {
   NORMAL: 'normal',
-  ITALIC: 'italic'
-};
+  ITALIC: 'italic',
+}
 
 /**
  * @cat display.text
@@ -99,8 +117,8 @@ TextStyle.FontStyle = {
  */
 TextStyle.FontWeight = {
   NORMAL: '400',
-  BOLD: '700'
-};
+  BOLD: '700',
+}
 
 /**
  * @cat display.text
@@ -112,8 +130,8 @@ TextStyle.FontAlign = {
   NONE: 'none',
   LEFT: 'left',
   RIGHT: 'right',
-  CENTER: 'center'
-};
+  CENTER: 'center',
+}
 
 /**
  * @cat display.text
@@ -124,8 +142,16 @@ TextStyle.FontAlign = {
 TextStyle.FontVerticalAlign = {
   TOP: 'top',
   MIDDLE: 'middle',
-  BOTTOM: 'bottom'
-};
+  BOTTOM: 'bottom',
+}
 
 /** @static @readonly @type {TextStyle} */
-TextStyle.default = new TextStyle('sans-serif', 0x0, 14, TextStyle.FontStyle.NORMAL, TextStyle.FontWeight.NORMAL, 0, 0x0);
+TextStyle.default = new TextStyle(
+  'sans-serif',
+  0x0,
+  14,
+  TextStyle.FontStyle.NORMAL,
+  TextStyle.FontWeight.NORMAL,
+  0,
+  0x0
+)

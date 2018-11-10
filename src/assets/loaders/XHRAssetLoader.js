@@ -7,52 +7,51 @@
 /* @echo EXPORT */
 class XHRAssetLoader extends AssetLoader {
   constructor(url) {
-    super(url);
+    super(url)
 
     /** @protected @type {XMLHttpRequest} */
-    this.mRequest = new XMLHttpRequest();
+    this.mRequest = new XMLHttpRequest()
 
     /** @type {string|undefined} */
-    this.mimeType = undefined;
+    this.mimeType = undefined
 
     /** @type {string} */
-    this.responseType = '';
+    this.responseType = ''
   }
 
   /**
    * @inheritDoc
    */
   load() {
-    this.mRequest.open('GET', this.mUrl, true);
+    this.mRequest.open('GET', this.mUrl, true)
 
-    if (this.responseType != '')
-      this.mRequest.responseType = this.responseType;
+    if (this.responseType != '') this.mRequest.responseType = this.responseType
 
     if (this.mRequest.overrideMimeType != undefined && this.mimeType)
-      this.mRequest.overrideMimeType(this.mimeType);
+      this.mRequest.overrideMimeType(this.mimeType)
 
     this.mRequest.onreadystatechange = () => {
       if (this.mRequest.readyState === 4) {
-        if ((this.mRequest.status === 200) || ((this.mRequest.status === 0) && this.mRequest.responseText)) {
+        if (
+          this.mRequest.status === 200 ||
+          (this.mRequest.status === 0 && this.mRequest.responseText)
+        ) {
           if (this.responseType === '' || this.responseType === 'text')
-            this.mData = this.mRequest.responseText;
-          else
-            this.mData = this.mRequest.response;
+            this.mData = this.mRequest.responseText
+          else this.mData = this.mRequest.response
 
-          this.onLoad();
-        }
-        else
-          this.onError();
+          this.onLoad()
+        } else this.onError()
       }
-    };
+    }
 
-    this.mRequest.send(null);
+    this.mRequest.send(null)
   }
 
   /**
    * @inheritDoc
    */
   abort() {
-    this.mRequest.abort();
+    this.mRequest.abort()
   }
 }

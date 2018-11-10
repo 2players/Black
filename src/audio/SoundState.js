@@ -11,5 +11,5 @@ const SoundState = {
   PLAYING: 'playing',
   PAUSED: 'paused',
   STOPPED: 'stopped',
-  COMPLETED: 'completed'
-};
+  COMPLETED: 'completed',
+}
