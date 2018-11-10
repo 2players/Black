@@ -86,7 +86,7 @@ class Stage extends GameObject {
    * @inheritDoc
    */
   onUpdate() {
-    let size = Black.instance.viewport.size
+    const { size } = Black.instance.viewport
 
     if (this.mCacheWidth !== size.width || this.mCacheHeight !== size.height) {
       this.mCacheWidth = size.width
@@ -115,45 +115,42 @@ class Stage extends GameObject {
     const windowWidth = size.width
     const windowHeight = size.height
 
-    if (
-      this.mScaleMode === StageScaleMode.FIXED ||
-      this.mScaleMode === StageScaleMode.LETTERBOX ||
-      this.mScaleMode === StageScaleMode.COVER
-    ) {
-      const mw = this.LP(
-        (windowWidth * this.mHeight) / windowHeight,
-        (windowWidth * this.mWidth) / windowHeight
+    if (this.mScaleMode === StageScaleMode.FIXED) {
+      const scaleFactor = Math.min(
+        windowWidth / this.mWidth,
+        windowHeight / this.mHeight
       )
-      const mh = this.LP(
-        (windowHeight * this.mWidth) / windowWidth,
-        (windowHeight * this.mHeight) / windowWidth
-      )
-      const scaleFactor = Math[
-        this.mScaleMode === StageScaleMode.COVER ? 'min' : 'max'
-      ](mw / windowWidth, mh / windowHeight)
-      const width = windowWidth * scaleFactor
-      const height = windowHeight * scaleFactor
-
-      if (this.mScaleMode === StageScaleMode.FIXED) {
-        this.mStageWidth = width
-        this.mStageHeight = height
-      } else {
-        const two = 2 * scaleFactor
-        this.mX = (width - this.LP(this.mWidth, this.mHeight)) / two
-        this.mY = (height - this.LP(this.mHeight, this.mWidth)) / two
-
-        this.mStageWidth = this.LP(this.mWidth, this.mHeight)
-        this.mStageHeight = this.LP(this.mHeight, this.mWidth)
-      }
-
-      this.mScaleX = this.mScaleY = this.mStageScaleFactor = Math.min(
-        windowWidth / width,
-        windowHeight / height
-      )
+      this.mStageWidth = this.mWidth
+      this.mStageHeight = this.mHeight
+      this.mScaleX = this.mScaleY = this.mStageScaleFactor = scaleFactor
     } else if (this.mScaleMode === StageScaleMode.NORMAL) {
       this.mStageWidth = size.width
       this.mStageHeight = size.height
       this.mScaleX = this.mScaleY = this.mStageScaleFactor = 1
+    } else if (this.mScaleMode === StageScaleMode.LETTERBOX) {
+      const scaleFactor = Math.min(
+        windowWidth / this.mWidth,
+        windowHeight / this.mHeight
+      )
+      const width = this.mWidth * scaleFactor
+      const height = this.mHeight * scaleFactor
+      this.mX = (windowWidth - width) / 2
+      this.mY = (windowHeight - height) / 2
+      this.mStageWidth = this.mWidth
+      this.mStageHeight = this.mHeight
+      this.mScaleX = this.mScaleY = this.mStageScaleFactor = scaleFactor
+    } else if (this.mScaleMode === StageScaleMode.COVER) {
+      const scaleFactor = Math.max(
+        windowWidth / this.mWidth,
+        windowHeight / this.mHeight
+      )
+      const width = this.mWidth * scaleFactor
+      const height = this.mHeight * scaleFactor
+      this.mX = (windowWidth - width) / 2
+      this.mY = (windowHeight - height) / 2
+      this.mStageWidth = this.mWidth
+      this.mStageHeight = this.mHeight
+      this.mScaleX = this.mScaleY = this.mStageScaleFactor = scaleFactor
     } else if (this.mScaleMode === StageScaleMode.NO_SCALE) {
       this.mStageWidth = size.width * this.mDPR
       this.mStageHeight = size.height * this.mDPR
@@ -181,21 +178,6 @@ class Stage extends GameObject {
      * @event Stage#resize
      */
     this.post(Message.RESIZE)
-  }
-
-  /**
-   * Determines which of two numbers suits to stage orientation.
-   *
-   * @public
-   * @param {number} land Landscape mode value.
-   * @param {number} port Portrait mode value.
-   * @returns {number}
-   */
-  LP(land, port) {
-    if (this.mOrientation == StageOrientation.LANDSCAPE) return land
-    else if (this.mOrientation == StageOrientation.PORTRAIT) return port
-
-    return Device.isLandscape ? land : port
   }
 
   /**
@@ -323,12 +305,22 @@ class Stage extends GameObject {
       (this.mOrientation === StageOrientation.LANDSCAPE && Device.isPortrait) ||
       (this.mOrientation === StageOrientation.PORTRAIT && Device.isLandscape)
     ) {
-      const x =
-        Black.instance.viewport.size.width * 0.5 -
-        this.mStageHeight * 0.5 * this.mStageScaleFactor
-      const y =
-        Black.instance.viewport.size.height * 0.5 +
-        this.mStageWidth * 0.5 * this.mStageScaleFactor
+      let x
+      let y
+      if (
+        this.mScaleMode === StageScaleMode.LETTERBOX ||
+        this.mScaleMode === StageScaleMode.COVER
+      ) {
+        x =
+          Black.instance.viewport.size.width * 0.5 -
+          this.mStageHeight * 0.5 * this.mStageScaleFactor
+        y =
+          Black.instance.viewport.size.height * 0.5 +
+          this.mStageWidth * 0.5 * this.mStageScaleFactor
+      } else {
+        x = 0
+        y = Black.instance.viewport.size.height
+      }
 
       this.mLocalTransform.rotate(-Math.PI / 2)
       this.mLocalTransform.setTranslation(x, y)
