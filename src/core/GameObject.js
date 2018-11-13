@@ -1142,7 +1142,7 @@ class GameObject extends MessageDispatcher {
     Debug.isNumber(ax, ay)
 
     this.mAnchorX = ax
-    this.anchorY = ay
+    this.mAnchorY = ay
 
     return this
   }
