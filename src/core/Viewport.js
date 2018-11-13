@@ -1,6 +1,7 @@
 /**
- * Manages viewport, handles DOM container resize events and updates internal data.
- * When firing `resize` event stage bounds will be not up to date. Listen for stage's `resize` message instead.
+ * Manages viewport, handles DOM container resize events and updates internal
+ * data. When firing `resize` event, stage bounds will be not up to date. Listen
+ * for stage's `resize` message instead.
  *
  * @cat core
  * @fires Viewport#resize
@@ -22,11 +23,10 @@ class Viewport extends MessageDispatcher {
     let style = this.mContainerElement.style
     style.userSelect = 'none'
     style.touchAction = 'none'
-    //style.overflow = 'hidden';
     style.cursor = 'auto'
     style.WebkitTapHighlightColor = 'rgba(0, 0, 0, 0)'
 
-    let size = this.mContainerElement.getBoundingClientRect()
+    const size = this.mContainerElement.getBoundingClientRect()
 
     /** @private @type {Rectangle} */
     this.mSize = new Rectangle(size.left, size.top, size.width, size.height)
@@ -36,7 +36,7 @@ class Viewport extends MessageDispatcher {
 
     this.mChecksLeftSeconds = 0
 
-    window.addEventListener('resize', x => this.__onResize())
+    window.addEventListener('resize', () => this.__onResize())
   }
 
   /**
@@ -56,9 +56,8 @@ class Viewport extends MessageDispatcher {
    * @ignore
    */
   __onResize() {
-    let size = this.mContainerElement.getBoundingClientRect()
-
-    let newSize = Rectangle.pool
+    const size = this.mContainerElement.getBoundingClientRect()
+    const newSize = Rectangle.pool
       .get()
       .set(size.left, size.top, size.width, size.height)
 
