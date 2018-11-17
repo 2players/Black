@@ -69,6 +69,16 @@ class Stage extends GameObject {
   }
 
   /**
+   * @ignore
+   */
+  get isOrientationNotMatched() {
+    return (
+      (this.mOrientation === StageOrientation.LANDSCAPE && Device.isPortrait) ||
+      (this.mOrientation === StageOrientation.PORTRAIT && Device.isLandscape)
+    )
+  }
+
+  /**
    * Sets stage size by given width and height.
    *
    * @param {number} width New stage width.
@@ -104,11 +114,7 @@ class Stage extends GameObject {
   __refresh() {
     const size = Black.instance.viewport.size.clone()
 
-    const isOrientationNotMatched =
-      (this.mOrientation === StageOrientation.LANDSCAPE && Device.isPortrait) ||
-      (this.mOrientation === StageOrientation.PORTRAIT && Device.isLandscape)
-
-    if (this.mOrientationLock && isOrientationNotMatched) {
+    if (this.mOrientationLock && this.isOrientationNotMatched) {
       ;[size.width, size.height] = [size.height, size.width]
     }
 
@@ -301,25 +307,23 @@ class Stage extends GameObject {
 
     if (this.mOrientationLock === false) return this.mLocalTransform
 
-    if (
-      (this.mOrientation === StageOrientation.LANDSCAPE && Device.isPortrait) ||
-      (this.mOrientation === StageOrientation.PORTRAIT && Device.isLandscape)
-    ) {
+    if (this.isOrientationNotMatched) {
       let x
       let y
-      if (
-        this.mScaleMode === StageScaleMode.CONTAIN ||
-        this.mScaleMode === StageScaleMode.COVER
-      ) {
-        x =
-          Black.instance.viewport.size.width * 0.5 -
-          this.mStageHeight * 0.5 * this.mStageScaleFactor
-        y =
-          Black.instance.viewport.size.height * 0.5 +
-          this.mStageWidth * 0.5 * this.mStageScaleFactor
-      } else {
-        x = 0
-        y = Black.instance.viewport.size.height
+
+      switch (this.mScaleMode) {
+        case StageScaleMode.CONTAIN:
+        case StageScaleMode.COVER:
+          x =
+            Black.instance.viewport.size.width * 0.5 -
+            this.mStageHeight * 0.5 * this.mStageScaleFactor
+          y =
+            Black.instance.viewport.size.height * 0.5 +
+            this.mStageWidth * 0.5 * this.mStageScaleFactor
+          break
+        default:
+          x = 0
+          y = Black.instance.viewport.size.height
       }
 
       this.mLocalTransform.rotate(-Math.PI / 2)
