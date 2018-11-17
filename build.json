@@ -1,6 +1,5 @@
 {
-  "files":
-  [
+  "files": [
     "src/core/Debug.js",
 
     "src/math/MathEx.js",
@@ -81,7 +80,6 @@
     "src/drivers/canvas/SpriteRendererCanvas.js",
     "src/drivers/canvas/RenderTargetCanvas.js",
     "src/drivers/canvas/GraphicsRendererCanvas.js",
-
 
     "src/drivers/VideoNullDriver.js",
     "src/drivers/canvas/CanvasDriver.js",
@@ -184,8 +182,6 @@
     "src/parsers/ParserBase.js",
     "src/parsers/BVGParser.js",
     "src/parsers/BVGStyle.js",
-
-    "src/core/SplashScreen.js",
 
     "src/timers/Timer.js",
 

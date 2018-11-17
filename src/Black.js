@@ -123,9 +123,6 @@ class Black extends MessageDispatcher {
     /** @private @type {boolean} */
     this.mWasStopped = false
 
-    /** @private @type {SplashScreen} */
-    this.mSplashScreen = new SplashScreen()
-
     /** @private @type {Array<number>} */
     this.mFrameTimes = []
 
@@ -310,9 +307,6 @@ class Black extends MessageDispatcher {
     this.mRAFHandle = window.requestAnimationFrame(function(timestamp) {
       // TODO: do first update here
       self.mIsRunning = true
-
-      // show splash screen
-      if (SplashScreen.enabled === true) self.mSplashScreen.show()
 
       self.mLastUpdateTime = timestamp
       self.mLastRenderTime = self.mLastUpdateTime
@@ -698,15 +692,6 @@ class Black extends MessageDispatcher {
    */
   get containerElementId() {
     return this.mContainerElementId
-  }
-
-  /**
-   * Returns currently active splash screen. Splash screen posts Message.COMPLETE message on hide.
-   *
-   * @returns {SplashScreen}
-   */
-  get splashScreen() {
-    return this.mSplashScreen
   }
 
   /**
