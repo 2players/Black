@@ -14,7 +14,7 @@ const StageScaleMode = {
   /** The stage size tries to stay inside requested size. default is 960x640 */
   FIXED: 'fixed',
   /** The stage size will be equal to requested size, position will be centered */
-  LETTERBOX: 'letterBox',
+  CONTAIN: 'contain',
   /** The stage size will be equal to requested size, position will be centered, and cover the viewport */
   COVER: 'cover',
 }

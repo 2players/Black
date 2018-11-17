@@ -127,7 +127,7 @@ class Stage extends GameObject {
       this.mStageWidth = size.width
       this.mStageHeight = size.height
       this.mScaleX = this.mScaleY = this.mStageScaleFactor = 1
-    } else if (this.mScaleMode === StageScaleMode.LETTERBOX) {
+    } else if (this.mScaleMode === StageScaleMode.CONTAIN) {
       const scaleFactor = Math.min(
         windowWidth / this.mWidth,
         windowHeight / this.mHeight
