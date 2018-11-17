@@ -104,21 +104,21 @@ class Stage extends GameObject {
   __refresh() {
     const size = Black.instance.viewport.size.clone()
 
-    if (
-      this.mOrientationLock &&
-      ((this.mOrientation === StageOrientation.LANDSCAPE &&
-        Device.isPortrait) ||
-        (this.mOrientation === StageOrientation.PORTRAIT && Device.isLandscape))
-    )
-      [size.width, size.height] = [size.height, size.width]
+    const isOrientationNotMatched =
+      (this.mOrientation === StageOrientation.LANDSCAPE && Device.isPortrait) ||
+      (this.mOrientation === StageOrientation.PORTRAIT && Device.isLandscape)
 
-    const windowWidth = size.width
-    const windowHeight = size.height
+    if (this.mOrientationLock && isOrientationNotMatched) {
+      ;[size.width, size.height] = [size.height, size.width]
+    }
+
+    const viewportWidth = size.width
+    const viewportHeight = size.height
 
     if (this.mScaleMode === StageScaleMode.FIXED) {
       const scaleFactor = Math.min(
-        windowWidth / this.mWidth,
-        windowHeight / this.mHeight
+        viewportWidth / this.mWidth,
+        viewportHeight / this.mHeight
       )
       this.mStageWidth = this.mWidth
       this.mStageHeight = this.mHeight
@@ -129,25 +129,25 @@ class Stage extends GameObject {
       this.mScaleX = this.mScaleY = this.mStageScaleFactor = 1
     } else if (this.mScaleMode === StageScaleMode.CONTAIN) {
       const scaleFactor = Math.min(
-        windowWidth / this.mWidth,
-        windowHeight / this.mHeight
+        viewportWidth / this.mWidth,
+        viewportHeight / this.mHeight
       )
       const width = this.mWidth * scaleFactor
       const height = this.mHeight * scaleFactor
-      this.mX = (windowWidth - width) / 2
-      this.mY = (windowHeight - height) / 2
+      this.mX = (viewportWidth - width) / 2
+      this.mY = (viewportHeight - height) / 2
       this.mStageWidth = this.mWidth
       this.mStageHeight = this.mHeight
       this.mScaleX = this.mScaleY = this.mStageScaleFactor = scaleFactor
     } else if (this.mScaleMode === StageScaleMode.COVER) {
       const scaleFactor = Math.max(
-        windowWidth / this.mWidth,
-        windowHeight / this.mHeight
+        viewportWidth / this.mWidth,
+        viewportHeight / this.mHeight
       )
       const width = this.mWidth * scaleFactor
       const height = this.mHeight * scaleFactor
-      this.mX = (windowWidth - width) / 2
-      this.mY = (windowHeight - height) / 2
+      this.mX = (viewportWidth - width) / 2
+      this.mY = (viewportHeight - height) / 2
       this.mStageWidth = this.mWidth
       this.mStageHeight = this.mHeight
       this.mScaleX = this.mScaleY = this.mStageScaleFactor = scaleFactor
@@ -308,7 +308,7 @@ class Stage extends GameObject {
       let x
       let y
       if (
-        this.mScaleMode === StageScaleMode.LETTERBOX ||
+        this.mScaleMode === StageScaleMode.CONTAIN ||
         this.mScaleMode === StageScaleMode.COVER
       ) {
         x =
