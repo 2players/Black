@@ -7454,7 +7454,7 @@ const StageScaleMode = {
   /** The stage size tries to stay inside requested size. default is 960x640 */
   FIXED: 'fixed',
   /** The stage size will be equal to requested size, position will be centered */
-  LETTERBOX: 'letterBox',
+  CONTAIN: 'contain',
   /** The stage size will be equal to requested size, position will be centered, and cover the viewport */
   COVER: 'cover',
 }
@@ -7603,7 +7603,7 @@ class Stage extends GameObject {
       this.mStageWidth = size.width
       this.mStageHeight = size.height
       this.mScaleX = this.mScaleY = this.mStageScaleFactor = 1
-    } else if (this.mScaleMode === StageScaleMode.LETTERBOX) {
+    } else if (this.mScaleMode === StageScaleMode.CONTAIN) {
       const scaleFactor = Math.min(
         windowWidth / this.mWidth,
         windowHeight / this.mHeight
