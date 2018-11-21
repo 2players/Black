@@ -1,5 +1,5 @@
 {
-  "name": "black-engine",
+  "name": "@2players/black-engine",
   "version": "0.5.8",
   "main": "dist/es6-module.js",
   "scripts": {
