@@ -208,6 +208,15 @@ class GameObject extends MessageDispatcher {
     return this.addChildAt(child, this.mChildren.length)
   }
 
+  addChildren(children) {
+    for (let i = 0; i < children.length; i++) {
+      const child = children[i]
+      this.addChild(child)
+    }
+
+    return this
+  }
+
   /**
    * Adds a child `GameObject` instance to this `GameObject` instance. The child is added to the top of all other
    * children in this GameObject instance.
@@ -386,6 +395,15 @@ class GameObject extends MessageDispatcher {
     this.mChildOrComponentBeenAdded = true
 
     return instance
+  }
+
+  addComponents(components) {
+    for (let i = 0; i < components.length; i++) {
+      const component = components[i]
+      this.addComponent(component)
+    }
+
+    return this
   }
 
   /**
