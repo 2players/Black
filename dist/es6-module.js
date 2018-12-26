@@ -5755,6 +5755,15 @@ class GameObject extends MessageDispatcher {
     return this.addChildAt(child, this.mChildren.length)
   }
 
+  addChildren(children) {
+    for (let i = 0; i < children.length; i++) {
+      const child = children[i]
+      this.addChild(child)
+    }
+
+    return this
+  }
+
   /**
    * Adds a child `GameObject` instance to this `GameObject` instance. The child is added to the top of all other
    * children in this GameObject instance.
@@ -5933,6 +5942,15 @@ class GameObject extends MessageDispatcher {
     this.mChildOrComponentBeenAdded = true
 
     return instance
+  }
+
+  addComponents(components) {
+    for (let i = 0; i < components.length; i++) {
+      const component = components[i]
+      this.addComponent(component)
+    }
+
+    return this
   }
 
   /**
@@ -7457,6 +7475,7 @@ const StageScaleMode = {
   CONTAIN: 'contain',
   /** The stage size will be equal to requested size, position will be centered, and cover the viewport */
   COVER: 'cover',
+  FIXED_WIDTH: 'fixed_width',
 }
 
 /**
@@ -7626,6 +7645,15 @@ class Stage extends GameObject {
         viewportWidth / this.mWidth,
         viewportHeight / this.mHeight
       )
+      const width = this.mWidth * scaleFactor
+      const height = this.mHeight * scaleFactor
+      this.mX = (viewportWidth - width) / 2
+      this.mY = (viewportHeight - height) / 2
+      this.mStageWidth = this.mWidth
+      this.mStageHeight = this.mHeight
+      this.mScaleX = this.mScaleY = this.mStageScaleFactor = scaleFactor
+    } else if (this.mScaleMode === StageScaleMode.FIXED_WIDTH) {
+      const scaleFactor = viewportWidth / this.mWidth
       const width = this.mWidth * scaleFactor
       const height = this.mHeight * scaleFactor
       this.mX = (viewportWidth - width) / 2
