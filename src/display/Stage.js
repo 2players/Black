@@ -157,6 +157,15 @@ class Stage extends GameObject {
       this.mStageWidth = this.mWidth
       this.mStageHeight = this.mHeight
       this.mScaleX = this.mScaleY = this.mStageScaleFactor = scaleFactor
+    } else if (this.mScaleMode === StageScaleMode.FIXED_WIDTH) {
+      const scaleFactor = viewportWidth / this.mWidth
+      const width = this.mWidth * scaleFactor
+      const height = this.mHeight * scaleFactor
+      this.mX = (viewportWidth - width) / 2
+      this.mY = (viewportHeight - height) / 2
+      this.mStageWidth = this.mWidth
+      this.mStageHeight = this.mHeight
+      this.mScaleX = this.mScaleY = this.mStageScaleFactor = scaleFactor
     } else if (this.mScaleMode === StageScaleMode.NO_SCALE) {
       this.mStageWidth = size.width * this.mDPR
       this.mStageHeight = size.height * this.mDPR
